@@ -4,6 +4,7 @@ import {
   Keyboard,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
@@ -14,7 +15,8 @@ import {
   useGetUserQuery,
   useLoginUserMutation,
 } from '../RTKquery/Slices/ApiSclices';
-
+import {color} from 'native-base/lib/typescript/theme/styled-system';
+// import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
 
@@ -37,7 +39,11 @@ const Login = ({navigation}) => {
   //
   //
   //
+
   //
+  const signupBtn = () => {
+    navigation.navigate('register');
+  };
 
   const registerUserBtn = async () => {
     try {
@@ -68,16 +74,23 @@ const Login = ({navigation}) => {
     setMessage('');
   };
 
+  const skipBtn = () => {
+    navigation.navigate('home');
+  };
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
         <ImageBackground
           source={require('../Assets/images/bg01.png')}
-          style={styles.topimg}
-        />
+          style={styles.topimg}>
+          <TouchableOpacity style={styles.SkipCont} onPress={skipBtn}>
+            <Text style={styles.Skiptxt}>Skip</Text>
+          </TouchableOpacity>
+        </ImageBackground>
         <View style={styles.headingCont}>
           <Text style={styles.headtxt}>#Books Ki Basti – Sabse Sasti!</Text>
-          <Text style={styles.headtxt}>{Message}</Text>
+          <Text style={styles.headtxt2}>Login Your Account</Text>
+          <Text style={styles.Errortxt}>{Message}</Text>
         </View>
         <View style={styles.inputboxcont}>
           <TextInput
@@ -125,6 +138,27 @@ const Login = ({navigation}) => {
             }}>
             Log In
           </Button>
+          <View style={{flexDirection: 'row', marginTop: '3%'}}>
+            <Text style={styles.btmText}>Don't have an Account </Text>
+            <TouchableOpacity
+              onPress={signupBtn}
+              styles={{
+                backgroundColor: 'pink',
+              }}>
+              <Text
+                style={[
+                  styles.btmText,
+                  {
+                    color: global.sandColor,
+                    textDecorationLine: 'underline',
+                    // justifyContent: 'center',
+                    // alignSelf: 'center',
+                  },
+                ]}>
+                SignIn
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -156,8 +190,41 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   headtxt: {
-    fontSize: 20,
-    fontFamily: font1,
+    fontSize: 25,
+    fontFamily: font,
+  },
+  Errortxt: {
+    fontSize: 15,
+    // fontFamily: font,
+    color: 'red',
+    alignSelf: 'center',
+  },
+  SkipCont: {
+    alignSelf: 'flex-end',
+    backgroundColor: global.bgColor,
+    height: '8%',
+    width: '18%',
+    borderRadius: 40,
+    justifyContent: 'center',
+    marginEnd: '2%',
+    marginTop: '2%',
+  },
+  Skiptxt: {
+    fontSize: 17,
+    color: global.sandColor,
+    alignSelf: 'center',
+  },
+  headtxt2: {
+    fontSize: 35,
+    fontFamily: font,
+    alignSelf: 'center',
+    marginTop: '3%',
+  },
+  btmText: {
+    fontSize: 13,
+    // fontFamily: font,
+    alignSelf: 'center',
+    // marginTop: '3%',
   },
   inputfield: {
     // marginBottom: '10%',
@@ -167,6 +234,6 @@ const styles = StyleSheet.create({
   },
   inputboxcont: {
     alignItems: 'center',
-    marginTop: height / 13,
+    // marginTop: "0.5%",
   },
 });
