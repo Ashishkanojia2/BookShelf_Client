@@ -44,10 +44,15 @@ const Books = () => {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* <View style={styles.topcontent}> */}
-        {/* <ScrollView styles={{flexGrow:1}}> */}
         <View style={styles.newBookContainer}>
-          <View style={styles.productPhoto}></View>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
           <View style={styles.productInfo}>
             <Text
               style={[styles.bookstxt]}
@@ -58,19 +63,19 @@ const Books = () => {
               BooksProgramming BooksProgramming BooksProgramming
               BooksProgramming BooksProgramming Books
             </Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.editionCont}>
               <Text style={styles.booksHead}>Edition</Text>
               <Text style={styles.bookstxt}>10th</Text>
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.infoCont}>
               <Text style={styles.booksHead}>Author</Text>
               <Text style={styles.bookstxt}>S Chand</Text>
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.infoCont}>
               <Text style={styles.booksHead}>S.Price</Text>
               <Text style={styles.bookstxt}>400 rs.</Text>
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.infoCont}>
               <Text style={styles.booksHead}>A.Price</Text>
               <Text
                 style={[
@@ -80,17 +85,281 @@ const Books = () => {
                 1000 rs.
               </Text>
             </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View><View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View><View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View><View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View><View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View><View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}></View>
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.newBookContainer}></View>
-        <View style={styles.newBookContainer}></View>
-        <View style={styles.newBookContainer}></View>
-        <View style={styles.newBookContainer}></View>
-        <View style={styles.newBookContainer}></View>
-        <View style={styles.newBookContainer}></View>
-        {/* </ScrollView> */}
-        {/* </View> */}
-        <View style={styles.content}></View>
+        
+
+        {/* <View style={styles.content}></View> */}
       </ScrollView>
     </View>
   );
@@ -159,10 +428,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     elevation: 1,
   },
-  productPhoto: {flex: 2, backgroundColor: 'green', height: '100%'},
+  productPhoto: {
+    flex: 2,
+    backgroundColor: global.sandColor,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   productInfo: {
     flex: 4,
-    backgroundColor: 'pink',
+
     height: '100%',
     paddingVertical: '1%',
   },
@@ -170,13 +445,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#000',
     marginHorizontal: '2%',
-    fontFamily: globalfonts.font3,
+    fontFamily: globalfonts.font5,
   },
   booksHead: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#000',
     fontWeight: '400',
     marginHorizontal: '2%',
+    fontFamily: globalfonts.font5,
+  },
+  addBtn: {
+    height: height / 25,
+    width: width / 7,
+    position: 'absolute',
+    // backgroundColor: global.bgColor,
+    backgroundColor: global.sandColor,
+    right: 10,
+    bottom: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
   },
   topimg: {height: height / 5, width: '100%'},
   BookInfo: {
@@ -203,6 +492,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontFamily: font,
   },
+  editionCont: {flexDirection: 'row', marginTop: '2%'},
+  infoCont: {flexDirection: 'row'},
 });
 
 export default Books;
