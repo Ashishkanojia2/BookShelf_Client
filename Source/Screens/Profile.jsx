@@ -5,13 +5,15 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  Touchable,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {TextInput} from 'react-native-paper';
-import {Button, TextInput} from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -19,21 +21,6 @@ const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
 
 const Profile = ({navigation}) => {
-  //   const [Registeruser] = useRegisterUserMutation();
-  const [emailId, setemailId] = useState('');
-  const [Password, setPassword] = useState('');
-  const [confirmPassword, setconfirmPassword] = useState('');
-  const [phone, setphone] = useState('');
-  const [address, setaddress] = useState('');
-  const [name, setname] = useState('');
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
-  const phoneRef = useRef(null);
-  const addressRef = useRef(null);
-  const nameRef = useRef(null);
-  //   const [buttonLoading, setbuttonLoading] = useState(false);
-
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -42,127 +29,195 @@ const Profile = ({navigation}) => {
         translucent={false}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* <View style={styles.inputboxcont}>
-          <TextInput
-            ref={nameRef}
-            value={name}
-            onChangeText={value => setname(value)}
-            label={'Full Name'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-          />
-          <TextInput
-            ref={emailRef}
-            value={emailId}
-            onChangeText={value => setemailId(value)}
-            label={'Email'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-          />
-          <TextInput
-            ref={passwordRef}
-            value={Password}
-            onChangeText={value => setPassword(value)}
-            label={'Password'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-            secureTextEntry={true} // Hide text input
-            autoComplete="off" // Disable autocomplete
-            autoCorrect={false} // Disable autocorrect
-            spellCheck={false} // Disable spell check
-            textContentType="password"
-          />
-          <TextInput
-            ref={confirmPasswordRef}
-            value={confirmPassword}
-            onChangeText={value => setconfirmPassword(value)}
-            label={'Confirm Password'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-          />
-          <TextInput
-            ref={phoneRef}
-            value={phone}
-            onChangeText={value => setphone(value)}
-            label={'Phone no.'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-          />
-          <TextInput
-            ref={addressRef}
-            value={address}
-            onChangeText={value => setaddress(value)}
-            label={'Address'}
-            style={styles.inputfield}
-            outlineColor={global.thirdColor}
-            cursorColor={global.sandColor}
-            activeOutlineColor={global.sandColor}
-            mode="outlined"
-            textColor={global.sandColor}
-            // onFocus={clearMessage}
-          />
-
-          <Button
-            mode="contained"
-            rippleColor="#c9c9c9"
-            buttonColor={global.thirdColor}
-            // onPress={() => registerUserBtn()}
-            // loading={buttonLoading}
-            style={{
-              marginTop: '20%',
-              height: height / 20,
-              width: width - 30,
-              justifyContent: 'center',
-            }}>
-            Log In
-          </Button>
-        </View> */}
-        <View style={styles.Profileheader}>
-          <View style={styles.profileHerderChild1}>
-            <TouchableOpacity style={styles.profilepicCont}>
-              <MaterialIcons
-                name="add-a-photo"
-                size={35}
-                color={global.bgColor}
-              />
-            </TouchableOpacity>
-            <Text style={styles.profileTxt}>Ashish Kanojia</Text>
-          </View>
-          <View style={styles.profileHerderChild2}></View>
+      <View style={styles.Profileheader}>
+        <View style={styles.profileHerderChild1}>
+          <TouchableOpacity style={styles.profilepicCont}>
+            <MaterialIcons
+              name="add-a-photo"
+              size={35}
+              color={global.bgColor}
+            />
+          </TouchableOpacity>
+          <Text style={styles.profileTxt}>Ashish Kanojia</Text>
+          <Text style={styles.profileDateTxt}> Acc. Created At 20-06-2024</Text>
         </View>
+        <View style={styles.profileHerderChild2}></View>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="user-o" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Your profile</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="heart-o" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Favorite</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="money" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Selling Books</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="user-o" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}> Order</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <MaterialCommunityIcons
+                name="information-variant"
+                size={25}
+                color={'#fff'}
+              />
+            </View>
+            <Text style={styles.profileOptionText}>About</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('profileUser')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <MaterialCommunityIcons
+                name="notebook-edit-outline"
+                size={20}
+                color={'#fff'}
+              />
+            </View>
+            <Text style={styles.profileOptionText}>Send FeedBack</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.profileOption}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="power-off" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Logout</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  profileTxt: {fontSize:width/18},
+  profileIconCont: {
+    height: height / 27,
+    width: width / 12,
+    borderRadius: 20,
+    backgroundColor: global.bgColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileOptionText: {
+    color: global.bgColor,
+    fontSize: 18,
+    fontWeight: '500',
+    marginLeft: '5%',
+  },
+  profileOptionView: {
+    height: '100%',
+    width: width - 100,
+    // backgroundColor: global.lightgray,
+    alignItems: 'center',
+    // justifyContent: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: '2%',
+  },
+  profileOption: {
+    height: height / 18,
+    width: width - 20,
+    borderRadius: 10,
+    // backgroundColor: 'rgba(26,54,54,0.3)',
+    backgroundColor: global.lightgray,
+    marginVertical: '3%',
+
+    alignSelf: 'center',
+    marginTop: '2%',
+    overflow: 'hidden',
+    elevation: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  profileTxt: {fontSize: width / 18, marginHorizontal: '5%', fontWeight: '600'},
+  profileDateTxt: {
+    fontSize: width / 30,
+    marginHorizontal: '5%',
+    fontWeight: '600',
+    position: 'absolute',
+    right: -5,
+    top: 5,
+    color: '#777675',
+  },
   profilepicCont: {
     height: height / 10,
     width: width / 4.5,
@@ -201,10 +256,11 @@ const styles = StyleSheet.create({
   },
   ParentContainer: {
     flex: 1, // Ensure the parent container takes up the full screen
+    backgroundColor: 'rgba(26,54,54,0.1)',
   },
   scrollContent: {
     flexGrow: 1,
-    backgroundColor: 'rgba(26,54,54,0.1)',
+    // backgroundColor: 'rgba(26,54,54,0.1)',
   },
   headerCont: {
     backgroundColor: 'rgba(26,54,54,0.5)',

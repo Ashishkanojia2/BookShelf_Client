@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 // import {TextInput} from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
 const height = Dimensions.get('window').height;
@@ -43,15 +44,53 @@ const Books = () => {
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.topcontent}>
-          <ScrollView horizontal>
-            <View style={styles.newBookContainer}></View>
-            <View style={styles.newBookContainer}></View>
-          </ScrollView>
+        {/* <View style={styles.topcontent}> */}
+        {/* <ScrollView styles={{flexGrow:1}}> */}
+        <View style={styles.newBookContainer}>
+          <View style={styles.productPhoto}></View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              Programming BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming BooksProgramming
+              BooksProgramming BooksProgramming Books
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.booksHead}>Edition</Text>
+              <Text style={styles.bookstxt}>10th</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.booksHead}>Author</Text>
+              <Text style={styles.bookstxt}>S Chand</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.booksHead}>S.Price</Text>
+              <Text style={styles.bookstxt}>400 rs.</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.booksHead}>A.Price</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                ]}>
+                1000 rs.
+              </Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.content}>
-          
-        </View>
+        <View style={styles.newBookContainer}></View>
+        <View style={styles.newBookContainer}></View>
+        <View style={styles.newBookContainer}></View>
+        <View style={styles.newBookContainer}></View>
+        <View style={styles.newBookContainer}></View>
+        <View style={styles.newBookContainer}></View>
+        {/* </ScrollView> */}
+        {/* </View> */}
+        <View style={styles.content}></View>
       </ScrollView>
     </View>
   );
@@ -62,6 +101,8 @@ const styles = StyleSheet.create({
     flex: 1, // Ensure the parent container takes up the full screen
   },
   scrollContent: {
+    alignItems: 'center',
+    // backgroundColor:"green",
     flexGrow: 1, // Allows the ScrollView to expand and fill the parent container
   },
   headerCont: {
@@ -85,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#000',
     flexDirection: 'row',
-    marginVertical: '2%',
+    marginTop: '2%',
     // flexWrap: 'wrap',
     // backgroundColor: global.sandColor,
   },
@@ -107,14 +148,35 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   newBookContainer: {
-    height: height / 4,
+    height: height / 5.5,
     width: width - 20,
-    backgroundColor: global.sandColor,
+    backgroundColor: '#fafafa',
     borderRadius: 10,
-    borderColor: global.bgColor,
-    borderWidth: 1,
-    // margin: '2%',
-    marginHorizontal: '1%',
+    // borderColor: '#c0c1c0',
+    // borderWidth: 1,
+    marginVertical: '1.5%',
+    // marginHorizontal: '1%',
+    flexDirection: 'row',
+    elevation: 1,
+  },
+  productPhoto: {flex: 2, backgroundColor: 'green', height: '100%'},
+  productInfo: {
+    flex: 4,
+    backgroundColor: 'pink',
+    height: '100%',
+    paddingVertical: '1%',
+  },
+  bookstxt: {
+    fontSize: 15,
+    color: '#000',
+    marginHorizontal: '2%',
+    fontFamily: globalfonts.font3,
+  },
+  booksHead: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '400',
+    marginHorizontal: '2%',
   },
   topimg: {height: height / 5, width: '100%'},
   BookInfo: {
