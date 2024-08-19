@@ -12,10 +12,12 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '../RTKquery/Slices/ApiSclices';
+import {position} from 'native-base/lib/typescript/theme/styled-system';
 // import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
@@ -41,9 +43,9 @@ const Profile_user = ({navigation}) => {
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
-//   const signupBtn = () => {
-//     navigation.navigate('register');
-//   };
+  //   const signupBtn = () => {
+  //     navigation.navigate('register');
+  //   };
 
   const registerUserBtn = async () => {
     // try {
@@ -69,7 +71,6 @@ const Profile_user = ({navigation}) => {
     //   const user = {email: emailId, password: Password, name, phone, address};
     //   const result = await Registeruser(user).unwrap();
     //   console.log('result', result);
-
     //   if (result.success) {
     //     navigation.navigate('home');
     //     setname('');
@@ -100,6 +101,10 @@ const Profile_user = ({navigation}) => {
         <ImageBackground
           source={require('../Assets/images/bg2.png')}
           style={styles.topimg}></ImageBackground>
+        <TouchableOpacity style={{position: 'absolute', left: 20, top: 20}}>
+          <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
+        </TouchableOpacity>
+
         <View style={styles.headingCont}></View>
 
         <TouchableOpacity style={styles.profilepicCont}>
@@ -144,7 +149,6 @@ const Profile_user = ({navigation}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
-           
           />
           <TextInput
             ref={occupationRef}
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf:"center"
+    alignSelf: 'center',
   },
   ParentContainer: {
     backgroundColor: global.bgColor,

@@ -8,13 +8,13 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState } from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
+import React, {useState} from 'react';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
 // import {TextInput} from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Badge } from 'react-native-paper';
+import {Badge} from 'react-native-paper';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
@@ -51,12 +51,14 @@ const Home = ({navigation}) => {
             placeholderTextColor={global.bgColor}
           />
         </View>
-        <FontAwesome
-          name="book"
-          size={30}
-          color={global.bgColor}
-          style={{right: 5}}
-        />
+        <TouchableOpacity>
+          <FontAwesome
+            name="book"
+            size={30}
+            color={global.bgColor}
+            style={{right: 5}}
+          />
+        </TouchableOpacity>
 
         <Badge size={20} style={styles.cartBadge}>
           3
@@ -71,11 +73,12 @@ const Home = ({navigation}) => {
         </View>
         <Text style={styles.newArival}>New Added</Text>
         <View style={styles.content}>
+          {/* 1*/}
           <TouchableOpacity
             style={styles.bookContainer}
             onPress={bookContainer}>
             <ImageBackground
-              source={require('../Assets/images/hor.jpg')}
+              source={require('../Assets/images/programming.jpg')}
               style={styles.topimg}></ImageBackground>
             <View style={{}}>
               <Text style={styles.BookInfo}>PROGRAMMING</Text>
@@ -83,28 +86,138 @@ const Home = ({navigation}) => {
               <Text style={styles.BookDiscount}>50%- 60% Off</Text>
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bookContainer}>
+          {/* 2*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
             <ImageBackground
-              source={require('../Assets/images/hor.jpg')}
+              source={require('../Assets/images/history.jpg')}
               style={styles.topimg}></ImageBackground>
             <View style={{}}>
-              <Text style={styles.BookInfo}>PROGRAMMING</Text>
-              <Text style={styles.BookDetails}>Second-Hand books</Text>
+              <Text style={styles.BookInfo}>HISTORY</Text>
+              <Text style={styles.BookDetails}>War, Rules, Guns, Armor </Text>
               <Text style={styles.BookDiscount}>50%- 60% Off</Text>
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.bookContainer}>
+          {/* 3*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
             <ImageBackground
-              source={require('../Assets/images/hor.jpg')}
+              source={require('../Assets/images/coding.jpg')}
               style={styles.topimg}></ImageBackground>
             <View style={{}}>
-              <Text style={styles.BookInfo}>PROGRAMMING</Text>
-              <Text style={styles.BookDetails}>Second-Hand books</Text>
+              <Text style={styles.BookInfo}>CODING</Text>
+              <Text style={styles.BookDetails}>Best Pactises</Text>
               <Text style={styles.BookDiscount}>50%- 60% Off</Text>
             </View>
           </TouchableOpacity>
+          {/* 4*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/chemistry.png')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>CHEMISTRY</Text>
+              <Text style={styles.BookDetails}>Bonds, Chemical, Lab-Test</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 5*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/english.jpg')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>ENGLISH</Text>
+              <Text style={styles.BookDetails}>Basics , verb, tenses</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 6*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/geo.png')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>GEOGRAPHY</Text>
+              <Text style={styles.BookDetails}>Map, route, travel</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 7*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/cooking.jpg')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>COOKING</Text>
+              <Text style={styles.BookDetails}>Taste, Food, Recipes </Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 8*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/politics.png')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>POLITICES</Text>
+              <Text style={styles.BookDetails}>Democracy, Leader, Rights</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 9*/}
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/story_books.jpg')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>STORY BOOK</Text>
+              <Text style={styles.BookDetails}>Motivational, funny, Moral</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity>
+          {/* 10
+          <TouchableOpacity
+            style={styles.bookContainer}
+            onPress={bookContainer}>
+            <ImageBackground
+              source={require('../Assets/images/politics.png')}
+              style={styles.topimg}></ImageBackground>
+            <View style={{}}>
+              <Text style={styles.BookInfo}>POLITICES</Text>
+              <Text style={styles.BookDetails}>Democracy, Leader, Rights</Text>
+              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            </View>
+          </TouchableOpacity> */}
+        </View>
+        <View
+          style={{
+            height: height / 5,
+            width: width - 20,
+            backgroundColor: global.sandColor,
+            borderRadius: 5,
+            alignSelf: 'center',
+            marginVertical: '2%',
+            overflow: 'hidden',
+          }}>
+          <ImageBackground
+            source={require('../Assets/images/tobeContinues.jpg')}
+            resizeMode="stretch"
+            style={[styles.topimg]}></ImageBackground>
         </View>
       </ScrollView>
     </View>
