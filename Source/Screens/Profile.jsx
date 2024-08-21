@@ -13,6 +13,8 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 // import {TextInput} from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
@@ -21,6 +23,24 @@ const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
 
 const Profile = ({navigation}) => {
+  const userData = useSelector(state => state.user);
+  console.log('Data received:', userData);
+
+  const name = userData?.data?.name || ''; // Provide a fallback in case name is undefined
+  const CapLetter = name.charAt(0).toUpperCase();
+
+  console.log('First capital letter:', CapLetter);
+
+  const FormateDate = createdAt => {
+    const dateString = createdAt;
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+    return formattedDate;
+    // console.log(formattedDate);
+  };
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -32,14 +52,13 @@ const Profile = ({navigation}) => {
       <View style={styles.Profileheader}>
         <View style={styles.profileHerderChild1}>
           <TouchableOpacity style={styles.profilepicCont}>
-            <MaterialIcons
-              name="add-a-photo"
-              size={35}
-              color={global.bgColor}
-            />
+            <Text style={styles.profilePhotoText}>{CapLetter}</Text>
           </TouchableOpacity>
-          <Text style={styles.profileTxt}>Ashish Kanojia</Text>
-          <Text style={styles.profileDateTxt}> Acc. Created At 20-06-2024</Text>
+          <Text style={styles.profileTxt}>{userData.data.name}</Text>
+
+          <Text style={styles.profileDateTxt}>
+            Acc. Created At  {FormateDate(userData.data.createAt)}
+          </Text>
         </View>
         <View style={styles.profileHerderChild2}></View>
       </View>
@@ -209,6 +228,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileTxt: {fontSize: width / 18, marginHorizontal: '5%', fontWeight: '600'},
+  profilePhotoText: {
+    fontSize: width / 6,
+    marginHorizontal: '5%',
+    fontFamily: globalfonts.font6,
+  },
   profileDateTxt: {
     fontSize: width / 30,
     marginHorizontal: '5%',

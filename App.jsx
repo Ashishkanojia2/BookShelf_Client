@@ -1,14 +1,14 @@
 import React from 'react';
-import {Provider} from 'react-redux';
-import store from './Source/Redux/Store/Store';
+import { Provider } from 'react-redux';
 import Main from './Main';
-import {ApiProvider} from '@reduxjs/toolkit/query/react';
-import {api} from './Source/RTKquery/Slices/ApiSclices';
+import { store } from './Source/Redux/Store/Store';
 
 export default App = () => {
   return (
-    <ApiProvider api={api}>
+    // <ApiProvider api={api}>
+    <Provider store={store}>
       <Main />
-    </ApiProvider>
+    </Provider>
+    // </ApiProvider>
   );
 };

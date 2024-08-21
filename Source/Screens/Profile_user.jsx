@@ -1,9 +1,7 @@
 import {
   Dimensions,
   ImageBackground,
-  Keyboard,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -13,11 +11,8 @@ import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  useLoginUserMutation,
-  useRegisterUserMutation,
-} from '../RTKquery/Slices/ApiSclices';
-import {position} from 'native-base/lib/typescript/theme/styled-system';
+import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
+import {useSelector} from 'react-redux';
 // import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
@@ -43,58 +38,11 @@ const Profile_user = ({navigation}) => {
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
-  //   const signupBtn = () => {
-  //     navigation.navigate('register');
-  //   };
+  const registerUserBtn = async () => {};
+  const clearMessage = () => {};
 
-  const registerUserBtn = async () => {
-    // try {
-    //   emailRef.current?.blur();
-    //   nameRef.current?.blur();
-    //   phoneRef.current?.blur();
-    //   addressRef.current?.blur();
-    //   emailRef.current?.blur();
-    //   passwordRef.current?.blur();
-    //   confirmPasswordRef.current?.blur();
-    //   Keyboard.dismiss();
-    //   if (
-    //     emailId == '' ||
-    //     Password == '' ||
-    //     confirmPassword == '' ||
-    //     name == '' ||
-    //     phone == '' ||
-    //     address == ''
-    //   ) {
-    //     return setMessage('please fill all the fields');
-    //   }
-    //   setbuttonLoading(true);
-    //   const user = {email: emailId, password: Password, name, phone, address};
-    //   const result = await Registeruser(user).unwrap();
-    //   console.log('result', result);
-    //   if (result.success) {
-    //     navigation.navigate('home');
-    //     setname('');
-    //     setemailId('');
-    //     setPassword('');
-    //     setconfirmPassword('');
-    //     setaddress('');
-    //     setphone('');
-    //     setbuttonLoading(false);
-    //   } else {
-    //     setMessage('Login failed. Please try again.');
-    //     setbuttonLoading(false);
-    //   }
-    // } catch (error) {
-    //   console.error('Login failed:', error);
-    // }
-  };
-  const clearMessage = () => {
-    // setMessage('');
-  };
+  const userData = useSelector(state => state.user.data);
 
-  const skipBtn = () => {
-    navigation.navigate('home');
-  };
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
@@ -202,7 +150,7 @@ const Profile_user = ({navigation}) => {
               width: width - 30,
               justifyContent: 'center',
             }}>
-            Update Profile
+            Update Your Profile
           </Button>
         </View>
       </View>

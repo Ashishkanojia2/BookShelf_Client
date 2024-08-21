@@ -11,22 +11,18 @@ import React, {useRef, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
-import {
-  useGetUserQuery,
-  useLoginUserMutation,
-} from '../RTKquery/Slices/ApiSclices';
-import {color} from 'native-base/lib/typescript/theme/styled-system';
-// import {} from "../../assets/fonts"
+import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
+import {useDispatch} from 'react-redux';
+import {getUserData} from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Login = ({navigation}) => {
+  const dispatch = useDispatch();
   const [loginUser, {isLoading, isError, isSuccess, error}] =
     useLoginUserMutation();
-  const a = useGetUserQuery();
 
   const [emailId, setemailId] = useState('');
   const [Password, setPassword] = useState('');
@@ -39,12 +35,10 @@ const Login = ({navigation}) => {
   //
   //
   //
-
   //
   const signupBtn = () => {
     navigation.navigate('register');
   };
-
   const registerUserBtn = async () => {
     try {
       if (emailId == '' || Password == '') {
@@ -53,8 +47,8 @@ const Login = ({navigation}) => {
       setbuttonLoading(true);
       const user = {email: emailId, password: Password};
       const result = await loginUser(user).unwrap();
-      // console.log('Login successful:', result);
-      // console.log('AA', a);
+      console.log('Login successful1234:', result);
+      dispatch(getUserData(result.user));
       emailRef.current?.blur();
       passwordRef.current?.blur();
       Keyboard.dismiss();
@@ -68,6 +62,9 @@ const Login = ({navigation}) => {
       }
     } catch (error) {
       console.error('Login failed:', error);
+      // console.error('Login failed2:', error.message);
+      setbuttonLoading(false);
+      setMessage(error.data.message);
     }
   };
   const clearMessage = () => {

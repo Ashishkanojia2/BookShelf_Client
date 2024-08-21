@@ -13,15 +13,21 @@ import Profile_Favorite from './Source/Screens/Profile_Favorite';
 import Profile_SendFeedBack from './Source/Screens/Profile_SendFeedBack';
 import Profile_order from './Source/Screens/Profile_order';
 import Profile_sellingBook from './Source/Screens/Profile_sellingBook';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
+  console.log(useSelector(state => state));
+  const userdata = useSelector(state => state.user);
+
   return (
     <NativeBaseProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="home"
+          initialRouteName={
+            userdata && userdata.data.length > 0 ? 'home' : 'login'
+          }
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />

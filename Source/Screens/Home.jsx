@@ -8,13 +8,16 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 // import {TextInput} from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Badge} from 'react-native-paper';
+import {useExistsUserQuery} from '../RTKquery/Slices/ApiSclices';
+import {getUserData} from '../Redux/Reducer/AuthReducer';
+import {useDispatch} from 'react-redux';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
