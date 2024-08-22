@@ -7,14 +7,16 @@ import {
   TouchableOpacity,
   Touchable,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import {logoutUser} from '../Redux/Reducer/AuthReducer';
+import {useLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 // import {TextInput} from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
@@ -30,6 +32,21 @@ const Profile = ({navigation}) => {
   const CapLetter = name.charAt(0).toUpperCase();
 
   console.log('First capital letter:', CapLetter);
+  const dispatch = useDispatch();
+
+  const logoutUserData = useSelector(state => state.user.data);
+  console.log(logoutUserData);
+
+  const logout = () => {
+    // dispatch(logoutUser());
+    console.log("@@@@@@@@");
+    
+  };
+
+  useEffect(() => {
+    const a = useLogoutUserQuery();
+    console.log('the value of a is ', a);
+  }, [logout]);
 
   const FormateDate = createdAt => {
     const dateString = createdAt;
@@ -57,7 +74,7 @@ const Profile = ({navigation}) => {
           <Text style={styles.profileTxt}>{userData.data.name}</Text>
 
           <Text style={styles.profileDateTxt}>
-            Acc. Created At  {FormateDate(userData.data.createAt)}
+            Acc. Created At {FormateDate(userData.data.createAt)}
           </Text>
         </View>
         <View style={styles.profileHerderChild2}></View>
@@ -168,7 +185,7 @@ const Profile = ({navigation}) => {
             style={{right: 10}}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profileOption}>
+        <TouchableOpacity style={styles.profileOption} onPress={logout}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <FontAwesome name="power-off" size={18} color={'#fff'} />

@@ -15,13 +15,11 @@ export const api = createApi({
         body: user,
       }),
     }),
-    // ExistsUser: builder.query({
-    //   query: user => ({
-    //     url: '/user/me',
-    //     method: 'GET',
-    //     body: user,
-    //   }),
-    // }),
+    logoutUser: builder.query({
+      query: () => ({
+        url: '/user/logout',
+      }),
+    }),
     registerUser: builder.mutation({
       query: registerUser => ({
         url: '/user/register',
@@ -36,5 +34,5 @@ export const {
   useGetUserQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
-  // useExistsUserQuery,
+  useLogoutUserQuery,
 } = api;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from './Source/Screens/Login';
@@ -13,20 +13,26 @@ import Profile_Favorite from './Source/Screens/Profile_Favorite';
 import Profile_SendFeedBack from './Source/Screens/Profile_SendFeedBack';
 import Profile_order from './Source/Screens/Profile_order';
 import Profile_sellingBook from './Source/Screens/Profile_sellingBook';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUserData} from './Source/Redux/Reducer/AuthReducer';
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
-  console.log(useSelector(state => state));
+  console.log("@@##$$",useSelector(state => state));
   const userdata = useSelector(state => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserData());
+  }, [dispatch]);
 
   return (
     <NativeBaseProvider>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={
-            userdata && userdata.data.length > 0 ? 'home' : 'login'
+            userdata && userdata.data ? 'home' : 'login'
           }
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="login" component={Login} />
