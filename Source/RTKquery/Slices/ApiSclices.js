@@ -34,5 +34,6 @@ export const {
   useGetUserQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
-  useLogoutUserQuery,
+  useLazyLogoutUserQuery,
+  // useLogoutUserQuery,
 } = api;

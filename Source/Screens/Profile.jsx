@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Touchable,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -16,7 +16,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {logoutUser} from '../Redux/Reducer/AuthReducer';
-import {useLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
+import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 // import {TextInput} from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
@@ -26,27 +26,35 @@ const font1 = 'Pacifico-Regular';
 
 const Profile = ({navigation}) => {
   const userData = useSelector(state => state.user);
-  console.log('Data received:', userData);
+  // console.log('Data received:', userData);
 
   const name = userData?.data?.name || ''; // Provide a fallback in case name is undefined
   const CapLetter = name.charAt(0).toUpperCase();
 
-  console.log('First capital letter:', CapLetter);
+  // console.log('First capital letter:', CapLetter);
   const dispatch = useDispatch();
 
   const logoutUserData = useSelector(state => state.user.data);
-  console.log(logoutUserData);
+  // console.log(logoutUserData);
+  const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
+    useLazyLogoutUserQuery();
+  // const a = triggerLogout();
+  console.log(isSuccess);
+  console.log(data);
 
-  const logout = () => {
-    // dispatch(logoutUser());
-    console.log("@@@@@@@@");
-    
+  const logout = async () => {
+    await triggerLogout()
+      .unwrap()
+      .then(() => {
+        // Handle successful logout
+        // For example, navigate to login screen
+        navigation.navigate('login');
+      })
+      .catch(err => {
+        // Handle logout error
+        console.error('Logout failed:', err);
+      });
   };
-
-  useEffect(() => {
-    const a = useLogoutUserQuery();
-    console.log('the value of a is ', a);
-  }, [logout]);
 
   const FormateDate = createdAt => {
     const dateString = createdAt;

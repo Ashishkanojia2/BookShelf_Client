@@ -13,7 +13,7 @@ import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
 import {useDispatch} from 'react-redux';
-import {getUserData} from '../Redux/Reducer/AuthReducer';
+import {loginUserData} from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -21,8 +21,7 @@ const width = Dimensions.get('window').width;
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
-  const [loginUser, {isLoading, isError, isSuccess, error}] =
-    useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
 
   const [emailId, setemailId] = useState('');
   const [Password, setPassword] = useState('');
@@ -31,11 +30,6 @@ const Login = ({navigation}) => {
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
-  //
-  //
-  //
-  //
-  //
   const signupBtn = () => {
     navigation.navigate('register');
   };
@@ -47,22 +41,21 @@ const Login = ({navigation}) => {
       setbuttonLoading(true);
       const user = {email: emailId, password: Password};
       const result = await loginUser(user).unwrap();
-      console.log('Login successful1234:', result);
-      dispatch(getUserData(result.user));
+
+      dispatch(loginUserData(result.user));
       emailRef.current?.blur();
       passwordRef.current?.blur();
       Keyboard.dismiss();
 
       if (result.success) {
-        navigation.navigate('home'); // Navigate to the Home screen
+        navigation.navigate('home');
         setbuttonLoading(false);
+        setPassword('');
       } else {
         setMessage('Login failed. Please try again.');
         setbuttonLoading(false);
       }
     } catch (error) {
-      console.error('Login failed:', error);
-      // console.error('Login failed2:', error.message);
       setbuttonLoading(false);
       setMessage(error.data.message);
     }
@@ -70,7 +63,6 @@ const Login = ({navigation}) => {
   const clearMessage = () => {
     setMessage('');
   };
-
   const skipBtn = () => {
     navigation.navigate('home');
   };

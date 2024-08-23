@@ -14,26 +14,32 @@ import Profile_SendFeedBack from './Source/Screens/Profile_SendFeedBack';
 import Profile_order from './Source/Screens/Profile_order';
 import Profile_sellingBook from './Source/Screens/Profile_sellingBook';
 import {useDispatch, useSelector} from 'react-redux';
+import {useGetUserQuery} from './Source/RTKquery/Slices/ApiSclices';
 import {getUserData} from './Source/Redux/Reducer/AuthReducer';
+import WaitingScren from './Source/Components/Comp/WaitingScren';
+// import {getUserData} from './Source/Redux/Reducer/AuthReducer';
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
-  console.log("@@##$$",useSelector(state => state));
-  const userdata = useSelector(state => state.user);
+  const {data, isSuccess, isFetching} = useGetUserQuery();
+  // const k = useGetUserQuery();
+  // const userdata = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserData());
-  }, [dispatch]);
+    if (isSuccess && data) {
+      dispatch(getUserData({data: data.user}));
+    }
+  }, [isSuccess, data, dispatch]);
 
-  return (
+  return isFetching ? (
+    <WaitingScren />
+  ) : (
     <NativeBaseProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={
-            userdata && userdata.data ? 'home' : 'login'
-          }
+          initialRouteName={isSuccess ? 'home' : 'login'}
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="login" component={Login} />
           <Stack.Screen name="register" component={Register} />

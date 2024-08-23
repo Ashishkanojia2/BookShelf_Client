@@ -25,7 +25,6 @@ const width = Dimensions.get('window').width;
 const Login = ({navigation}) => {
   const [loginUser, {isLoading, isError, isSuccess, error}] =
     useLoginUserMutation();
-  //   const a = useGetUserQuery();
   const [Registeruser] = useRegisterUserMutation();
 
   const [emailId, setemailId] = useState('');
