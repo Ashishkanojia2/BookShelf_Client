@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useGetUserQuery} from './Source/RTKquery/Slices/ApiSclices';
 import {getUserData} from './Source/Redux/Reducer/AuthReducer';
 import WaitingScren from './Source/Components/Comp/WaitingScren';
+import AddBooks from './Source/Screens/AddBooks';
 // import {getUserData} from './Source/Redux/Reducer/AuthReducer';
 
 const Stack = createNativeStackNavigator();
@@ -49,6 +50,7 @@ const Main = () => {
           <Stack.Screen name="profileUser" component={Profile_user} />
           <Stack.Screen name="profileabout" component={Profile_about} />
           <Stack.Screen name="profileFavorite" component={Profile_Favorite} />
+          <Stack.Screen name="addbooks" component={AddBooks} />
           <Stack.Screen
             name="profileSendFeedBack"
             component={Profile_SendFeedBack}

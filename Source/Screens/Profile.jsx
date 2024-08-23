@@ -107,6 +107,22 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
+          onPress={() => navigation.navigate('addbooks')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <FontAwesome name="user-o" size={18} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Add books</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
           onPress={() => navigation.navigate('profileUser')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
