@@ -14,6 +14,7 @@ import {ScrollView} from 'native-base';
 import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
 import {useDispatch} from 'react-redux';
 import {loginUserData} from '../Redux/Reducer/AuthReducer';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -29,6 +30,8 @@ const Login = ({navigation}) => {
   const passwordRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
+  const [showPassword, setshowPassword] = useState(false);
+  const [passIcon, setpassIcon] = useState('eye');
 
   const signupBtn = () => {
     navigation.navigate('register');
@@ -107,11 +110,18 @@ const Login = ({navigation}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
-            secureTextEntry={true} // Hide text input
+            secureTextEntry={showPassword} // Hide text input
             autoComplete="off" // Disable autocomplete
             autoCorrect={false} // Disable autocorrect
             spellCheck={false} // Disable spell check
             textContentType="password"
+            right={
+              <TextInput.Icon
+                icon={showPassword ? 'eye' : 'eye-off'}
+                onPress={() => setshowPassword(!showPassword)}
+                color={global.sandColor}
+              />
+            }
           />
 
           <Button

@@ -18,6 +18,7 @@ import {Badge} from 'react-native-paper';
 import {useExistsUserQuery} from '../RTKquery/Slices/ApiSclices';
 // import {getUserData} from '../Redux/Reducer/AuthReducer';
 import {useDispatch} from 'react-redux';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
@@ -75,6 +76,14 @@ const Home = ({navigation}) => {
           </ScrollView>
         </View>
         <Text style={styles.newArival}>New Added</Text>
+        <View style={styles.bookChooseCatCont}>
+          <TouchableOpacity style={styles.catBtnCont}>
+            <Text style={styles.all}>All Books</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.catBtnCont}>
+            <Text style={styles.all}>Categories</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.content}>
           {/* 1*/}
           <TouchableOpacity
@@ -193,19 +202,6 @@ const Home = ({navigation}) => {
               <Text style={styles.BookDiscount}>50%- 60% Off</Text>
             </View>
           </TouchableOpacity>
-          {/* 10
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/politics.png')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>POLITICES</Text>
-              <Text style={styles.BookDetails}>Democracy, Leader, Rights</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity> */}
         </View>
         <View
           style={{
@@ -349,6 +345,18 @@ const styles = StyleSheet.create({
     backgroundColor: global.sandColor,
     color: global.bgColor,
   },
+  bookChooseCatCont: {flexDirection: 'row'},
+  catBtnCont: {
+    marginVertical: '1.5%',
+    // backgroundColor: '#000',
+    borderColor: global.bgColor,
+    marginLeft: '2%',
+    borderWidth: 1,
+    paddingHorizontal: '2%',
+    paddingVertical: '1%',
+    borderRadius: 20,
+  },
+  all: {fontSize: 18, color: global.bgColor, fontFamily: globalfonts.font4},
 });
 
 export default Home;
