@@ -1,6 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
-export const api = createApi({
+export const userApi = createApi({
+  reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1',
   }),
@@ -36,4 +37,4 @@ export const {
   useRegisterUserMutation,
   useLazyLogoutUserQuery,
   // useLogoutUserQuery,
-} = api;
+} = userApi;

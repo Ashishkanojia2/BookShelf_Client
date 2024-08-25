@@ -462,6 +462,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: '1%',
     flexDirection: 'row',
     elevation: 1,
+    overflow:"hidden"
   },
   productPhoto: {
     flex: 2,

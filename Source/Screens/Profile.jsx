@@ -15,7 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {logoutUser} from '../Redux/Reducer/AuthReducer';
+import {clearUserData, logoutUser} from '../Redux/Reducer/AuthReducer';
 import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 // import {TextInput} from 'react-native-paper';
 
@@ -34,13 +34,14 @@ const Profile = ({navigation}) => {
   // console.log('First capital letter:', CapLetter);
   const dispatch = useDispatch();
 
-  const logoutUserData = useSelector(state => state.user.data);
+  // const logoutUserData = useSelector(state => state.user.data);
   // console.log(logoutUserData);
   const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
     useLazyLogoutUserQuery();
   // const a = triggerLogout();
-  console.log(isSuccess);
-  console.log(data);
+  console.log('isSucces logout', isSuccess);
+  console.log('data while logout', data);
+  console.log('userdata logout', userData);
 
   const logout = async () => {
     await triggerLogout()
@@ -48,6 +49,7 @@ const Profile = ({navigation}) => {
       .then(() => {
         // Handle successful logout
         // For example, navigate to login screen
+        dispatch(clearUserData());
         navigation.navigate('login');
       })
       .catch(err => {

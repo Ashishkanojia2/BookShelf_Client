@@ -30,7 +30,7 @@ const Login = ({navigation}) => {
   const passwordRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
-  const [showPassword, setshowPassword] = useState(false);
+  const [showPassword, setshowPassword] = useState(true);
   const [passIcon, setpassIcon] = useState('eye');
 
   const signupBtn = () => {

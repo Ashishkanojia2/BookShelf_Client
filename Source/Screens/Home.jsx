@@ -8,29 +8,22 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
-// import {TextInput} from 'react-native-paper';
+import {Badge} from 'react-native-paper';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Badge} from 'react-native-paper';
-import {useExistsUserQuery} from '../RTKquery/Slices/ApiSclices';
-// import {getUserData} from '../Redux/Reducer/AuthReducer';
-import {useDispatch} from 'react-redux';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
-const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const Home = ({navigation}) => {
   const [searchText, setsearchText] = useState('');
-
+  const [ShowingBookData, setShowingBookData] = useState(false);
   const bookContainer = () => {
     navigation.navigate('books');
   };
-
   const profileBtn = () => {
     navigation.navigate('profile');
   };
@@ -50,6 +43,7 @@ const Home = ({navigation}) => {
 
           <TextInput
             // value={searchText}
+            style={{color:global.bgColor}}
             onChangeText={text => setsearchText(text)}
             placeholder="Search Books"
             placeholderTextColor={global.bgColor}
@@ -70,169 +64,307 @@ const Home = ({navigation}) => {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.topcontent}>
-          <ScrollView horizontal>
+          <ScrollView horizontal style={{flex: 1, marginBottom: '2%'}}>
             <View style={styles.newBookContainer}></View>
             <View style={styles.newBookContainer}></View>
           </ScrollView>
         </View>
         <Text style={styles.newArival}>New Added</Text>
         <View style={styles.bookChooseCatCont}>
-          <TouchableOpacity style={styles.catBtnCont}>
-            <Text style={styles.all}>All Books</Text>
+          <TouchableOpacity
+            style={{
+              marginVertical: '1.5%',
+              borderColor: global.bgColor,
+              backgroundColor: ShowingBookData
+                ? global.lightgray
+                : global.sandColor,
+              marginLeft: '2%',
+              borderWidth: 1,
+              paddingHorizontal: '2%',
+              paddingVertical: '1%',
+              borderRadius: 20,
+              elevation: 50,
+              shadowColor: '#000',
+            }}
+            onPress={() => setShowingBookData(false)}>
+            <Text
+              style={{
+                fontSize: ShowingBookData ? 18 : 16,
+                color: global.bgColor,
+                fontFamily: globalfonts.font4,
+              }}>
+              All Books
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.catBtnCont}>
-            <Text style={styles.all}>Categories</Text>
+          <TouchableOpacity
+            style={{
+              marginVertical: '1.5%',
+              backgroundColor: ShowingBookData
+                ? global.sandColor
+                : global.lightgray,
+              marginLeft: '2%',
+              borderWidth: 1,
+              paddingHorizontal: '2%',
+              paddingVertical: '1%',
+              borderRadius: 20,
+            }}
+            onPress={() => setShowingBookData(true)}>
+            <Text
+              style={{
+                fontSize: ShowingBookData ? 16 : 18,
+                color: global.bgColor,
+                fontFamily: globalfonts.font4,
+              }}>
+              Categories
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.content}>
-          {/* 1*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/programming.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>PROGRAMMING</Text>
-              <Text style={styles.BookDetails}>Second-Hand books</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+        {ShowingBookData ? (
+          <View style={styles.content}>
+            {/* 1*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/programming.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>PROGRAMMING</Text>
+                <Text style={styles.BookDetails}>Second-Hand books</Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 2*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/history.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>HISTORY</Text>
+                <Text style={styles.BookDetails}>War, Rules, Guns, Armor </Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 3*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/coding.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>CODING</Text>
+                <Text style={styles.BookDetails}>Best Pactises</Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 4*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/chemistry.png')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>CHEMISTRY</Text>
+                <Text style={styles.BookDetails}>
+                  Bonds, Chemical, Lab-Test
+                </Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 5*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/english.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>ENGLISH</Text>
+                <Text style={styles.BookDetails}>Basics , verb, tenses</Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 6*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/geo.png')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>GEOGRAPHY</Text>
+                <Text style={styles.BookDetails}>Map, route, travel</Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 7*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/cooking.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>COOKING</Text>
+                <Text style={styles.BookDetails}>Taste, Food, Recipes </Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 8*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/politics.png')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>POLITICES</Text>
+                <Text style={styles.BookDetails}>
+                  Democracy, Leader, Rights
+                </Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+            {/* 9*/}
+            <TouchableOpacity
+              style={styles.bookContainer}
+              onPress={bookContainer}>
+              <ImageBackground
+                source={require('../Assets/images/story_books.jpg')}
+                style={styles.topimg}></ImageBackground>
+              <View style={{}}>
+                <Text style={styles.BookInfo}>STORY BOOK</Text>
+                <Text style={styles.BookDetails}>
+                  Motivational, funny, Moral
+                </Text>
+                <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.allBookContainer}>
+            <View style={styles.productPhoto}>
+              <View
+                style={{
+                  height: '80%',
+                  width: '80%',
+                  backgroundColor: global.thirdColor,
+                }}></View>
             </View>
-          </TouchableOpacity>
-          {/* 2*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/history.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>HISTORY</Text>
-              <Text style={styles.BookDetails}>War, Rules, Guns, Armor </Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
+            <View style={styles.productInfo}>
+              <Text
+                style={[styles.bookstxt]}
+                numberOfLines={3}
+                ellipsizeMode="tail">
+                Programming BooksProgramming BooksProgramming BooksProgramming
+                BooksProgramming BooksProgramming BooksProgramming
+                BooksProgramming BooksProgramming BooksProgramming
+                BooksProgramming BooksProgramming Books
+              </Text>
+              <View style={styles.editionCont}>
+                <Text style={styles.booksHead}>Edition</Text>
+                <Text style={styles.bookstxt}>10th</Text>
+              </View>
+              <View style={styles.editionCont}>
+                <Text style={styles.booksHead}>Author</Text>
+                <Text style={styles.bookstxt}>S Chand</Text>
+              </View>
+              <View style={styles.editionCont}>
+                <Text style={styles.booksHead}>S.Price</Text>
+                <Text style={styles.bookstxt}>400 rs.</Text>
+              </View>
+              <View style={styles.editionCont}>
+                <Text style={styles.booksHead}>A.Price</Text>
+                <Text
+                  style={[
+                    styles.bookstxt,
+                    {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                  ]}>
+                  1000 rs.
+                </Text>
+              </View>
+              <TouchableOpacity style={styles.addBtn}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: '#000',
+                    fontFamily: globalfonts.font5,
+                  }}>
+                  ADD
+                </Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-          {/* 3*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/coding.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>CODING</Text>
-              <Text style={styles.BookDetails}>Best Pactises</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 4*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/chemistry.png')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>CHEMISTRY</Text>
-              <Text style={styles.BookDetails}>Bonds, Chemical, Lab-Test</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 5*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/english.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>ENGLISH</Text>
-              <Text style={styles.BookDetails}>Basics , verb, tenses</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 6*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/geo.png')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>GEOGRAPHY</Text>
-              <Text style={styles.BookDetails}>Map, route, travel</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 7*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/cooking.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>COOKING</Text>
-              <Text style={styles.BookDetails}>Taste, Food, Recipes </Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 8*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/politics.png')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>POLITICES</Text>
-              <Text style={styles.BookDetails}>Democracy, Leader, Rights</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-          {/* 9*/}
-          <TouchableOpacity
-            style={styles.bookContainer}
-            onPress={bookContainer}>
-            <ImageBackground
-              source={require('../Assets/images/story_books.jpg')}
-              style={styles.topimg}></ImageBackground>
-            <View style={{}}>
-              <Text style={styles.BookInfo}>STORY BOOK</Text>
-              <Text style={styles.BookDetails}>Motivational, funny, Moral</Text>
-              <Text style={styles.BookDiscount}>50%- 60% Off</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            height: height / 5,
-            width: width - 20,
-            backgroundColor: global.sandColor,
-            borderRadius: 5,
-            alignSelf: 'center',
-            marginVertical: '2%',
-            overflow: 'hidden',
-          }}>
-          <ImageBackground
-            source={require('../Assets/images/tobeContinues.jpg')}
-            resizeMode="stretch"
-            style={[styles.topimg]}></ImageBackground>
-        </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  addBtn: {
+    height: height / 25,
+    width: width / 7,
+    position: 'absolute',
+    backgroundColor: global.sandColor,
+    right: 10,
+    bottom: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+  },
+  editionCont: {flexDirection: 'row', marginTop: '1%', flexDirection: 'row'},
+  booksHead: {
+    fontSize: 14,
+    color: '#000',
+    fontWeight: '400',
+    marginHorizontal: '2%',
+    fontFamily: globalfonts.font5,
+  },
+  bookstxt: {
+    fontSize: 15,
+    color: '#000',
+    marginHorizontal: '2%',
+    fontFamily: globalfonts.font5,
+  },
+  productInfo: {
+    flex: 4,
+    height: '100%',
+    paddingVertical: '1%',
+  },
+  productPhoto: {
+    flex: 2,
+    backgroundColor: 'pink',
+    height: '100%',
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  allBookContainer: {
+    height: height / 5.5,
+    width: width - 20,
+    backgroundColor: '#fafafa',
+    borderRadius: 10,
+    marginVertical: '1.5%',
+    flexDirection: 'row',
+    elevation: 1,
+    alignSelf: 'center',
+    overflow: 'hidden',
+  },
   ParentContainer: {
-    flex: 1, // Ensure the parent container takes up the full screen
+    flex: 1,
   },
   scrollContent: {
-    flexGrow: 1, // Allows the ScrollView to expand and fill the parent container
+    flexGrow: 1,
   },
   headerCont: {
     backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70, // Set a specific height for the header
+    height: 70,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -250,12 +382,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   topcontent: {
-    flex: 1,
     color: '#000',
     flexDirection: 'row',
-    // marginVertical: '2%',
-    // flexWrap: 'wrap',
-    // backgroundColor: global.sandColor,
   },
   inputfield: {
     width: width - 100,
@@ -295,7 +423,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: global.bgColor,
     borderWidth: 1,
-    // margin: '2%',
     marginHorizontal: '1%',
     elevation: 10,
     marginVertical: 20,
@@ -323,7 +450,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 30,
     marginHorizontal: 10,
-    fontFamily: font,
+    fontFamily: globalfonts.font,
     backgroundColor: global.thirdColor,
     borderRadius: 6,
     paddingHorizontal: 10,
@@ -348,7 +475,15 @@ const styles = StyleSheet.create({
   bookChooseCatCont: {flexDirection: 'row'},
   catBtnCont: {
     marginVertical: '1.5%',
-    // backgroundColor: '#000',
+    borderColor: global.bgColor,
+    marginLeft: '2%',
+    borderWidth: 1,
+    paddingHorizontal: '2%',
+    paddingVertical: '1%',
+    borderRadius: 20,
+  },
+  allbookcatBtnCont: {
+    marginVertical: '1.5%',
     borderColor: global.bgColor,
     marginLeft: '2%',
     borderWidth: 1,

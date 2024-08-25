@@ -24,25 +24,28 @@ const width = Dimensions.get('window').width;
 const AddBooks = ({navigation}) => {
   const [Registeruser] = useRegisterUserMutation();
 
-  const [emailId, setemailId] = useState('');
-  const [Gender, setGender] = useState('');
-  const [Occupation, setOccupation] = useState('');
-  const [phone, setphone] = useState('');
-  const [address, setaddress] = useState('');
-  const [name, setname] = useState('');
-  const emailRef = useRef(null);
-  const genderRef = useRef(null);
-  const occupationRef = useRef(null);
-  const phoneRef = useRef(null);
-  const addressRef = useRef(null);
-  const nameRef = useRef(null);
+  const [bookDesc, setbookDesc] = useState('');
+  const [author, setauthor] = useState('');
+  const [Edition, setEdition] = useState('');
+  const [mrp, setmrp] = useState('');
+  const [Categories, setCategories] = useState('');
+  const [bookName, setbookName] = useState('');
+  const [sellingPrice, setsellingPrice] = useState('');
+  //
+  const bookRef = useRef(null);
+  const DescRef = useRef(null);
+  const authorRef = useRef(null);
+  const editionRef = useRef(null);
+  const categoriesRef = useRef(null);
+  const mrpRef = useRef(null);
+  const sellingRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
   const registerUserBtn = async () => {};
   const clearMessage = () => {};
 
-  const userData = useSelector(state => state.user.data);
+//   const userData = useSelector(state => state.user.data);
 
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
@@ -91,9 +94,9 @@ const AddBooks = ({navigation}) => {
           </View>
           <View style={styles.inputboxcont}>
             <TextInput
-              ref={nameRef}
-              value={name}
-              onChangeText={value => setname(value)}
+              ref={bookRef}
+              value={bookName}
+              onChangeText={value => setbookName(value)}
               label={'Book Name'}
               style={styles.inputfield}
               outlineColor={global.thirdColor}
@@ -102,13 +105,14 @@ const AddBooks = ({navigation}) => {
               mode="outlined"
               textColor={global.sandColor}
               onFocus={clearMessage}
+              autoCorrect={true}
             />
             <TextInput
-              ref={emailRef}
-              value={emailId}
-                numberOfLines={7}
+              ref={DescRef}
+              value={bookDesc}
+              numberOfLines={7}
               multiline={true}
-              onChangeText={value => setemailId(value)}
+              onChangeText={value => setbookDesc(value)}
               label={'Description'}
               style={styles.inputfield}
               outlineColor={global.thirdColor}
@@ -116,12 +120,13 @@ const AddBooks = ({navigation}) => {
               activeOutlineColor={global.sandColor}
               mode="outlined"
               textColor={global.sandColor}
+              autoCorrect={true}
               onFocus={clearMessage}
             />
             <TextInput
-              ref={genderRef}
-              value={Gender}
-              onChangeText={value => setGender(value)}
+              ref={authorRef}
+              value={author}
+              onChangeText={value => setauthor(value)}
               label={'Author'}
               style={styles.inputfield}
               outlineColor={global.thirdColor}
@@ -130,11 +135,12 @@ const AddBooks = ({navigation}) => {
               mode="outlined"
               textColor={global.sandColor}
               onFocus={clearMessage}
+              autoCorrect={true}
             />
             <TextInput
-              ref={occupationRef}
-              value={Occupation}
-              onChangeText={value => setOccupation(value)}
+              ref={editionRef}
+              value={Edition}
+              onChangeText={value => setEdition(value)}
               label={'Edition'}
               style={styles.inputfield}
               outlineColor={global.thirdColor}
@@ -144,11 +150,12 @@ const AddBooks = ({navigation}) => {
               mode="outlined"
               textColor={global.sandColor}
               onFocus={clearMessage}
+              autoCorrect={true}
             />
             <TextInput
-              ref={addressRef}
-              value={address}
-              onChangeText={value => setaddress(value)}
+              ref={categoriesRef}
+              value={Categories}
+              onChangeText={value => setCategories(value)}
               label={'Categories'}
               style={styles.inputfield}
               outlineColor={global.thirdColor}
@@ -159,9 +166,9 @@ const AddBooks = ({navigation}) => {
               onFocus={clearMessage}
             />
             <TextInput
-              ref={phoneRef}
-              value={phone}
-              onChangeText={value => setphone(value)}
+              ref={mrpRef}
+              value={mrp}
+              onChangeText={value => setmrp(value)}
               label={'MRP rs.'}
               keyboardType="decimal-pad"
               style={styles.inputfield}
@@ -173,9 +180,9 @@ const AddBooks = ({navigation}) => {
               onFocus={clearMessage}
             />
             <TextInput
-              ref={addressRef}
-              value={address}
-              onChangeText={value => setaddress(value)}
+              ref={sellingRef}
+              value={sellingPrice}
+              onChangeText={value => setsellingPrice(value)}
               label={'Selling Price'}
               keyboardType="decimal-pad"
               style={styles.inputfield}

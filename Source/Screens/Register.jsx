@@ -46,7 +46,6 @@ const Login = ({navigation}) => {
   //
   //
   //
-
   //
   const signupBtn = () => {
     navigation.navigate('register');
