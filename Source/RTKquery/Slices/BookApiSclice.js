@@ -13,11 +13,11 @@ export const bookApi = createApi({
         body: book,
       }),
     }),
-    // getBookData : builder.query({
-    //     query:()=>({
-    //         url:"/"
-    //     })
-    // })
+    getBookData : builder.query({
+        query:()=>({
+            url:"/getallbooks"
+        })
+    })
     // logoutUser: builder.query({
     //   query: () => ({
     //     url: '/user/logout',
@@ -33,4 +33,4 @@ export const bookApi = createApi({
   }),
 });
 
-export const {useRegisterBookMutation} = bookApi;
+export const {useRegisterBookMutation , useGetBookDataQuery} = bookApi;

@@ -15,12 +15,33 @@ import {Badge} from 'react-native-paper';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
+import {useDispatch, useSelector} from 'react-redux';
+import {setBookData} from '../Redux/Reducer/BookReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Home = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  //USE_STATE
   const [searchText, setsearchText] = useState('');
   const [ShowingBookData, setShowingBookData] = useState(false);
+
+  //API CALLING
+  const allBooksData = useGetBookDataQuery();
+
+  if (allBooksData.currentData) {
+    console.log('getalldata', allBooksData.currentData.allbooks);
+    dispatch(setBookData(allBooksData.currentData.allbooks));
+  } else {
+    console.log('Loading data or error occurred');
+  }
+
+  const state_BookData = useSelector(state => state.book); // Ensure correct path to state
+  console.log('state_BookData', state_BookData);
+
+  //FUNCTIONS
   const bookContainer = () => {
     navigation.navigate('books');
   };
@@ -43,7 +64,7 @@ const Home = ({navigation}) => {
 
           <TextInput
             // value={searchText}
-            style={{color:global.bgColor}}
+            style={{color: global.bgColor}}
             onChangeText={text => setsearchText(text)}
             placeholder="Search Books"
             placeholderTextColor={global.bgColor}
@@ -246,59 +267,64 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={styles.allBookContainer}>
-            <View style={styles.productPhoto}>
-              <View
-                style={{
-                  height: '80%',
-                  width: '80%',
-                  backgroundColor: global.thirdColor,
-                }}></View>
-            </View>
-            <View style={styles.productInfo}>
-              <Text
-                style={[styles.bookstxt]}
-                numberOfLines={3}
-                ellipsizeMode="tail">
-                Programming BooksProgramming BooksProgramming BooksProgramming
-                BooksProgramming BooksProgramming BooksProgramming
-                BooksProgramming BooksProgramming BooksProgramming
-                BooksProgramming BooksProgramming Books
-              </Text>
-              <View style={styles.editionCont}>
-                <Text style={styles.booksHead}>Edition</Text>
-                <Text style={styles.bookstxt}>10th</Text>
-              </View>
-              <View style={styles.editionCont}>
-                <Text style={styles.booksHead}>Author</Text>
-                <Text style={styles.bookstxt}>S Chand</Text>
-              </View>
-              <View style={styles.editionCont}>
-                <Text style={styles.booksHead}>S.Price</Text>
-                <Text style={styles.bookstxt}>400 rs.</Text>
-              </View>
-              <View style={styles.editionCont}>
-                <Text style={styles.booksHead}>A.Price</Text>
-                <Text
-                  style={[
-                    styles.bookstxt,
-                    {textDecorationLine: 'line-through', color: '#c9c9c9'},
-                  ]}>
-                  1000 rs.
-                </Text>
-              </View>
-              <TouchableOpacity style={styles.addBtn}>
-                <Text
+          state_BookData.bookdata.map(item => (
+            <View style={styles.allBookContainer}>
+              <View style={styles.productPhoto}>
+                <View
                   style={{
-                    fontSize: 15,
-                    color: '#000',
-                    fontFamily: globalfonts.font5,
-                  }}>
-                  ADD
+                    height: '80%',
+                    width: '80%',
+                    backgroundColor: global.thirdColor,
+                  }}></View>
+              </View>
+              <View style={styles.productInfo}>
+                <Text
+                  style={[styles.bookstxt]}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item.b_name}
                 </Text>
-              </TouchableOpacity>
+                <Text
+                  style={[styles.bookstxt]}
+                  numberOfLines={3}
+                  ellipsizeMode="tail">
+                  {item.b_desc}
+                </Text>
+                <View style={styles.editionCont}>
+                  <Text style={styles.booksHead}>Edition</Text>
+                  <Text style={styles.bookstxt}>{item.b_edition}th.</Text>
+                </View>
+                <View style={styles.editionCont}>
+                  <Text style={styles.booksHead}>Author</Text>
+                  <Text style={styles.bookstxt}>{item.b_author}</Text>
+                </View>
+                <View style={styles.editionCont}>
+                  <Text style={styles.booksHead}>S.Price</Text>
+                  <Text style={styles.bookstxt}>{item.b_sellingprice} rs.</Text>
+                </View>
+                <View style={styles.editionCont}>
+                  <Text style={styles.booksHead}>MRP</Text>
+                  <Text
+                    style={[
+                      styles.bookstxt,
+                      {textDecorationLine: 'line-through', color: '#c9c9c9'},
+                    ]}>
+                    {item.b_MRP} rs.
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.addBtn}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: '#000',
+                      fontFamily: globalfonts.font5,
+                    }}>
+                    ADD
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ))
         )}
       </ScrollView>
     </View>

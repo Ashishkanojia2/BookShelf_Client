@@ -9,11 +9,11 @@ export const bookReducer = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    getUserData: (state, action) => {
-      state.data = action.payload.bookdata;
+    setBookData: (state, action) => {
+      state.bookdata = action.payload;
     },
   },
 });
 
-export const {getUserData} = bookReducer.actions;
+export const {setBookData} = bookReducer.actions;
 export default bookReducer.reducer;
