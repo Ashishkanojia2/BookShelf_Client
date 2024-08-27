@@ -4,19 +4,17 @@ import {
   Text,
   View,
   StatusBar,
-  TouchableOpacity,
-  Touchable,
+  TouchableOpacity
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React from 'react';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {clearUserData, logoutUser} from '../Redux/Reducer/AuthReducer';
-import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
+import { useDispatch, useSelector } from 'react-redux';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import { clearUserData } from '../Redux/Reducer/AuthReducer';
+import { useLazyLogoutUserQuery } from '../RTKquery/Slices/ApiSclices';
 // import {TextInput} from 'react-native-paper';
 
 const height = Dimensions.get('window').height;
@@ -39,9 +37,9 @@ const Profile = ({navigation}) => {
   const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
     useLazyLogoutUserQuery();
   // const a = triggerLogout();
-  console.log('isSucces logout', isSuccess);
-  console.log('data while logout', data);
-  console.log('userdata logout', userData);
+  // console.log('isSucces logout', isSuccess);
+  // console.log('data while logout', data);
+  // console.log('userdata logout', userData);
 
   const logout = async () => {
     await triggerLogout()

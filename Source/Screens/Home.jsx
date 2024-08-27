@@ -32,7 +32,10 @@ const Home = ({navigation}) => {
   const allBooksData = useGetBookDataQuery();
 
   if (allBooksData.currentData) {
-    // console.log('getalldata', allBooksData.currentData.allbooks);
+    console.log(
+      'sab phele ye mill raha hai',
+      allBooksData.currentData.allbooks,
+    );
     dispatch(setBookData(allBooksData.currentData.allbooks));
   } else {
     console.log('Loading data or error occurred');
@@ -42,8 +45,11 @@ const Home = ({navigation}) => {
   // console.log('state_BookData', state_BookData);
 
   //FUNCTIONS
-  const bookContainer = () => {
-    navigation.navigate('books');
+  const bookContainer = bookname => {
+    console.log('clicking');
+    navigation.navigate('books', {
+      message: `${bookname}`,
+    });
   };
   const profileBtn = () => {
     navigation.navigate('profile');
@@ -145,7 +151,7 @@ const Home = ({navigation}) => {
             {/* 1*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('programming')}>
               <ImageBackground
                 source={require('../Assets/images/programming.jpg')}
                 style={styles.topimg}></ImageBackground>
@@ -158,7 +164,7 @@ const Home = ({navigation}) => {
             {/* 2*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('history')}>
               <ImageBackground
                 source={require('../Assets/images/history.jpg')}
                 style={styles.topimg}></ImageBackground>
@@ -171,7 +177,7 @@ const Home = ({navigation}) => {
             {/* 3*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('coding')}>
               <ImageBackground
                 source={require('../Assets/images/coding.jpg')}
                 style={styles.topimg}></ImageBackground>
@@ -184,7 +190,7 @@ const Home = ({navigation}) => {
             {/* 4*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('chemistry')}>
               <ImageBackground
                 source={require('../Assets/images/chemistry.png')}
                 style={styles.topimg}></ImageBackground>
@@ -199,7 +205,7 @@ const Home = ({navigation}) => {
             {/* 5*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('english')}>
               <ImageBackground
                 source={require('../Assets/images/english.jpg')}
                 style={styles.topimg}></ImageBackground>
@@ -212,7 +218,7 @@ const Home = ({navigation}) => {
             {/* 6*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('geology')}>
               <ImageBackground
                 source={require('../Assets/images/geo.png')}
                 style={styles.topimg}></ImageBackground>
@@ -225,7 +231,7 @@ const Home = ({navigation}) => {
             {/* 7*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('cooking')}>
               <ImageBackground
                 source={require('../Assets/images/cooking.jpg')}
                 style={styles.topimg}></ImageBackground>
@@ -238,7 +244,7 @@ const Home = ({navigation}) => {
             {/* 8*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('politics')}>
               <ImageBackground
                 source={require('../Assets/images/politics.png')}
                 style={styles.topimg}></ImageBackground>
@@ -253,7 +259,7 @@ const Home = ({navigation}) => {
             {/* 9*/}
             <TouchableOpacity
               style={styles.bookContainer}
-              onPress={bookContainer}>
+              onPress={() => bookContainer('english')}>
               <ImageBackground
                 source={require('../Assets/images/story_books.jpg')}
                 style={styles.topimg}></ImageBackground>

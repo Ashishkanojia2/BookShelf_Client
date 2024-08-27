@@ -72,8 +72,8 @@ const AddBooks = ({navigation}) => {
       }
       setbuttonLoading(!buttonLoading);
       const isRegister = await RegisterBook(bookdata);
-      console.log('isRegister', isRegister);
-      console.log('isRegister123', isRegister.data.success);
+      // console.log('isRegister', isRegister);
+      // console.log('isRegister123', isRegister.data.success);
 
       if (isRegister.data.success == true) {
         setbuttonLoading(false);
