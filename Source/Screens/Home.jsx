@@ -285,7 +285,7 @@ const Home = ({navigation}) => {
               </View>
               <View style={styles.productInfo}>
                 <Text
-                  style={[styles.bookstxt]}
+                  style={[styles.booksName]}
                   numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.b_name}
@@ -338,6 +338,12 @@ const Home = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  booksName: {
+    fontSize: 20,
+    color: '#000',
+    marginHorizontal: '2%',
+    fontFamily: globalfonts.font5,
+  },
   addBtn: {
     height: height / 25,
     width: width / 7,

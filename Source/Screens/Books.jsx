@@ -65,7 +65,6 @@ const Books = route => {
             : '';
           return category === route.route.params.message;
         }).length === 0 ? (
-          // Display "No Data" message if no items match the filter criteria
           <Text
             style={{
               color: global.sandColor,
@@ -74,7 +73,7 @@ const Books = route => {
               marginTop: '20%',
               textDecorationLine: 'underline',
             }}>
-            No Data
+            No Book
           </Text>
         ) : (
           data.bookdata
@@ -97,25 +96,31 @@ const Books = route => {
                   </View>
                   <View style={styles.productInfo}>
                     <Text
-                      style={[styles.bookstxt]}
+                      style={[styles.booksName]}
                       numberOfLines={3}
                       ellipsizeMode="tail">
                       {item.b_name}
                     </Text>
+                    <Text
+                      style={[styles.bookstxt]}
+                      numberOfLines={3}
+                      ellipsizeMode="tail">
+                      {item.b_desc}
+                    </Text>
                     <View style={styles.editionCont}>
-                      <Text style={styles.booksHead}>Edition</Text>
-                      <Text style={styles.bookstxt}>10th</Text>
+                      <Text style={styles.booksHead}>Edition :</Text>
+                      <Text style={styles.bookstxt}>{item.b_edition}</Text>
                     </View>
                     <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>Author</Text>
-                      <Text style={styles.bookstxt}>S Chand</Text>
+                      <Text style={styles.booksHead}>Author :</Text>
+                      <Text style={styles.bookstxt}>{item.b_author}</Text>
                     </View>
                     <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>S.Price</Text>
-                      <Text style={styles.bookstxt}>400 rs.</Text>
+                      <Text style={styles.booksHead}>S.Price :</Text>
+                      <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
                     </View>
                     <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>A.Price</Text>
+                      <Text style={styles.booksHead}>MRP :</Text>
                       <Text
                         style={[
                           styles.bookstxt,
@@ -124,7 +129,7 @@ const Books = route => {
                             color: '#c9c9c9',
                           },
                         ]}>
-                        1000 rs.
+                        {item.b_MRP}
                       </Text>
                     </View>
                     <TouchableOpacity style={styles.addBtn}>
@@ -249,6 +254,12 @@ const styles = StyleSheet.create({
   },
   bookstxt: {
     fontSize: 15,
+    color: '#000',
+    marginHorizontal: '2%',
+    fontFamily: globalfonts.font5,
+  },
+  booksName: {
+    fontSize: 20,
     color: '#000',
     marginHorizontal: '2%',
     fontFamily: globalfonts.font5,
