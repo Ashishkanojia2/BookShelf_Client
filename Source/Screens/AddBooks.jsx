@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   ImageBackground,
   StyleSheet,
@@ -11,18 +12,15 @@ import {Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
-import {useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
-// import {} from "../../assets/fonts"
+import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
 const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const AddBooks = ({navigation}) => {
-  const [Registeruser] = useRegisterUserMutation();
+  const [RegisterBook] = useRegisterBookMutation();
 
   const [bookDesc, setbookDesc] = useState('');
   const [author, setauthor] = useState('');
@@ -42,17 +40,82 @@ const AddBooks = ({navigation}) => {
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
-  const registerUserBtn = async () => {};
-  const clearMessage = () => {};
+  const registerBookBtn = async () => {
+    try {
+      bookRef.current?.blur();
+      DescRef.current?.blur();
+      authorRef.current?.blur();
+      editionRef.current?.blur();
+      categoriesRef.current?.blur();
+      sellingRef.current?.blur();
+      mrpRef.current?.blur();
+      const bookdata = {
+        b_name: bookName,
+        b_desc: bookDesc,
+        b_author: author,
+        b_edition: Edition,
+        b_categorie: Categories,
+        b_MRP: mrp,
+        b_sellingprice: sellingPrice,
+      };
 
-//   const userData = useSelector(state => state.user.data);
+      if (
+        bookName == '' ||
+        bookDesc == '' ||
+        author == '' ||
+        Edition == '' ||
+        Categories == '' ||
+        mrp == '' ||
+        sellingPrice == ''
+      ) {
+        return setMessage('Please Fill All The Fields');
+      }
+      setbuttonLoading(!buttonLoading);
+      const isRegister = await RegisterBook(bookdata);
+      console.log('isRegister', isRegister);
+      console.log('isRegister123', isRegister.data.success);
+
+      if (isRegister.data.success == true) {
+        setbuttonLoading(false);
+        Alert.alert(
+          'Registered',
+          `Your Book: ${isRegister.data.bookdata.b_name} is Registered`,
+          [
+            {
+              text: 'OK',
+              onPress: () => console.log('OK Pressed'),
+            },
+          ],
+          {cancelable: true},
+        );
+        setbookDesc('');
+        setauthor('');
+        setEdition('');
+        setmrp('');
+        setCategories('');
+        setbookName('');
+        setsellingPrice('');
+      }
+    } catch (error) {
+      console.log('error while register books in record ', error);
+    }
+  };
+  const clearMessage = () => {
+    setMessage('');
+  };
+
+  // CALLING API
+
+  //   const userData = useSelector(state => state.user.data);
 
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
       <ImageBackground
         source={require('../Assets/images/bg2.png')}
         style={styles.topimg}></ImageBackground>
-      <TouchableOpacity style={{position: 'absolute', left: 20, top: 20}}>
+      <TouchableOpacity
+        style={{position: 'absolute', left: 20, top: 20}}
+        onPress={() => navigation.navigate('profile')}>
         <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
       </TouchableOpacity>
 
@@ -193,21 +256,35 @@ const AddBooks = ({navigation}) => {
               textColor={global.sandColor}
               onFocus={clearMessage}
             />
-
-            <Button
-              mode="contained"
-              rippleColor="#c9c9c9"
-              buttonColor={global.thirdColor}
-              onPress={() => registerUserBtn()}
-              // loading={buttonLoading}
-              style={{
-                marginTop: '20%',
-                height: height / 20,
-                width: width - 30,
-                justifyContent: 'center',
-              }}>
-              Add Book
-            </Button>
+            <Text style={styles.Errortxt}>{Message}</Text>
+            {buttonLoading ? (
+              <Button
+                mode="contained"
+                rippleColor="#c9c9c9"
+                buttonColor={global.thirdColor}
+                onPress={() => registerBookBtn()}
+                loading={buttonLoading}
+                style={{
+                  marginTop: '5%',
+                  height: height / 20,
+                  width: width - 90,
+                  justifyContent: 'center',
+                }}></Button>
+            ) : (
+              <Button
+                mode="contained"
+                rippleColor="#c9c9c9"
+                buttonColor={global.thirdColor}
+                onPress={() => registerBookBtn()}
+                style={{
+                  marginTop: '5%',
+                  height: height / 20,
+                  width: width - 90,
+                  justifyContent: 'center',
+                }}>
+                Add Book
+              </Button>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -236,7 +313,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: '2%',
     elevation: 30,
-    // shadowColor: global.bgColor,
   },
   ParentContainer: {
     paddingBottom: '5%',
@@ -262,12 +338,13 @@ const styles = StyleSheet.create({
   },
   headtxt: {
     fontSize: 25,
-    fontFamily: font,
+    fontFamily: globalfonts.font,
   },
   Errortxt: {
     fontSize: 15,
     color: 'red',
     alignSelf: 'center',
+    marginTop: '5%',
   },
   SkipCont: {
     alignSelf: 'flex-end',

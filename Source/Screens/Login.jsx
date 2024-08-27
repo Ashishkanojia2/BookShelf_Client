@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {Button, TextInput} from 'react-native-paper';
-import {ScrollView} from 'native-base';
-import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
-import {useDispatch} from 'react-redux';
-import {loginUserData} from '../Redux/Reducer/AuthReducer';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useRef, useState } from 'react';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { Button, TextInput } from 'react-native-paper';
+import { ScrollView } from 'native-base';
+import { useLoginUserMutation } from '../RTKquery/Slices/ApiSclices';
+import { useDispatch } from 'react-redux';
+import { loginUserData } from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -110,10 +109,10 @@ const Login = ({navigation}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
-            secureTextEntry={showPassword} // Hide text input
-            autoComplete="off" // Disable autocomplete
-            autoCorrect={false} // Disable autocorrect
-            spellCheck={false} // Disable spell check
+            secureTextEntry={showPassword} 
+            autoComplete="off"
+            autoCorrect={false} 
+            spellCheck={false} 
             textContentType="password"
             right={
               <TextInput.Icon
@@ -150,8 +149,6 @@ const Login = ({navigation}) => {
                   {
                     color: global.sandColor,
                     textDecorationLine: 'underline',
-                    // justifyContent: 'center',
-                    // alignSelf: 'center',
                   },
                 ]}>
                 SignIn
@@ -194,7 +191,6 @@ const styles = StyleSheet.create({
   },
   Errortxt: {
     fontSize: 15,
-    // fontFamily: font,
     color: 'red',
     alignSelf: 'center',
   },
@@ -221,18 +217,14 @@ const styles = StyleSheet.create({
   },
   btmText: {
     fontSize: 13,
-    // fontFamily: font,
     alignSelf: 'center',
-    // marginTop: '3%',
   },
   inputfield: {
-    // marginBottom: '10%',
     width: width - 50,
     backgroundColor: global.bgColor,
     marginVertical: height / 70,
   },
   inputboxcont: {
     alignItems: 'center',
-    // marginTop: "0.5%",
   },
 });

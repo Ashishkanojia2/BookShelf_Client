@@ -32,14 +32,14 @@ const Home = ({navigation}) => {
   const allBooksData = useGetBookDataQuery();
 
   if (allBooksData.currentData) {
-    console.log('getalldata', allBooksData.currentData.allbooks);
+    // console.log('getalldata', allBooksData.currentData.allbooks);
     dispatch(setBookData(allBooksData.currentData.allbooks));
   } else {
     console.log('Loading data or error occurred');
   }
 
   const state_BookData = useSelector(state => state.book); // Ensure correct path to state
-  console.log('state_BookData', state_BookData);
+  // console.log('state_BookData', state_BookData);
 
   //FUNCTIONS
   const bookContainer = () => {
@@ -268,7 +268,7 @@ const Home = ({navigation}) => {
           </View>
         ) : (
           state_BookData.bookdata.map(item => (
-            <View style={styles.allBookContainer}>
+            <View style={styles.allBookContainer} key={item.id}>
               <View style={styles.productPhoto}>
                 <View
                   style={{
