@@ -116,7 +116,7 @@ const Login = ({navigation}) => {
             textContentType="password"
             right={
               <TextInput.Icon
-                icon={showPassword ? 'eye' : 'eye-off'}
+                icon={showPassword ? 'eye-off' : 'eye'}
                 onPress={() => setshowPassword(!showPassword)}
                 color={global.sandColor}
               />

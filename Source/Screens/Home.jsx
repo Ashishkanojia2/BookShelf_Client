@@ -18,6 +18,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
 import {setBookData} from '../Redux/Reducer/BookReducer';
+import TryComp from './TryComp';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -32,10 +33,10 @@ const Home = ({navigation}) => {
   const allBooksData = useGetBookDataQuery();
 
   if (allBooksData.currentData) {
-    console.log(
-      'sab phele ye mill raha hai',
-      allBooksData.currentData.allbooks,
-    );
+    // console.log(
+    //   'sab phele ye mill raha hai',
+    //   allBooksData.currentData.allbooks,
+    // );
     dispatch(setBookData(allBooksData.currentData.allbooks));
   } else {
     console.log('Loading data or error occurred');
@@ -50,6 +51,10 @@ const Home = ({navigation}) => {
     navigation.navigate('books', {
       message: `${bookname}`,
     });
+  };
+  const opencamera = () => {
+    console.log('working camera');
+    navigation.navigate("camera")
   };
   const profileBtn = () => {
     navigation.navigate('profile');
@@ -76,7 +81,7 @@ const Home = ({navigation}) => {
             placeholderTextColor={global.bgColor}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => opencamera()}>
           <FontAwesome
             name="book"
             size={30}

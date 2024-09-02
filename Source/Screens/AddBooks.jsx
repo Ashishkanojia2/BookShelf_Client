@@ -5,12 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
@@ -19,7 +20,10 @@ const font = 'Calistoga-Regular';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-const AddBooks = ({navigation}) => {
+const AddBooks = ({navigation, route}) => {
+  // const {photo} = route.params;
+  // console.log(photo);
+
   const [RegisterBook] = useRegisterBookMutation();
 
   const [bookDesc, setbookDesc] = useState('');
@@ -39,6 +43,7 @@ const AddBooks = ({navigation}) => {
   const sellingRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
+  const [storePhotoPath, setstorePhotoPath] = useState([]);
 
   const registerBookBtn = async () => {
     try {
@@ -108,6 +113,28 @@ const AddBooks = ({navigation}) => {
 
   //   const userData = useSelector(state => state.user.data);
 
+  // const photoPathArray = [];
+  // photoPathArray.push(photo.path);
+
+  useEffect(() => {
+    if (route.params?.photo) {
+      const {photo} = route.params;
+      setstorePhotoPath(previousPaths => {
+        // Check if the photo path is already in the array
+        if (!previousPaths.includes(photo.path)) {
+          return [...previousPaths, photo.path];
+        }
+        // Return the existing array if the photo path is already there
+        return previousPaths;
+      });
+    }
+  }, [route.params?.photo]);
+
+  // const addbookPhotoFun = async () => {
+  //   console.log('123456');
+  //   navigation.navigate('camera', {FromScreen: 'addbooks'});
+  // };
+
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
       <ImageBackground
@@ -118,6 +145,11 @@ const AddBooks = ({navigation}) => {
         onPress={() => navigation.navigate('profile')}>
         <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={{position: 'absolute', right: 20, top: 20}}
+        onPress={() => navigation.navigate('camera', {FromScreen: 'addbooks'})}>
+        <MaterialCommunityIcons name="camera-plus" size={30} color="#fff" />
+      </TouchableOpacity>
 
       <View style={styles.headingCont}>
         <Text style={styles.headingTxt}>Add new Books</Text>
@@ -125,36 +157,20 @@ const AddBooks = ({navigation}) => {
       <ScrollView>
         <View style={styles.ParentContainer}>
           <View style={styles.booksimageCont}>
-            <TouchableOpacity style={styles.profilepicCont}>
-              <MaterialIcons
-                name="add-a-photo"
-                size={35}
-                color={global.bgColor}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profilepicCont}>
-              <MaterialIcons
-                name="add-a-photo"
-                size={35}
-                color={global.bgColor}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profilepicCont}>
-              <MaterialIcons
-                name="add-a-photo"
-                size={35}
-                color={global.bgColor}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.profilepicCont}>
-              <MaterialIcons
-                name="add-a-photo"
-                size={35}
-                color={global.bgColor}
-              />
-            </TouchableOpacity>
+            {storePhotoPath.map(item => {
+              return (
+                <TouchableOpacity style={styles.profilepicCont}>
+                  <Image
+                    source={{uri: `file://${item}`}}
+                    style={{height: '100%', width: '100%'}}
+                    accessible={true}
+                    accessibilityLabel="Book cover image"
+                  />
+                </TouchableOpacity>
+              );
+            })}
           </View>
+
           <View style={styles.inputboxcont}>
             <TextInput
               ref={bookRef}
@@ -300,19 +316,27 @@ const styles = StyleSheet.create({
     color: global.sandColor,
     fontFamily: globalfonts.font4,
   },
-  booksimageCont: {flexDirection: 'row', flexWrap: 'wrap'},
+  booksimageCont: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent:"center",
+    // backgroundColor: 'green',
+  },
   profilepicCont: {
-    height: height / 6,
-    width: width / 2.2,
+    height: height / 4,
+    width: width / 2.5,
     borderRadius: 10,
     backgroundColor: global.thirdColor,
     borderWidth: 1,
     borderColor: global.sandColor,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     alignSelf: 'center',
     margin: '2%',
     elevation: 30,
+    overflow: 'hidden',
+    // alignSelf:"center"
   },
   ParentContainer: {
     paddingBottom: '5%',

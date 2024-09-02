@@ -23,6 +23,8 @@ import Favorite from './Source/Screens/Favorite';
 import Order from './Source/Screens/Order';
 import SellingBook from './Source/Screens/SellingBook';
 import Sending_FeedBack from './Source/Screens/Sending_FeedBack';
+import TryComp from './Source/Screens/TryComp';
+import Camera from './Source/Screens/Camera';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +61,8 @@ const Main = () => {
           <Stack.Screen name="order" component={Order} />
           <Stack.Screen name="sellingbooks" component={SellingBook} />
           <Stack.Screen name="feedback" component={Sending_FeedBack} />
+          <Stack.Screen name="trycomp" component={TryComp} />
+          <Stack.Screen name="camera" component={Camera} />
           <Stack.Screen
             name="profileSendFeedBack"
             component={Profile_SendFeedBack}
