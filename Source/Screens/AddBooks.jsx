@@ -104,7 +104,8 @@ const AddBooks = ({navigation, route}) => {
         setsellingPrice('');
       }
     } catch (error) {
-      console.log('error while register books in record ', error);
+      Alert.alert("Error" , "Error Ocurred while registering books in the record")
+      // console.log('error while register books in record ', error);
     }
   };
   const clearMessage = () => {
@@ -137,12 +138,12 @@ const AddBooks = ({navigation, route}) => {
   //   navigation.navigate('camera', {FromScreen: 'addbooks'});
   // };
   const deletePhoto = item => {
-    console.log('item Name', item);
+    // console.log('item Name', item);
     const ispresent = storePhotoPath.find(photopath => photopath === item);
     if (ispresent === undefined) {
       return Alert.alert('Error', "Currently this Image Can't be Detele");
     }
-    console.log('ispresent11', ispresent);
+    // console.log('ispresent11', ispresent);
     if (ispresent) {
       setstorePhotoPath(storePhotoPath.filter(photoPath => photoPath !== item));
       return Alert.alert('Success', 'Book is Deteled');

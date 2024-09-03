@@ -2,10 +2,12 @@ import {
   Dimensions,
   ImageBackground,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
+  Image
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
@@ -13,6 +15,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
 import {useSelector} from 'react-redux';
+import {color} from 'native-base/lib/typescript/theme/styled-system';
+// import {Image} from 'react-native-svg';
 // import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
 const font1 = 'Pacifico-Regular';
@@ -20,7 +24,7 @@ const font1 = 'Pacifico-Regular';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
-const Profile_user = ({navigation}) => {
+const Profile_user = ({navigation, route}) => {
   const [Registeruser] = useRegisterUserMutation();
 
   const [emailId, setemailId] = useState('');
@@ -43,6 +47,20 @@ const Profile_user = ({navigation}) => {
 
   const userData = useSelector(state => state.user.data);
 
+  const setProfilFun = () => {
+    console.log('profile pic set');
+    navigation.navigate('camera', {FromScreen: 'profileUser'});
+  };
+  const [userProfilePic, setuserProfilePic] = useState('');
+  useEffect(() => {
+    console.log('we are here', route.params);
+    if (route?.params?.photo) {
+      const {photo} = route.params;
+      return setuserProfilePic(photo.path);
+    }
+  }, [route]);
+  
+  console.log('we are here1234', userProfilePic);
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
@@ -55,8 +73,28 @@ const Profile_user = ({navigation}) => {
 
         <View style={styles.headingCont}></View>
 
-        <TouchableOpacity style={styles.profilepicCont}>
-          <MaterialIcons name="add-a-photo" size={35} color={global.bgColor} />
+        <View style={styles.profilepicCont}>
+          {userProfilePic !== undefined && userProfilePic !== "" ? (
+            <Image
+              source={{uri: `file://${userProfilePic}`}}
+              style={{height: '100%', width: '100%'}}
+              // accessible={true}
+              // accessibilityLabel="Book cover image"
+            />
+          ) : (
+            <MaterialIcons
+              name="add-a-photo"
+              size={35}
+              color={global.bgColor}
+            />
+          )}
+        </View>
+        <TouchableOpacity
+          style={{alignSelf: 'center'}}
+          onPress={() => {
+            setProfilFun();
+          }}>
+          <Text style={styles.uploadPhtText}>Upload Photo</Text>
         </TouchableOpacity>
         <View style={styles.inputboxcont}>
           <TextInput
@@ -161,6 +199,11 @@ const Profile_user = ({navigation}) => {
 export default Profile_user;
 
 const styles = StyleSheet.create({
+  uploadPhtText: {
+    color: global.sandColor,
+    marginTop: '2%',
+    textDecorationLine: 'underline',
+  },
   profilepicCont: {
     height: height / 10,
     width: width / 4.5,
@@ -171,6 +214,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    overflow:"hidden"
   },
   ParentContainer: {
     backgroundColor: global.bgColor,

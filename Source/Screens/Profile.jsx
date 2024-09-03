@@ -107,7 +107,7 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
-          onPress={() => navigation.navigate('profileUser')}>
+          onPress={() => navigation.navigate('favorite')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <FontAwesome name="heart-o" size={18} color={'#fff'} />
@@ -123,7 +123,7 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
-          onPress={() => navigation.navigate('profileUser')}>
+          onPress={() => navigation.navigate('sellingbooks')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <FontAwesome name="money" size={18} color={'#fff'} />
@@ -139,7 +139,7 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
-          onPress={() => navigation.navigate('profileUser')}>
+          onPress={() => navigation.navigate('order')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <FontAwesome name="user-o" size={18} color={'#fff'} />
@@ -155,7 +155,7 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
-          onPress={() => navigation.navigate('profileUser')}>
+          onPress={() => navigation.navigate('about')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <MaterialCommunityIcons
@@ -175,7 +175,7 @@ const Profile = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.profileOption}
-          onPress={() => navigation.navigate('profileUser')}>
+          onPress={() => navigation.navigate('feedback')}>
           <View style={styles.profileOptionView}>
             <View style={styles.profileIconCont}>
               <MaterialCommunityIcons
