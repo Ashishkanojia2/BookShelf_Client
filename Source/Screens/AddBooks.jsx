@@ -136,7 +136,18 @@ const AddBooks = ({navigation, route}) => {
   //   console.log('123456');
   //   navigation.navigate('camera', {FromScreen: 'addbooks'});
   // };
-
+  const deletePhoto = item => {
+    console.log('item Name', item);
+    const ispresent = storePhotoPath.find(photopath => photopath === item);
+    if (ispresent === undefined) {
+      return Alert.alert('Error', "Currently this Image Can't be Detele");
+    }
+    console.log('ispresent11', ispresent);
+    if (ispresent) {
+      setstorePhotoPath(storePhotoPath.filter(photoPath => photoPath !== item));
+      return Alert.alert('Success', 'Book is Deteled');
+    }
+  };
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
       <ImageBackground
@@ -158,11 +169,26 @@ const AddBooks = ({navigation, route}) => {
       </View>
       <ScrollView>
         <View style={styles.ParentContainer}>
+          <View style={styles.noteCont}>
+            <Text style={styles.noteText}>NOTE :</Text>
+            <Text style={styles.noteDetailsText}>
+              * Click Top-right button to add your books photo.
+            </Text>
+            <Text style={styles.noteDetailsText}>
+              * Please insure that First photo is cover page for your book.
+            </Text>
+            <Text style={styles.noteDetailsText}>
+              * Add minimum 4 photo and should be cover page, MRP page, edition
+              page back cover.
+            </Text>
+          </View>
+
           <View style={styles.booksimageCont}>
             {storePhotoPath.map(item => {
               return (
                 <View style={styles.profilepicCont}>
                   <TouchableOpacity
+                    onPress={() => deletePhoto(item)}
                     style={{position: 'absolute', right: 5, top: 5, zIndex: 1}}>
                     <AntDesign name="closecircleo" size={25} color="red" />
                   </TouchableOpacity>
@@ -317,6 +343,9 @@ const AddBooks = ({navigation, route}) => {
 export default AddBooks;
 
 const styles = StyleSheet.create({
+  noteText: {color: global.sandColor, fontSize: 15},
+  noteDetailsText: {color: global.thirdColor, fontSize: 13},
+  noteCont: {marginHorizontal: '5%'},
   headingTxt: {
     fontSize: width / 13,
     color: global.sandColor,
