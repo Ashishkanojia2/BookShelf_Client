@@ -12,6 +12,8 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
@@ -159,14 +161,18 @@ const AddBooks = ({navigation, route}) => {
           <View style={styles.booksimageCont}>
             {storePhotoPath.map(item => {
               return (
-                <TouchableOpacity style={styles.profilepicCont}>
+                <View style={styles.profilepicCont}>
+                  <TouchableOpacity
+                    style={{position: 'absolute', right: 5, top: 5, zIndex: 1}}>
+                    <AntDesign name="closecircleo" size={25} color="red" />
+                  </TouchableOpacity>
                   <Image
                     source={{uri: `file://${item}`}}
                     style={{height: '100%', width: '100%'}}
                     accessible={true}
                     accessibilityLabel="Book cover image"
                   />
-                </TouchableOpacity>
+                </View>
               );
             })}
           </View>
@@ -320,7 +326,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent:"center",
+    justifyContent: 'center',
     // backgroundColor: 'green',
   },
   profilepicCont: {
