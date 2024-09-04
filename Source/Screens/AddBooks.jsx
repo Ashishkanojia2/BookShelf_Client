@@ -104,7 +104,10 @@ const AddBooks = ({navigation, route}) => {
         setsellingPrice('');
       }
     } catch (error) {
-      Alert.alert("Error" , "Error Ocurred while registering books in the record")
+      Alert.alert(
+        'Error',
+        'Error Ocurred while registering books in the record',
+      );
       // console.log('error while register books in record ', error);
     }
   };

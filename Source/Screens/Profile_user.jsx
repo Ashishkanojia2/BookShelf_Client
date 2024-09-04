@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
@@ -59,7 +59,7 @@ const Profile_user = ({navigation, route}) => {
       return setuserProfilePic(photo.path);
     }
   }, [route]);
-  
+
   console.log('we are here1234', userProfilePic);
   return (
     <ScrollView>
@@ -67,14 +67,16 @@ const Profile_user = ({navigation, route}) => {
         <ImageBackground
           source={require('../Assets/images/bg2.png')}
           style={styles.topimg}></ImageBackground>
-        <TouchableOpacity style={{position: 'absolute', left: 20, top: 20}}>
+        <TouchableOpacity
+          style={{position: 'absolute', left: 20, top: 20}}
+          onPress={() => {navigation.navigate("profile")}}>
           <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.headingCont}></View>
 
         <View style={styles.profilepicCont}>
-          {userProfilePic !== undefined && userProfilePic !== "" ? (
+          {userProfilePic !== undefined && userProfilePic !== '' ? (
             <Image
               source={{uri: `file://${userProfilePic}`}}
               style={{height: '100%', width: '100%'}}
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    overflow:"hidden"
+    overflow: 'hidden',
   },
   ParentContainer: {
     backgroundColor: global.bgColor,
