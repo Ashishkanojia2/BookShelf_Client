@@ -63,10 +63,10 @@ const Main = () => {
           <Stack.Screen name="feedback" component={Sending_FeedBack} />
           <Stack.Screen name="trycomp" component={TryComp} />
           <Stack.Screen name="camera" component={Camera} />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="profileSendFeedBack"
             component={Profile_SendFeedBack}
-          />
+          /> */}
           <Stack.Screen name="profileorder" component={Profile_order} />
           <Stack.Screen
             name="profilesellingBook"

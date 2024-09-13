@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { Button, TextInput } from 'react-native-paper';
-import { ScrollView } from 'native-base';
-import { useLoginUserMutation } from '../RTKquery/Slices/ApiSclices';
-import { useDispatch } from 'react-redux';
-import { loginUserData } from '../Redux/Reducer/AuthReducer';
+import React, {useRef, useState} from 'react';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {Button, TextInput} from 'react-native-paper';
+import {ScrollView} from 'native-base';
+import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
+import {useDispatch} from 'react-redux';
+import {loginUserData} from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -59,7 +59,10 @@ const Login = ({navigation}) => {
       }
     } catch (error) {
       setbuttonLoading(false);
-      setMessage(error.data.message);
+
+      console.log("error form login screen",error);
+
+      // setMessage(error.data.message);
     }
   };
   const clearMessage = () => {
@@ -109,10 +112,10 @@ const Login = ({navigation}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
-            secureTextEntry={showPassword} 
+            secureTextEntry={showPassword}
             autoComplete="off"
-            autoCorrect={false} 
-            spellCheck={false} 
+            autoCorrect={false}
+            spellCheck={false}
             textContentType="password"
             right={
               <TextInput.Icon

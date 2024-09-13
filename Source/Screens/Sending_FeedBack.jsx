@@ -1,6 +1,8 @@
 import {
+  Alert,
   Dimensions,
   ImageBackground,
+  Keyboard,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -11,6 +13,7 @@ import {Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import {useSendFeedbackMutation} from '../RTKquery/Slices/Feedback';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -18,10 +21,10 @@ const width = Dimensions.get('window').width;
 
 const Sending_Feedback = ({navigation, route}) => {
   const [Describe, setDescribe] = useState('');
-
   const [Topic, setTopic] = useState('');
-  //
-  const bookRef = useRef(null);
+  const [sendfeedBack, {isLoading, isSuccess, isError, error}] =
+    useSendFeedbackMutation();
+  const topicRef = useRef(null);
   const DescRef = useRef(null);
 
   const [buttonLoading, setbuttonLoading] = useState(false);
@@ -30,10 +33,41 @@ const Sending_Feedback = ({navigation, route}) => {
   const clearMessage = () => {
     setMessage('');
   };
-  const sendFeedBackBtn = () => {
-    console.log('send feedback');
-    setTopic('');
-    setDescribe('');
+  const sendFeedBackBtn = async () => {
+    try {
+      if (Topic == '' || Describe == '') {
+        return setMessage('Please fill Both the Feilds.');
+      }
+      setbuttonLoading(true);
+      const feedbackData = {topic: Topic, describe: Describe};
+      const data = await sendfeedBack(feedbackData);
+      setTopic('');
+      setDescribe('');
+      topicRef.current?.blur();
+      DescRef.current?.blur();
+      Keyboard.dismiss();
+      if (!isSuccess) {
+        setTopic('');
+        setDescribe('');
+        setbuttonLoading(false);
+        Alert.alert(
+          'Successfull Send',
+          'ThankYou for your feedBack. Your FeedBack is Important For Us.',
+          [
+            {
+              text: 'Go to profile page',
+              onPress: () => navigation.navigate('profile'),
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        setMessage('Failed. Please try again.');
+        setbuttonLoading(false);
+      }
+    } catch (error) {
+      setbuttonLoading(false);
+    }
   };
 
   return (
@@ -55,7 +89,7 @@ const Sending_Feedback = ({navigation, route}) => {
         <View style={styles.ParentContainer}>
           <View style={styles.inputboxcont}>
             <TextInput
-              ref={bookRef}
+              ref={topicRef}
               value={Topic}
               onChangeText={value => setTopic(value)}
               label={'Topic'}
@@ -84,13 +118,14 @@ const Sending_Feedback = ({navigation, route}) => {
               autoCorrect={true}
               onFocus={clearMessage}
             />
+            <Text style={{color: 'red'}}>{Message}</Text>
 
             {buttonLoading ? (
               <Button
                 mode="contained"
                 rippleColor="#c9c9c9"
                 buttonColor={global.thirdColor}
-                onPress={() => registerBookBtn()}
+                onPress={() => sendFeedBackBtn()}
                 loading={buttonLoading}
                 style={{
                   marginTop: '5%',
