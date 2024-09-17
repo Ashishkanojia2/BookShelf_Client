@@ -8,7 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Badge} from 'react-native-paper';
@@ -32,18 +32,18 @@ const Home = ({navigation}) => {
   //API CALLING
   const allBooksData = useGetBookDataQuery();
 
-  if (allBooksData.currentData) {
-    // console.log(
-    //   'sab phele ye mill raha hai',
-    //   allBooksData.currentData.allbooks,
-    // );
-    dispatch(setBookData(allBooksData.currentData.allbooks));
-  } else {
-    console.log('Loading data or error occurred');
-  }
+  useEffect(() => {
+    if (allBooksData) {
+      dispatch(setBookData(allBooksData.allbooks));
+    }
+  }, [allBooksData, dispatch]);
 
   const state_BookData = useSelector(state => state.book); // Ensure correct path to state
+  const userdata = useSelector(state => state.user); // Ensure correct path to state
   // console.log('state_BookData', state_BookData);
+  console.log("*******************from home screen********************");
+  
+  console.log('userdata', userdata);
 
   //FUNCTIONS
   const bookContainer = bookname => {
@@ -54,7 +54,7 @@ const Home = ({navigation}) => {
   };
   const opencamera = () => {
     console.log('working camera');
-    navigation.navigate("camera")
+    navigation.navigate('camera');
   };
   const profileBtn = () => {
     navigation.navigate('profile');
@@ -277,7 +277,7 @@ const Home = ({navigation}) => {
               </View>
             </TouchableOpacity>
           </View>
-        ) : (
+        ) : state_BookData.bookdata && state_BookData.bookdata.length > 0 ? (
           state_BookData.bookdata.map(item => (
             <View style={styles.allBookContainer} key={item.id}>
               <View style={styles.productPhoto}>
@@ -336,6 +336,8 @@ const Home = ({navigation}) => {
               </View>
             </View>
           ))
+        ) : (
+          <Text>No books available.</Text>
         )}
       </ScrollView>
     </View>

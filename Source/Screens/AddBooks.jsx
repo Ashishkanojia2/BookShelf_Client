@@ -17,6 +17,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
+import mime from 'mime';
+import {store} from '../Redux/Store/Store';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -45,6 +47,7 @@ const AddBooks = ({navigation, route}) => {
   const sellingRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
+
   const [storePhotoPath, setstorePhotoPath] = useState([]);
 
   const registerBookBtn = async () => {
@@ -56,45 +59,94 @@ const AddBooks = ({navigation, route}) => {
       categoriesRef.current?.blur();
       sellingRef.current?.blur();
       mrpRef.current?.blur();
-      const bookdata = {
-        b_name: bookName,
-        b_desc: bookDesc,
-        b_author: author,
-        b_edition: Edition,
-        b_categorie: Categories,
-        b_MRP: mrp,
-        b_sellingprice: sellingPrice,
-      };
 
       if (
-        bookName == '' ||
-        bookDesc == '' ||
-        author == '' ||
-        Edition == '' ||
-        Categories == '' ||
-        mrp == '' ||
-        sellingPrice == ''
+        bookName === '' ||
+        bookDesc === '' ||
+        author === '' ||
+        Edition === '' ||
+        Categories === '' ||
+        mrp === '' ||
+        sellingPrice === ''
       ) {
         return setMessage('Please Fill All The Fields');
+      } else if (storePhotoPath.length < 1) {
+        return setMessage('Image Should be Atleast 1');
       }
-      setbuttonLoading(!buttonLoading);
-      const isRegister = await RegisterBook(bookdata);
-      // console.log('isRegister', isRegister);
-      // console.log('isRegister123', isRegister.data.success);
 
-      if (isRegister.data.success == true) {
+      setbuttonLoading(true);
+
+      const processImages = imagePaths => {
+        const processedImages = [];
+
+        storePhotoPath.forEach(imagePath => {
+          const mimeType = mime.getType(imagePath);
+          // console.log('Image Path:', imagePath, 'MIME Type:', mimeType);
+
+          if (mimeType) {
+            processedImages.push({
+              uri: imagePath,
+              // uri: Platform.OS == 'android' ? imagePath : photo.path,
+              type: mimeType,
+              name: imagePath.split('/').pop(),
+            });
+          } else {
+            console.error(`MIME type not found for image: ${imagePath}`);
+          }
+        });
+
+        return processedImages;
+      };
+
+      // const processImages = imagePaths => {
+      //   const processedImages = {};
+
+      //   store.forEach((imagePath, index) => {
+      //     const mimeType = mime.getType(imagePath);
+
+      //     if (mimeType) {
+      //       // Use the index or a unique identifier as the key
+      //       processedImages[index] = {
+      //         uri: imagePath,
+      //         type: mimeType,
+      //         name: imagePath.split('/').pop(),
+      //       };
+      //     } else {
+      //       console.error(`MIME type not found for image: ${imagePath}`);
+      //     }
+      //   });
+
+      //   return processedImages;
+      // };
+
+      console.log('@@@@@@@@@@@@@@', processImages());
+
+      // Create FormData object
+      const myform = new FormData();
+      myform.append('b_name', bookName);
+      myform.append('b_desc', bookDesc);
+      myform.append('b_author', author);
+      myform.append('b_edition', Edition);
+      myform.append('b_categorie', Categories);
+      myform.append('b_MRP', mrp);
+      myform.append('b_sellingprice', sellingPrice);
+      myform.append('images', processImages());
+
+      console.log('Data being sent: ', myform);
+
+      // Call API to register the book
+      const isRegister = await RegisterBook(myform);
+      console.log('isRegister', isRegister);
+
+      if (isRegister?.data?.success) {
         setbuttonLoading(false);
         Alert.alert(
           'Registered',
           `Your Book: ${isRegister.data.bookdata.b_name} is Registered`,
-          [
-            {
-              text: 'OK',
-              onPress: () => console.log('OK Pressed'),
-            },
-          ],
+          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
           {cancelable: true},
         );
+        // Clear form fields
         setbookDesc('');
         setauthor('');
         setEdition('');
@@ -102,25 +154,26 @@ const AddBooks = ({navigation, route}) => {
         setCategories('');
         setbookName('');
         setsellingPrice('');
+      } else {
+        throw new Error('Registration failed');
       }
     } catch (error) {
+      setbuttonLoading(false);
+      console.log('Error:', error);
       Alert.alert(
         'Error',
-        'Error Ocurred while registering books in the record',
+        'Error Occurred while registering books in the record',
       );
-      // console.log('error while register books in record ', error);
     }
   };
+
+  //
+  //
+  //
+
   const clearMessage = () => {
     setMessage('');
   };
-
-  // CALLING API
-
-  //   const userData = useSelector(state => state.user.data);
-
-  // const photoPathArray = [];
-  // photoPathArray.push(photo.path);
 
   useEffect(() => {
     if (route.params?.photo) {
@@ -136,10 +189,6 @@ const AddBooks = ({navigation, route}) => {
     }
   }, [route.params?.photo]);
 
-  // const addbookPhotoFun = async () => {
-  //   console.log('123456');
-  //   navigation.navigate('camera', {FromScreen: 'addbooks'});
-  // };
   const deletePhoto = item => {
     // console.log('item Name', item);
     const ispresent = storePhotoPath.find(photopath => photopath === item);
@@ -152,6 +201,11 @@ const AddBooks = ({navigation, route}) => {
       return Alert.alert('Success', 'Book is Deteled');
     }
   };
+  const checkPhoto = () => {
+    console.log('checking photot ');
+    console.log('checking photot : ', storePhotoPath);
+  };
+
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
       <ImageBackground
@@ -174,6 +228,11 @@ const AddBooks = ({navigation, route}) => {
       <ScrollView>
         <View style={styles.ParentContainer}>
           <View style={styles.noteCont}>
+            <TouchableOpacity onPress={() => checkPhoto()}>
+              <Text style={{color: 'pink', fontSize: 20}}>
+                click for check photo
+              </Text>
+            </TouchableOpacity>
             <Text style={styles.noteText}>NOTE :</Text>
             <Text style={styles.noteDetailsText}>
               * Click Top-right button to add your books photo.
@@ -188,9 +247,9 @@ const AddBooks = ({navigation, route}) => {
           </View>
 
           <View style={styles.booksimageCont}>
-            {storePhotoPath.map(item => {
+            {storePhotoPath.map((item, index) => {
               return (
-                <View style={styles.profilepicCont}>
+                <View key={index} style={styles.profilepicCont}>
                   <TouchableOpacity
                     onPress={() => deletePhoto(item)}
                     style={{position: 'absolute', right: 5, top: 5, zIndex: 1}}>

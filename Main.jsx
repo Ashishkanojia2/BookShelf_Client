@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './Source/Screens/Login';
-import {NativeBaseProvider} from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import Register from './Source/Screens/Register';
 import Home from './Source/Screens/Home';
 import Books from './Source/Screens/Books';
@@ -10,12 +10,11 @@ import Profile from './Source/Screens/Profile';
 import Profile_user from './Source/Screens/Profile_user';
 import Profile_about from './Source/Screens/Profile_about';
 import Profile_Favorite from './Source/Screens/Profile_Favorite';
-import Profile_SendFeedBack from './Source/Screens/Profile_SendFeedBack';
 import Profile_order from './Source/Screens/Profile_order';
 import Profile_sellingBook from './Source/Screens/Profile_sellingBook';
-import {useDispatch, useSelector} from 'react-redux';
-import {useGetUserQuery} from './Source/RTKquery/Slices/ApiSclices';
-import {getUserData} from './Source/Redux/Reducer/AuthReducer';
+import { useDispatch } from 'react-redux';
+import { useGetUserQuery } from './Source/RTKquery/Slices/ApiSclices';
+import { getUserData } from './Source/Redux/Reducer/AuthReducer';
 import WaitingScren from './Source/Components/Comp/WaitingScren';
 import AddBooks from './Source/Screens/AddBooks';
 import About from './Source/Screens/About';
@@ -63,10 +62,7 @@ const Main = () => {
           <Stack.Screen name="feedback" component={Sending_FeedBack} />
           <Stack.Screen name="trycomp" component={TryComp} />
           <Stack.Screen name="camera" component={Camera} />
-          {/* <Stack.Screen
-            name="profileSendFeedBack"
-            component={Profile_SendFeedBack}
-          /> */}
+
           <Stack.Screen name="profileorder" component={Profile_order} />
           <Stack.Screen
             name="profilesellingBook"

@@ -1,13 +1,15 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {launchImageLibrary} from 'react-native-image-picker';
+
 import {
   Camera,
   useCameraPermission,
   useCameraDevice,
 } from 'react-native-vision-camera';
 
-const VisionCamera = ({route , navigation}) => {
+const VisionCamera = ({route, navigation}) => {
   const {FromScreen} = route.params;
   //   console.log('FromScreen', FromScreen);
 
@@ -45,7 +47,7 @@ const VisionCamera = ({route , navigation}) => {
       console.log('No camera devices available', device);
     } else {
       //   console.log('Device available:', device);
-    //   console.log('Device available:');
+      //   console.log('Device available:');
     }
   }, [device]);
 
@@ -69,6 +71,32 @@ const VisionCamera = ({route , navigation}) => {
       prevPosition === 'front' ? 'back' : 'front',
     );
   };
+  const openImagePicker = () => {
+   
+    const options = {
+      mediaType: 'photo', // Choose 'photo' to allow photo selection
+      includeBase64: false, // Set to false to avoid base64 data
+      maxHeight: 2000, // Maximum height for the selected image
+      maxWidth: 2000, // Maximum width for the selected image
+      quality: 1, // Set the quality of the image (1 is the highest quality)
+      allowsEditing: true, // This allows the user to crop/resize the image
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let path = response.uri || response.assets?.[0]?.uri;
+        console.log('imageuri me ky recive ho raha hai ', path);
+
+        navigation.navigate(FromScreen, {path});
+        // setSelectedImage(path);
+        // navigation.navigate('signin', {selectedImage});
+      }
+    });
+  };
 
   return (
     <View style={{backgroundColor: '#000', height: '100%'}}>
@@ -83,7 +111,7 @@ const VisionCamera = ({route , navigation}) => {
       )}
 
       <View style={styles.bottomCont}>
-        <TouchableOpacity style={styles.photoCont}>
+        <TouchableOpacity style={styles.photoCont} onPress={openImagePicker}>
           <MaterialIcons
             name="insert-photo"
             size={40}
