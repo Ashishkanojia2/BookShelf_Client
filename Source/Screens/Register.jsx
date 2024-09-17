@@ -1,31 +1,32 @@
 import {
-    Dimensions,
-    ImageBackground,
-    Keyboard,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  ImageBackground,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { global } from '../Components/GlobalComponent/GlobalStyle';
 import { Button, TextInput } from 'react-native-paper';
 import { ScrollView } from 'native-base';
 import {
-    useLoginUserMutation,
-    useRegisterUserMutation
+  useRegisterUserMutation
 } from '../RTKquery/Slices/ApiSclices';
+import { useDispatch } from 'react-redux';
 // import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Login = ({navigation}) => {
-  const [loginUser, {isLoading, isError, isSuccess, error}] =
-    useLoginUserMutation();
   const [Registeruser] = useRegisterUserMutation();
+  const dispatch = useDispatch();
+  // const {data: getuserdatafromStore} = useGetUserQuery();
+  // const {data} = useGetUserQuery();
 
   const [emailId, setemailId] = useState('');
   const [Password, setPassword] = useState('');
@@ -42,11 +43,6 @@ const Login = ({navigation}) => {
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
 
-  //
-  //
-  //
-  //
-  //
   const signupBtn = () => {
     navigation.navigate('register');
   };
@@ -76,8 +72,19 @@ const Login = ({navigation}) => {
       const result = await Registeruser(user).unwrap();
       console.log('result', result);
 
-      if (result.success) {
-        navigation.navigate('home');
+      if (result?.success) {
+        Alert.alert(
+          'Successful',
+          'Your Account is Registered in Our BooksOfAccount',
+          [
+            {
+              text: 'Go to Login page',
+              onPress: () => navigation.navigate('Register'),
+            },
+          ],
+          {cancelable: false},
+        );
+
         setname('');
         setemailId('');
         setPassword('');
@@ -97,22 +104,14 @@ const Login = ({navigation}) => {
     setMessage('');
   };
 
-  const skipBtn = () => {
-    navigation.navigate('home');
-  };
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
         <ImageBackground
           source={require('../Assets/images/bg2.png')}
-          style={styles.topimg}>
-          <TouchableOpacity style={styles.SkipCont} onPress={skipBtn}>
-            <Text style={styles.Skiptxt}>Skip</Text>
-          </TouchableOpacity>
-        </ImageBackground>
+          style={styles.topimg}></ImageBackground>
         <View style={styles.headingCont}>
           <Text style={styles.headtxt}>#Register Your Account in Books</Text>
-          {/* <Text style={styles.headtxt2}>Login Your Account</Text> */}
           <Text style={styles.Errortxt}>{Message}</Text>
         </View>
         <View style={styles.inputboxcont}>

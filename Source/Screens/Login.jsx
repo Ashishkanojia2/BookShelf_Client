@@ -59,7 +59,7 @@ const Login = ({navigation}) => {
       }
     } catch (error) {
       setbuttonLoading(false);
-
+      setMessage(error.data.message);
       console.log("error form login screen",error);
 
       // setMessage(error.data.message);
