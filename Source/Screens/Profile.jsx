@@ -7,18 +7,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {clearUserData} from '../Redux/Reducer/AuthReducer';
-import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
+import { useDispatch, useSelector } from 'react-redux';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import { clearUserData } from '../Redux/Reducer/AuthReducer';
+import {
+  useLazyLogoutUserQuery
+} from '../RTKquery/Slices/ApiSclices';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const Profile = ({navigation}) => {
   const userData = useSelector(state => state.user);
@@ -28,7 +29,10 @@ const Profile = ({navigation}) => {
   const dispatch = useDispatch();
   const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
     useLazyLogoutUserQuery();
-
+  // console.log(
+  //   '****************** from profile screen**************************',
+  // );
+  // console.log(userData);
   const logout = async () => {
     await triggerLogout()
       .unwrap()
@@ -42,11 +46,13 @@ const Profile = ({navigation}) => {
   };
 
   const FormateDate = createdAt => {
-    const dateString = createdAt;
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
+    const date = new Date(createdAt);
+    if (isNaN(date)) {
+      return 'Invalid Date';
+    }
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
     const formattedDate = `${day}-${month}-${year}`;
     return formattedDate;
   };
@@ -66,7 +72,7 @@ const Profile = ({navigation}) => {
           <Text style={styles.profileTxt}>{userData.data.name}</Text>
 
           <Text style={styles.profileDateTxt}>
-            Acc. Created At {FormateDate(userData.data.createAt)}
+            Acc. Created At {FormateDate(userData.createAt)}
           </Text>
         </View>
         <View style={styles.profileHerderChild2}></View>

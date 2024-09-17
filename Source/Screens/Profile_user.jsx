@@ -6,30 +6,31 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {Button, TextInput} from 'react-native-paper';
-import {ScrollView} from 'native-base';
+import React, { useEffect, useRef, useState } from 'react';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { Button, TextInput } from 'react-native-paper';
+import { ScrollView } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
-import {useSelector} from 'react-redux';
-import {color} from 'native-base/lib/typescript/theme/styled-system';
-// import {Image} from 'react-native-svg';
-// import {} from "../../assets/fonts"
+import {
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from '../RTKquery/Slices/ApiSclices';
+import { useDispatch, useSelector } from 'react-redux';
+import mime from 'mime';
+import { getUserData } from '../Redux/Reducer/AuthReducer';
+
 const font = 'Calistoga-Regular';
-const font1 = 'Pacifico-Regular';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Profile_user = ({navigation, route}) => {
-  const [Registeruser] = useRegisterUserMutation();
-
   const [emailId, setemailId] = useState('');
-  const [Gender, setGender] = useState('');
-  const [Occupation, setOccupation] = useState('');
+  const [gender, setgender] = useState('');
+  const [occupation, setOccupation] = useState('');
   const [phone, setphone] = useState('');
   const [address, setaddress] = useState('');
   const [name, setname] = useState('');
@@ -41,26 +42,110 @@ const Profile_user = ({navigation, route}) => {
   const nameRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
   const [Message, setMessage] = useState('');
+  const [userProfilePic, setuserProfilePic] = useState(null);
+  const [buttonEnabled, setButtonEnabled] = useState(false);
 
-  const registerUserBtn = async () => {};
+  const [UpdateUserData] = useUpdateUserMutation();
+  const dispatch = useDispatch();
+  const {data: getuserdatafromStore} = useGetUserQuery();
+
   const clearMessage = () => {};
 
   const userData = useSelector(state => state.user.data);
+  // console.log('@@@@@@@@@@@@@@@profile_user@@@@@@@@@@@@@@@@@@@2');
+  // console.log(userData);
+  // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2');
+
+  const [initialData, setInitialData] = useState({
+    address: '',
+    name: '',
+    occupation: '',
+    gender: '',
+    phone: '',
+    avatar: '',
+  });
+  useEffect(() => {
+    if (userData) {
+      setaddress(userData.address || '');
+      setemailId(userData.email || '');
+      setname(userData.name || '');
+      setOccupation(userData.occupation || '');
+      setgender(userData.gender || '');
+      setphone(userData.phone ? userData.phone.toString() : '');
+      setuserProfilePic(userData.avatar?.url || '');
+      console.log('########', userData.avatar);
+    }
+    setInitialData({
+      address: userData.address || '',
+      name: userData.name || '',
+      occupation: userData.occupation || '',
+      gender: userData.gender || '',
+      phone: userData.phone ? userData.phone.toString() : '',
+      avatar: userData.avatar ? userData.avatar.url : '',
+    });
+  }, [userData]);
 
   const setProfilFun = () => {
-    console.log('profile pic set');
     navigation.navigate('camera', {FromScreen: 'profileUser'});
   };
-  const [userProfilePic, setuserProfilePic] = useState('');
   useEffect(() => {
-    console.log('we are here', route.params);
-    if (route?.params?.photo) {
-      const {photo} = route.params;
-      return setuserProfilePic(photo.path);
+    if (route.params) {
+      if (route.params?.photo?.path) {
+        return setuserProfilePic(`file://${route.params.photo.path}`);
+      } else if (route.params?.path) {
+        return setuserProfilePic(route.params.path);
+      }
     }
   }, [route]);
+  useEffect(() => {
+    if (
+      name !== initialData.name ||
+      address !== initialData.address ||
+      occupation !== initialData.occupation ||
+      gender !== initialData.gender ||
+      phone !== initialData.phone ||
+      userProfilePic !== initialData.avatar
+    ) {
+      setButtonEnabled(true);
+    } else {
+      setButtonEnabled(false);
+    }
+  }, [name, address, occupation, gender, phone, initialData, userProfilePic]);
 
-  console.log('we are here1234', userProfilePic);
+  const UpdateUserBtn = async () => {
+    setbuttonLoading(true);
+    const myform = new FormData();
+    myform.append('name', name);
+    myform.append('gender', gender);
+    myform.append('phone', phone);
+    myform.append('address', address);
+    myform.append('occupation', occupation);
+
+    myform.append('avatar', {
+      uri: userProfilePic,
+      type: mime.getType(userProfilePic),
+      name: userProfilePic.split('/').pop(),
+    });
+
+    const response = await UpdateUserData(myform);
+    if (response?.data?.success) {
+      setbuttonLoading(false);
+      dispatch(getUserData(response.data));
+      Alert.alert(
+        'Success',
+        'Profile Successfully Updated',
+        [
+          {
+            text: 'Go to profile page',
+            onPress: () => navigation.navigate('profile'),
+          },
+        ],
+        {cancelable: false},
+      );
+    }
+    console.log('user profile update krne ke baad RESPONSE', response);
+  };
+
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
@@ -69,19 +154,19 @@ const Profile_user = ({navigation, route}) => {
           style={styles.topimg}></ImageBackground>
         <TouchableOpacity
           style={{position: 'absolute', left: 20, top: 20}}
-          onPress={() => {navigation.navigate("profile")}}>
+          onPress={() => {
+            navigation.navigate('profile');
+          }}>
           <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.headingCont}></View>
 
         <View style={styles.profilepicCont}>
-          {userProfilePic !== undefined && userProfilePic !== '' ? (
+          {userProfilePic !== undefined && userProfilePic !== null ? (
             <Image
-              source={{uri: `file://${userProfilePic}`}}
+              source={{uri: userProfilePic}}
               style={{height: '100%', width: '100%'}}
-              // accessible={true}
-              // accessibilityLabel="Book cover image"
             />
           ) : (
             <MaterialIcons
@@ -124,12 +209,13 @@ const Profile_user = ({navigation, route}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
+            editable={false}
           />
           <TextInput
             ref={genderRef}
-            value={Gender}
-            onChangeText={value => setGender(value)}
-            label={'Gender'}
+            value={gender}
+            onChangeText={value => setgender(value)}
+            label={'gender'}
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
@@ -140,9 +226,9 @@ const Profile_user = ({navigation, route}) => {
           />
           <TextInput
             ref={occupationRef}
-            value={Occupation}
+            value={occupation}
             onChangeText={value => setOccupation(value)}
-            label={'Occupation'}
+            label={'occupation'}
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
@@ -163,6 +249,7 @@ const Profile_user = ({navigation, route}) => {
             mode="outlined"
             textColor={global.sandColor}
             onFocus={clearMessage}
+            keyboardType="phone-pad"
           />
           <TextInput
             ref={addressRef}
@@ -181,9 +268,14 @@ const Profile_user = ({navigation, route}) => {
           <Button
             mode="contained"
             rippleColor="#c9c9c9"
-            buttonColor={global.thirdColor}
-            onPress={() => registerUserBtn()}
-            // loading={buttonLoading}
+            buttonColor={
+              buttonEnabled == false
+                ? global.disablebtn_Gray
+                : global.thirdColor
+            }
+            onPress={() => buttonEnabled && UpdateUserBtn()}
+            // disabled={!buttonEnabled}
+            loading={buttonLoading}
             style={{
               marginTop: '20%',
               height: height / 20,
