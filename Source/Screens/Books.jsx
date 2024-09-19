@@ -58,7 +58,7 @@ const Books = route => {
           3
         </Badge>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      {/* <ScrollView contentContainerStyle={styles.scrollContent}>
         {data.bookdata.filter(item => {
           const category = item.b_categorie
             ? item.b_categorie.trim().toLowerCase()
@@ -147,7 +147,93 @@ const Books = route => {
               );
             })
         )}
-      </ScrollView>
+      </ScrollView> */}
+
+<ScrollView contentContainerStyle={styles.scrollContent}>
+  {data && data.bookdata && data.bookdata.length > 0 ? (
+    data.bookdata
+      .filter(item => {
+        const category = item.b_categorie
+          ? item.b_categorie.trim().toLowerCase()
+          : '';
+        return category === route.route.params.message;
+      })
+      .map(item => (
+        <View style={styles.newBookContainer} key={item.id}>
+          <View style={styles.productPhoto}>
+            <View
+              style={{
+                height: '80%',
+                width: '80%',
+                backgroundColor: global.thirdColor,
+              }}
+            />
+          </View>
+          <View style={styles.productInfo}>
+            <Text
+              style={[styles.booksName]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              {item.b_name}
+            </Text>
+            <Text
+              style={[styles.bookstxt]}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              {item.b_desc}
+            </Text>
+            <View style={styles.editionCont}>
+              <Text style={styles.booksHead}>Edition :</Text>
+              <Text style={styles.bookstxt}>{item.b_edition}</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>Author :</Text>
+              <Text style={styles.bookstxt}>{item.b_author}</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>S.Price :</Text>
+              <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
+            </View>
+            <View style={styles.infoCont}>
+              <Text style={styles.booksHead}>MRP :</Text>
+              <Text
+                style={[
+                  styles.bookstxt,
+                  {
+                    textDecorationLine: 'line-through',
+                    color: '#c9c9c9',
+                  },
+                ]}>
+                {item.b_MRP}
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.addBtn}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000',
+                  fontFamily: globalfonts.font5,
+                }}>
+                ADD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))
+  ) : (
+    <Text
+      style={{
+        color: global.sandColor,
+        fontSize: 25,
+        fontFamily: globalfonts.font,
+        marginTop: '20%',
+        textDecorationLine: 'underline',
+      }}>
+      No Books
+    </Text>
+  )}
+</ScrollView>
+
     </View>
   );
 };
@@ -167,16 +253,15 @@ const styles = StyleSheet.create({
     right: 3,
   },
   ParentContainer: {
-    flex: 1, // Ensure the parent container takes up the full screen
+    flex: 1, 
   },
   scrollContent: {
     alignItems: 'center',
-    // backgroundColor:"green",
-    flexGrow: 1, // Allows the ScrollView to expand and fill the parent container
+    flexGrow: 1, 
   },
   headerCont: {
     backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70, // Set a specific height for the header
+    height: 70, 
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -206,8 +291,6 @@ const styles = StyleSheet.create({
     color: '#000',
     flexDirection: 'row',
     marginTop: '2%',
-    // flexWrap: 'wrap',
-    // backgroundColor: global.sandColor,
   },
   inputfield: {
     width: width - 100,
@@ -231,10 +314,7 @@ const styles = StyleSheet.create({
     width: width - 20,
     backgroundColor: '#fafafa',
     borderRadius: 10,
-    // borderColor: '#c0c1c0',
-    // borderWidth: 1,
     marginVertical: '1.5%',
-    // marginHorizontal: '1%',
     flexDirection: 'row',
     elevation: 1,
     overflow: 'hidden',
@@ -275,7 +355,6 @@ const styles = StyleSheet.create({
     height: height / 25,
     width: width / 7,
     position: 'absolute',
-    // backgroundColor: global.bgColor,
     backgroundColor: global.sandColor,
     right: 10,
     bottom: 10,

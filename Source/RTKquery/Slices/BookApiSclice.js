@@ -3,7 +3,10 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const bookApi = createApi({
   reducerPath: 'bookApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1/book',
+    // baseUrl: 'http://localhost:27017/api/v1/book',
+    // baseUrl: 'https://192.168.137.1:4000/api/v1/book',
+    // baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1/book',
+    baseUrl: 'http://192.168.137.1:4000/api/v1/book',
   }),
   endpoints: builder => ({
     registerBook: builder.mutation({
@@ -11,26 +14,18 @@ export const bookApi = createApi({
         url: '/register',
         method: 'POST',
         body: book,
+        // headers: {
+        //   'Content-Type': 'multipart/form-data', // Optional, usually auto-handled by the browser
+        // },
       }),
     }),
-    getBookData : builder.query({
-        query:()=>({
-            url:"/getallbooks"
-        })
-    })
-    // logoutUser: builder.query({
-    //   query: () => ({
-    //     url: '/user/logout',
-    //   }),
-    // }),
-    // registerUser: builder.mutation({
-    //   query: registerUser => ({
-    //     url: '/user/register',
-    //     method: 'POST',
-    //     body: registerUser,
-    //   }),
-    // }),
+    getBookData: builder.query({
+      query: () => ({
+        url: '/getallbooks',
+      }),
+    }),
+  
   }),
 });
 
-export const {useRegisterBookMutation , useGetBookDataQuery} = bookApi;
+export const {useRegisterBookMutation, useGetBookDataQuery} = bookApi;

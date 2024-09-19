@@ -16,7 +16,7 @@ export const userData = createSlice({
       // state.isAuth = isSuccess;
     },
     loginUserData: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.data;
       // state.isAuth = true;
       state.msg = 'user login';
     },
@@ -29,9 +29,17 @@ export const userData = createSlice({
       state.data = '';
       state.msg = 'data Clear';
     },
+    updateUserData: (state, action) => {
+      state.data = action.payload;
+    },
   },
 });
 
-export const {getUserData, logoutUser, loginUserData, clearUserData} =
-  userData.actions;
+export const {
+  getUserData,
+  logoutUser,
+  loginUserData,
+  clearUserData,
+  updateUserData,
+} = userData.actions;
 export default userData.reducer;

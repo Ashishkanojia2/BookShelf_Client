@@ -5,18 +5,17 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
-import { clearUserData } from '../Redux/Reducer/AuthReducer';
-import {
-  useLazyLogoutUserQuery
-} from '../RTKquery/Slices/ApiSclices';
+import {useDispatch, useSelector} from 'react-redux';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import {clearUserData} from '../Redux/Reducer/AuthReducer';
+import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
@@ -29,10 +28,14 @@ const Profile = ({navigation}) => {
   const dispatch = useDispatch();
   const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
     useLazyLogoutUserQuery();
-  // console.log(
-  //   '****************** from profile screen**************************',
-  // );
-  // console.log(userData);
+  console.log(
+    '****************** from profile screen**************************',
+  );
+  console.log(userData);
+  console.log(userData.data.avatar.url);
+
+  // const [profileImage, setprofileImage] = useState('');
+  // setprofileImage(userData.data.avatar.url);
   const logout = async () => {
     await triggerLogout()
       .unwrap()
@@ -67,7 +70,14 @@ const Profile = ({navigation}) => {
       <View style={styles.Profileheader}>
         <View style={styles.profileHerderChild1}>
           <TouchableOpacity style={styles.profilepicCont}>
-            <Text style={styles.profilePhotoText}>{CapLetter}</Text>
+            {userData && userData.data.avatar && userData.data.avatar.url ? (
+              <Image
+                source={{uri: userData.data.avatar.url}}
+                style={{height: '100%', width: '100%'}}
+              />
+            ) : (
+              <Text style={styles.profilePhotoText}>{CapLetter}</Text>
+            )}
           </TouchableOpacity>
           <Text style={styles.profileTxt}>{userData.data.name}</Text>
 
@@ -279,6 +289,8 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow:"hidden",
+    // resizeMode:"contain"
   },
   profileHerderChild1: {
     flex: 4,

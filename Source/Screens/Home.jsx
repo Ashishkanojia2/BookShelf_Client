@@ -7,6 +7,7 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'native-base';
@@ -41,9 +42,12 @@ const Home = ({navigation}) => {
   const state_BookData = useSelector(state => state.book); // Ensure correct path to state
   const userdata = useSelector(state => state.user); // Ensure correct path to state
   // console.log('state_BookData', state_BookData);
-  console.log("*******************from home screen********************");
-  
+  console.log('*******************from home screen********************');
+
   console.log('userdata', userdata);
+
+  const name = userdata?.data?.name || '';
+  const CapLetter = name.charAt(0).toUpperCase();
 
   //FUNCTIONS
   const bookContainer = bookname => {
@@ -67,9 +71,16 @@ const Home = ({navigation}) => {
         translucent={false}
       />
       <View style={styles.headerCont}>
-        <TouchableOpacity
-          onPress={profileBtn}
-          style={styles.userProfile}></TouchableOpacity>
+        <TouchableOpacity onPress={profileBtn} style={styles.userProfile}>
+          {userdata && userdata.data.avatar && userdata.data.avatar.url ? (
+            <Image
+              source={{uri: userdata.data.avatar.url}}
+              style={{height: '100%', width: '100%'}}
+            />
+          ) : (
+            <Text style={styles.profilePhotoText}>{CapLetter}</Text>
+          )}
+        </TouchableOpacity>
         <View style={styles.searchfield}>
           <Fontisto name="search" size={20} color="#000" />
 
@@ -81,7 +92,7 @@ const Home = ({navigation}) => {
             placeholderTextColor={global.bgColor}
           />
         </View>
-        <TouchableOpacity onPress={() => opencamera()}>
+        <TouchableOpacity>
           <FontAwesome
             name="book"
             size={30}
@@ -337,7 +348,17 @@ const Home = ({navigation}) => {
             </View>
           ))
         ) : (
-          <Text>No books available.</Text>
+          <Text
+            style={{
+              color: global.sandColor,
+              fontSize: 25,
+              fontFamily: globalfonts.font,
+              marginTop: '20%',
+              textDecorationLine: 'underline',
+              alignSelf:"center"
+            }}>
+            No books available.
+          </Text>
         )}
       </ScrollView>
     </View>
@@ -508,6 +529,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: global.sandColor,
     borderWidth: 1,
+    overflow: 'hidden',
   },
   cartBadge: {
     color: '#fff',

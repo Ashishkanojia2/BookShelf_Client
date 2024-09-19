@@ -3,29 +3,41 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1',
+    // http://localhost:4000/api/v1/user/login
+    baseUrl: 'http://192.168.137.1:4000/api/v1/user',
+    // baseUrl: 'http://192.168.132.190:4000/api/v1/user',
   }),
   endpoints: builder => ({
     getUser: builder.query({
-      query: () => '/user/me',
+      query: () => '/me',
     }),
     LoginUser: builder.mutation({
       query: user => ({
-        url: '/user/login',
+        url: '/login',
         method: 'POST',
         body: user,
       }),
     }),
     logoutUser: builder.query({
       query: () => ({
-        url: '/user/logout',
+        url: '/logout',
       }),
     }),
     registerUser: builder.mutation({
       query: registerUser => ({
-        url: '/user/register',
+        url: '/register',
         method: 'POST',
         body: registerUser,
+      }),
+    }),
+    updateUser: builder.mutation({
+      query: data => ({
+        url: './updateProfile',
+        method: 'PUT',
+        body: data,
+        // headers: {
+        //   'Content-Type': 'multipart/form-data', // Optional, usually auto-handled by the browser
+        // },
       }),
     }),
   }),
@@ -36,5 +48,6 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useLazyLogoutUserQuery,
+  useUpdateUserMutation,
   // useLogoutUserQuery,
 } = userApi;
