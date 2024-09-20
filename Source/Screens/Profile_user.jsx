@@ -8,19 +8,19 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { Button, TextInput } from 'react-native-paper';
-import { ScrollView } from 'native-base';
+import React, {useEffect, useRef, useState} from 'react';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {Button, TextInput} from 'react-native-paper';
+import {ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   useGetUserQuery,
   useUpdateUserMutation,
 } from '../RTKquery/Slices/ApiSclices';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import mime from 'mime';
-import { getUserData } from '../Redux/Reducer/AuthReducer';
+import {getUserData} from '../Redux/Reducer/AuthReducer';
 
 const font = 'Calistoga-Regular';
 
@@ -73,7 +73,7 @@ const Profile_user = ({navigation, route}) => {
       setgender(userData.gender || '');
       setphone(userData.phone ? userData.phone.toString() : '');
       setuserProfilePic(userData.avatar?.url || '');
-      console.log('########', userData.avatar);
+      // console.log('########', userData.avatar);
     }
     setInitialData({
       address: userData.address || '',
@@ -120,6 +120,9 @@ const Profile_user = ({navigation, route}) => {
     myform.append('phone', phone);
     myform.append('address', address);
     myform.append('occupation', occupation);
+    console.log('***************************************');
+
+    console.log('userProfilePic', userProfilePic);
 
     myform.append('avatar', {
       uri: userProfilePic,

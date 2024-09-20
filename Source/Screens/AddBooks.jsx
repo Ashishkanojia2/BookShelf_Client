@@ -12,13 +12,11 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
 import mime from 'mime';
-import {store} from '../Redux/Store/Store';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -49,6 +47,25 @@ const AddBooks = ({navigation, route}) => {
   const [Message, setMessage] = useState('');
 
   const [storePhotoPath, setstorePhotoPath] = useState([]);
+  useEffect(() => {
+    if (route.params?.photo) {
+      const {photo} = route.params;
+
+      setstorePhotoPath(previousPaths => {
+        if (!previousPaths.includes(photo.path)) {
+          return [...previousPaths, `file://${photo.path}`];
+        }
+        return previousPaths;
+      });
+    } else if (route.params?.path) {
+      setstorePhotoPath(previousPaths => {
+        if (!previousPaths.includes(route.params.path)) {
+          return [...previousPaths, route.params.path];
+        }
+        return previousPaths;
+      });
+    }
+  }, [route.params]);
 
   const registerBookBtn = async () => {
     try {
@@ -75,53 +92,6 @@ const AddBooks = ({navigation, route}) => {
       }
 
       setbuttonLoading(true);
-
-      const processImages = imagePaths => {
-        const processedImages = [];
-
-        storePhotoPath.forEach(imagePath => {
-          const mimeType = mime.getType(imagePath);
-          // console.log('Image Path:', imagePath, 'MIME Type:', mimeType);
-
-          if (mimeType) {
-            processedImages.push({
-              uri: imagePath,
-              // uri: Platform.OS == 'android' ? imagePath : photo.path,
-              type: mimeType,
-              name: imagePath.split('/').pop(),
-            });
-          } else {
-            console.error(`MIME type not found for image: ${imagePath}`);
-          }
-        });
-
-        return processedImages;
-      };
-
-      // const processImages = imagePaths => {
-      //   const processedImages = {};
-
-      //   store.forEach((imagePath, index) => {
-      //     const mimeType = mime.getType(imagePath);
-
-      //     if (mimeType) {
-      //       // Use the index or a unique identifier as the key
-      //       processedImages[index] = {
-      //         uri: imagePath,
-      //         type: mimeType,
-      //         name: imagePath.split('/').pop(),
-      //       };
-      //     } else {
-      //       console.error(`MIME type not found for image: ${imagePath}`);
-      //     }
-      //   });
-
-      //   return processedImages;
-      // };
-
-      console.log('@@@@@@@@@@@@@@', processImages());
-
-      // Create FormData object
       const myform = new FormData();
       myform.append('b_name', bookName);
       myform.append('b_desc', bookDesc);
@@ -130,23 +100,27 @@ const AddBooks = ({navigation, route}) => {
       myform.append('b_categorie', Categories);
       myform.append('b_MRP', mrp);
       myform.append('b_sellingprice', sellingPrice);
-      myform.append('images', processImages());
 
-      console.log('Data being sent: ', myform);
+      console.log('storePhotoPath', storePhotoPath);
 
-      // Call API to register the book
+      storePhotoPath.forEach(imagePath => {
+        const mimeType = mime.getType(imagePath);
+        if (mimeType) {
+          myform.append('images', {
+            uri: imagePath,
+            type: mimeType,
+            name: imagePath.split('/').pop(),
+          });
+        } else {
+          console.error(`MIME type not found for image: ${imagePath}`);
+        }
+      });
+
       const isRegister = await RegisterBook(myform);
       console.log('isRegister', isRegister);
 
       if (isRegister?.data?.success) {
         setbuttonLoading(false);
-        Alert.alert(
-          'Registered',
-          `Your Book: ${isRegister.data.bookdata.b_name} is Registered`,
-          [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-          {cancelable: true},
-        );
-        // Clear form fields
         setbookDesc('');
         setauthor('');
         setEdition('');
@@ -154,6 +128,21 @@ const AddBooks = ({navigation, route}) => {
         setCategories('');
         setbookName('');
         setsellingPrice('');
+        Alert.alert(
+          'Registered',
+          `Your Book: ${isRegister.data.bookdata.b_name} is Registered, Now you want to go..`,
+          [
+            {
+              text: 'Profile Page',
+              onPress: () => navigation.navigate('profile'),
+            },
+            {
+              text: 'Home Page',
+              onPress: () => navigation.navigate('home'),
+            },
+          ],
+          {cancelable: false},
+        );
       } else {
         throw new Error('Registration failed');
       }
@@ -167,35 +156,15 @@ const AddBooks = ({navigation, route}) => {
     }
   };
 
-  //
-  //
-  //
-
   const clearMessage = () => {
     setMessage('');
   };
 
-  useEffect(() => {
-    if (route.params?.photo) {
-      const {photo} = route.params;
-      setstorePhotoPath(previousPaths => {
-        // Check if the photo path is already in the array
-        if (!previousPaths.includes(photo.path)) {
-          return [...previousPaths, photo.path];
-        }
-        // Return the existing array if the photo path is already there
-        return previousPaths;
-      });
-    }
-  }, [route.params?.photo]);
-
   const deletePhoto = item => {
-    // console.log('item Name', item);
     const ispresent = storePhotoPath.find(photopath => photopath === item);
     if (ispresent === undefined) {
       return Alert.alert('Error', "Currently this Image Can't be Detele");
     }
-    // console.log('ispresent11', ispresent);
     if (ispresent) {
       setstorePhotoPath(storePhotoPath.filter(photoPath => photoPath !== item));
       return Alert.alert('Success', 'Book is Deteled');
@@ -419,7 +388,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'green',
   },
   profilepicCont: {
     height: height / 4,
@@ -428,13 +396,10 @@ const styles = StyleSheet.create({
     backgroundColor: global.thirdColor,
     borderWidth: 1,
     borderColor: global.sandColor,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     alignSelf: 'center',
     margin: '2%',
     elevation: 30,
     overflow: 'hidden',
-    // alignSelf:"center"
   },
   ParentContainer: {
     paddingBottom: '5%',
