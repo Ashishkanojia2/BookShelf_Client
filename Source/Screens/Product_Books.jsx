@@ -241,7 +241,7 @@ const Product_Books = ({navigation}) => {
                 paddingStart: '1%',
                 paddingEnd: '15%',
               }}>
-              <View style={styles.similarProductCont}>
+              <TouchableOpacity style={styles.similarProductCont}>
                 <View
                   style={{
                     width: '100%',
@@ -293,8 +293,8 @@ const Product_Books = ({navigation}) => {
                   }}>
                   <Text style={{color: global.bgColor}}>Add to Cart</Text>
                 </TouchableOpacity>
-              </View>
-              <View style={styles.similarProductCont}>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.similarProductCont}>
                 <View
                   style={{
                     width: '100%',
@@ -346,8 +346,8 @@ const Product_Books = ({navigation}) => {
                   }}>
                   <Text style={{color: global.bgColor}}>Add to Cart</Text>
                 </TouchableOpacity>
-              </View>
-              <View style={styles.similarProductCont}>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.similarProductCont}>
                 <View
                   style={{
                     width: '100%',
@@ -399,8 +399,8 @@ const Product_Books = ({navigation}) => {
                   }}>
                   <Text style={{color: global.bgColor}}>Add to Cart</Text>
                 </TouchableOpacity>
-              </View>
-              <View style={styles.similarProductCont}>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.similarProductCont}>
                 <View
                   style={{
                     width: '100%',
@@ -452,7 +452,7 @@ const Product_Books = ({navigation}) => {
                   }}>
                   <Text style={{color: global.bgColor}}>Add to Cart</Text>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </ScrollView>
           </View>
         </View>
@@ -672,15 +672,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     elevation: 10,
   },
-  // userProfile: {
-  //   height: height / 23,
-  //   width: width / 10.5,
-  //   backgroundColor: global.bgColor,
-  //   borderRadius: 50,
-  //   borderColor: global.sandColor,
-  //   borderWidth: 1,
-  //   overflow: 'hidden',
-  // },
+
   cartBadge: {
     color: '#fff',
     position: 'absolute',
