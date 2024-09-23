@@ -74,7 +74,7 @@ const SellingBooks = ({navigation}) => {
                 </Text>
                 <Text
                   style={[styles.bookstxt]}
-                  numberOfLines={3}
+                  numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.b_desc}
                 </Text>
@@ -163,11 +163,12 @@ const styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    backgroundColor: global.bgColor,
-    height: '100%',
+    // backgroundColor: global.bgColor,
+    height: '95%',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf:"center"
   },
   allBookContainer: {
     height: height / 5.5,

@@ -44,7 +44,7 @@ const Login = ({navigation}) => {
   const [Message, setMessage] = useState('');
 
   const signupBtn = () => {
-    navigation.navigate('register');
+    navigation.navigate('login');
   };
 
   const registerUserBtn = async () => {
@@ -111,7 +111,7 @@ const Login = ({navigation}) => {
           source={require('../Assets/images/bg2.png')}
           style={styles.topimg}></ImageBackground>
         <View style={styles.headingCont}>
-          <Text style={styles.headtxt}>#Register Your Account in Books</Text>
+          <Text style={styles.headtxt}>#Create Your Book Account</Text>
           <Text style={styles.Errortxt}>{Message}</Text>
         </View>
         <View style={styles.inputboxcont}>

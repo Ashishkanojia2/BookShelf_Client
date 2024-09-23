@@ -6,33 +6,38 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import React from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-// import {TextInput} from 'react-native-paper';
+import React, { useState } from 'react';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Badge} from 'react-native-paper';
+import { Badge } from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {useSelector} from 'react-redux';
+import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
 
 const Books = route => {
-  // const {message} = route.params;
-  console.log('message:', route.route.params.message);
-
-  const data = useSelector(state => state.book);
-  console.log('@@@@@@@@@@@@@@@@@@', data);
-
+  const [favBook, setfavBook] = useState(false);
+  // console.log('message:', route.route.params.message);
+  const {
+    data: Book_data,
+    isLoading: bookload,
+    error,
+    isSuccess,
+  } = useGetBookDataQuery();
+  // const data = useSelector(state => state.book);
+  // console.log('@@@@@@@@@@@Book screen@@@@@@@', Book_data);
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
-        barStyle="light-content" // Use 'dark-content' for dark text
-        backgroundColor="rgba(140,154,154,1)" // Background color for Android
-        translucent={false} // Set to true if you want a translucent status bar
+        barStyle="light-content"
+        backgroundColor="rgba(140,154,154,1)"
+        translucent={false}
       />
       <View style={styles.headerCont}>
         <View style={styles.searchfield}>
@@ -58,182 +63,111 @@ const Books = route => {
           3
         </Badge>
       </View>
-      {/* <ScrollView contentContainerStyle={styles.scrollContent}>
-        {data.bookdata.filter(item => {
-          const category = item.b_categorie
-            ? item.b_categorie.trim().toLowerCase()
-            : '';
-          return category === route.route.params.message;
-        }).length === 0 ? (
-          <Text
-            style={{
-              color: global.sandColor,
-              fontSize: 40,
-              fontFamily: globalfonts.font,
-              marginTop: '20%',
-              textDecorationLine: 'underline',
-            }}>
-            No Book
-          </Text>
-        ) : (
-          data.bookdata
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {Book_data && Book_data.allbooks && Book_data.allbooks.length > 0 ? (
+          Book_data.allbooks
             .filter(item => {
               const category = item.b_categorie
                 ? item.b_categorie.trim().toLowerCase()
                 : '';
               return category === route.route.params.message;
             })
-            .map(item => {
-              return (
-                <View style={styles.newBookContainer}>
-                  <View style={styles.productPhoto}>
-                    <View
+            .map(item => (
+              
+              <View style={styles.newBookContainer} key={item.id}>
+                {/* console.log(item.id) */}
+                <View style={styles.productPhoto}>
+                  <View
+                    style={{
+                      height: '80%',
+                      width: '80%',
+                      // backgroundColor: global.thirdColor,
+                    }}>
+                    <Image
+                      source={{uri: item.images[0].url}}
                       style={{
-                        height: '80%',
-                        width: '80%',
-                        backgroundColor: global.thirdColor,
-                      }}></View>
-                  </View>
-                  <View style={styles.productInfo}>
-                    <Text
-                      style={[styles.booksName]}
-                      numberOfLines={3}
-                      ellipsizeMode="tail">
-                      {item.b_name}
-                    </Text>
-                    <Text
-                      style={[styles.bookstxt]}
-                      numberOfLines={3}
-                      ellipsizeMode="tail">
-                      {item.b_desc}
-                    </Text>
-                    <View style={styles.editionCont}>
-                      <Text style={styles.booksHead}>Edition :</Text>
-                      <Text style={styles.bookstxt}>{item.b_edition}</Text>
-                    </View>
-                    <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>Author :</Text>
-                      <Text style={styles.bookstxt}>{item.b_author}</Text>
-                    </View>
-                    <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>S.Price :</Text>
-                      <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
-                    </View>
-                    <View style={styles.infoCont}>
-                      <Text style={styles.booksHead}>MRP :</Text>
-                      <Text
-                        style={[
-                          styles.bookstxt,
-                          {
-                            textDecorationLine: 'line-through',
-                            color: '#c9c9c9',
-                          },
-                        ]}>
-                        {item.b_MRP}
-                      </Text>
-                    </View>
-                    <TouchableOpacity style={styles.addBtn}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#000',
-                          fontFamily: globalfonts.font5,
-                        }}>
-                        ADD
-                      </Text>
-                    </TouchableOpacity>
+                        width: '100%',
+                        height: '100%',
+                        resizeMode: 'center',
+                        borderRadius: 12,
+                      }}
+                    />
                   </View>
                 </View>
-              );
-            })
+                <TouchableOpacity
+                  onPress={() => setfavBook(!favBook)}
+                  style={{position: 'absolute', right: 10, top: 7, zIndex: 1}}>
+                  {favBook ? (
+                    <AntDesign name="heart" size={25} color="red" />
+                  ) : (
+                    <FontAwesome name="heart-o" size={25} color="#000" />
+                  )}
+                </TouchableOpacity>
+                <View style={styles.productInfo}>
+                  <Text
+                    style={[styles.booksName]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.b_name}
+                  </Text>
+                  <Text
+                    style={[styles.bookstxt]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.b_desc}
+                  </Text>
+                  <View style={styles.editionCont}>
+                    <Text style={styles.booksHead}>Edition :</Text>
+                    <Text style={styles.bookstxt}>{item.b_edition}</Text>
+                  </View>
+                  <View style={styles.infoCont}>
+                    <Text style={styles.booksHead}>Author :</Text>
+                    <Text style={styles.bookstxt}>{item.b_author}</Text>
+                  </View>
+                  <View style={styles.infoCont}>
+                    <Text style={styles.booksHead}>S.Price :</Text>
+                    <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
+                  </View>
+                  <View style={styles.infoCont}>
+                    <Text style={styles.booksHead}>MRP :</Text>
+                    <Text
+                      style={[
+                        styles.bookstxt,
+                        {
+                          textDecorationLine: 'line-through',
+                          color: '#c9c9c9',
+                        },
+                      ]}>
+                      {item.b_MRP}
+                    </Text>
+                  </View>
+                  <TouchableOpacity style={styles.addBtn}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#000',
+                        fontFamily: globalfonts.font5,
+                      }}>
+                      ADD
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+        ) : (
+          <Text
+            style={{
+              color: global.sandColor,
+              fontSize: 25,
+              fontFamily: globalfonts.font,
+              marginTop: '20%',
+              textDecorationLine: 'underline',
+            }}>
+            No Books
+          </Text>
         )}
-      </ScrollView> */}
-
-<ScrollView contentContainerStyle={styles.scrollContent}>
-  {data && data.bookdata && data.bookdata.length > 0 ? (
-    data.bookdata
-      .filter(item => {
-        const category = item.b_categorie
-          ? item.b_categorie.trim().toLowerCase()
-          : '';
-        return category === route.route.params.message;
-      })
-      .map(item => (
-        <View style={styles.newBookContainer} key={item.id}>
-          <View style={styles.productPhoto}>
-            <View
-              style={{
-                height: '80%',
-                width: '80%',
-                backgroundColor: global.thirdColor,
-              }}
-            />
-          </View>
-          <View style={styles.productInfo}>
-            <Text
-              style={[styles.booksName]}
-              numberOfLines={3}
-              ellipsizeMode="tail">
-              {item.b_name}
-            </Text>
-            <Text
-              style={[styles.bookstxt]}
-              numberOfLines={3}
-              ellipsizeMode="tail">
-              {item.b_desc}
-            </Text>
-            <View style={styles.editionCont}>
-              <Text style={styles.booksHead}>Edition :</Text>
-              <Text style={styles.bookstxt}>{item.b_edition}</Text>
-            </View>
-            <View style={styles.infoCont}>
-              <Text style={styles.booksHead}>Author :</Text>
-              <Text style={styles.bookstxt}>{item.b_author}</Text>
-            </View>
-            <View style={styles.infoCont}>
-              <Text style={styles.booksHead}>S.Price :</Text>
-              <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
-            </View>
-            <View style={styles.infoCont}>
-              <Text style={styles.booksHead}>MRP :</Text>
-              <Text
-                style={[
-                  styles.bookstxt,
-                  {
-                    textDecorationLine: 'line-through',
-                    color: '#c9c9c9',
-                  },
-                ]}>
-                {item.b_MRP}
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.addBtn}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: '#000',
-                  fontFamily: globalfonts.font5,
-                }}>
-                ADD
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))
-  ) : (
-    <Text
-      style={{
-        color: global.sandColor,
-        fontSize: 25,
-        fontFamily: globalfonts.font,
-        marginTop: '20%',
-        textDecorationLine: 'underline',
-      }}>
-      No Books
-    </Text>
-  )}
-</ScrollView>
-
+      </ScrollView>
     </View>
   );
 };
@@ -253,15 +187,15 @@ const styles = StyleSheet.create({
     right: 3,
   },
   ParentContainer: {
-    flex: 1, 
+    flex: 1,
   },
   scrollContent: {
     alignItems: 'center',
-    flexGrow: 1, 
+    flexGrow: 1,
   },
   headerCont: {
     backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70, 
+    height: 70,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -321,7 +255,7 @@ const styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    backgroundColor: global.sandColor,
+    // backgroundColor: global.sandColor,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',

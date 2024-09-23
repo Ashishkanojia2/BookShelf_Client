@@ -8,14 +8,14 @@ import {
   Image,
 } from 'react-native';
 import React from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {clearUserData} from '../Redux/Reducer/AuthReducer';
-import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
+import { useDispatch, useSelector } from 'react-redux';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import { clearUserData } from '../Redux/Reducer/AuthReducer';
+import { useLazyLogoutUserQuery } from '../RTKquery/Slices/ApiSclices';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
@@ -26,16 +26,12 @@ const Profile = ({navigation}) => {
   const CapLetter = name.charAt(0).toUpperCase();
 
   const dispatch = useDispatch();
-  const [triggerLogout, {isLoading, isSuccess, isError, data, error}] =
-    useLazyLogoutUserQuery();
-  console.log(
-    '****************** from profile screen**************************',
-  );
-  console.log(userData);
-  console.log(userData.data.avatar.url);
+  const [triggerLogout] = useLazyLogoutUserQuery();
+  // console.log(
+  //   '****************** from profile screen**************************',
+  // );
+  // console.log(userData);
 
-  // const [profileImage, setprofileImage] = useState('');
-  // setprofileImage(userData.data.avatar.url);
   const logout = async () => {
     await triggerLogout()
       .unwrap()
@@ -66,7 +62,6 @@ const Profile = ({navigation}) => {
         backgroundColor="rgba(140,154,154,1)"
         translucent={false}
       />
-
       <View style={styles.Profileheader}>
         <View style={styles.profileHerderChild1}>
           <TouchableOpacity style={styles.profilepicCont}>
@@ -289,7 +284,7 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow:"hidden",
+    overflow: 'hidden',
     // resizeMode:"contain"
   },
   profileHerderChild1: {

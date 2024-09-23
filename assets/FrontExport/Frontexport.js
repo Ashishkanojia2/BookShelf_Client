@@ -7,4 +7,5 @@ export const globalfonts = {
   font5: 'Kanit-Regular',
   font6: 'Kanit-SemBold',
   font7: 'Kanit-Thin',
+  font8: 'CutiveMono-Regular',
 };

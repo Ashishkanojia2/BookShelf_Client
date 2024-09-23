@@ -12,39 +12,46 @@ import {
 import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {Badge} from 'react-native-paper';
+import {ActivityIndicator, Badge} from 'react-native-paper';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
 import {setBookData} from '../Redux/Reducer/BookReducer';
-import TryComp from './TryComp';
+import {position} from 'native-base/lib/typescript/theme/styled-system';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Home = ({navigation}) => {
-  const dispatch = useDispatch();
-
   //USE_STATE
   const [searchText, setsearchText] = useState('');
   const [ShowingBookData, setShowingBookData] = useState(false);
 
   //API CALLING
-  const allBooksData = useGetBookDataQuery();
+  // const {state_BookData} = useGetBookDataQuery();
+  const [state_BookData, setstate_BookData] = useState('');
+  const [favBook, setfavBook] = useState(false);
 
+  const {
+    data: Book_data,
+    isLoading: bookload,
+    error,
+    isSuccess,
+  } = useGetBookDataQuery();
   useEffect(() => {
-    if (allBooksData) {
-      dispatch(setBookData(allBooksData.allbooks));
+    if (Book_data && isSuccess) {
+      setstate_BookData(Book_data);
     }
-  }, [allBooksData, dispatch]);
+  }, [Book_data, isSuccess]);
+  const userdata = useSelector(state => state.user);
 
-  const state_BookData = useSelector(state => state.book); // Ensure correct path to state
-  const userdata = useSelector(state => state.user); // Ensure correct path to state
-  // console.log('state_BookData', state_BookData);
   console.log('*******************from home screen********************');
 
   console.log('userdata', userdata);
+  console.log('state_BookData direct data recived form api', state_BookData);
 
   const name = userdata?.data?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
@@ -56,10 +63,7 @@ const Home = ({navigation}) => {
       message: `${bookname}`,
     });
   };
-  const opencamera = () => {
-    console.log('working camera');
-    navigation.navigate('camera');
-  };
+
   const profileBtn = () => {
     navigation.navigate('profile');
   };
@@ -72,7 +76,7 @@ const Home = ({navigation}) => {
       />
       <View style={styles.headerCont}>
         <TouchableOpacity onPress={profileBtn} style={styles.userProfile}>
-          {userdata && userdata.data.avatar && userdata.data.avatar.url ? (
+          {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
             <Image
               source={{uri: userdata.data.avatar.url}}
               style={{height: '100%', width: '100%'}}
@@ -288,17 +292,39 @@ const Home = ({navigation}) => {
               </View>
             </TouchableOpacity>
           </View>
-        ) : state_BookData.bookdata && state_BookData.bookdata.length > 0 ? (
-          state_BookData.bookdata.map(item => (
+        ) : bookload ? (
+          <ActivityIndicator size={'small'} />
+        ) : state_BookData && state_BookData.allbooks.length > 0 ? (
+          state_BookData.allbooks.map(item => (
             <View style={styles.allBookContainer} key={item.id}>
               <View style={styles.productPhoto}>
                 <View
                   style={{
-                    height: '80%',
-                    width: '80%',
-                    backgroundColor: global.thirdColor,
-                  }}></View>
+                    height: '90%',
+                    width: '90%',
+                    // backgroundColor: global.thirdColor,
+                  }}>
+                  <Image
+                    source={{uri: item.images[0].url}}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      resizeMode: 'center',
+                      borderRadius: 12,
+                    }}
+                  />
+                </View>
               </View>
+              <TouchableOpacity
+                onPress={() => setfavBook(!favBook)}
+                style={{position: 'absolute', right: 10, top: 7, zIndex: 1}}>
+                {favBook ? (
+                  <AntDesign name="heart" size={25} color="red" />
+                ) : (
+                  <FontAwesome name="heart-o" size={25} color="#000" />
+                )}
+              </TouchableOpacity>
+
               <View style={styles.productInfo}>
                 <Text
                   style={[styles.booksName]}
@@ -308,7 +334,7 @@ const Home = ({navigation}) => {
                 </Text>
                 <Text
                   style={[styles.bookstxt]}
-                  numberOfLines={3}
+                  numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.b_desc}
                 </Text>
@@ -355,7 +381,7 @@ const Home = ({navigation}) => {
               fontFamily: globalfonts.font,
               marginTop: '20%',
               textDecorationLine: 'underline',
-              alignSelf:"center"
+              alignSelf: 'center',
             }}>
             No books available.
           </Text>
@@ -405,7 +431,7 @@ const styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    backgroundColor: 'pink',
+    // backgroundColor: global.thirdColor,
     height: '100%',
     width: '50%',
     justifyContent: 'center',
