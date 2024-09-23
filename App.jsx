@@ -12,8 +12,8 @@ export default App = () => {
     <Provider store={store}>
       {/* <WaitingScren/> */}
       {/* <Product_Books /> */}
-      {/* <Main /> */}
-      <Cart/>
+      <Main />
+      {/* <Cart/> */}
     </Provider>
     // </ApiProvider>
   );

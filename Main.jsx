@@ -22,6 +22,8 @@ import SellingBook from './Source/Screens/SellingBook';
 import Sending_FeedBack from './Source/Screens/Sending_FeedBack';
 import TryComp from './Source/Screens/TryComp';
 import Camera from './Source/Screens/Camera';
+import Cart from './Source/Screens/Cart';
+import Product_Books from './Source/Screens/Product_Books';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +61,8 @@ const Main = () => {
           <Stack.Screen name="feedback" component={Sending_FeedBack} />
           <Stack.Screen name="trycomp" component={TryComp} />
           <Stack.Screen name="camera" component={Camera} />
-
+          <Stack.Screen name="cart" component={Cart} />
+          <Stack.Screen name="productbooks" component={Product_Books} />
           <Stack.Screen name="profileorder" component={Profile_order} />
           
         </Stack.Navigator>

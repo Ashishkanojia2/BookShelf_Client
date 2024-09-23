@@ -17,11 +17,9 @@ import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
-import {setBookData} from '../Redux/Reducer/BookReducer';
-import {position} from 'native-base/lib/typescript/theme/styled-system';
+import { setCartData } from '../Redux/Reducer/CartReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -31,14 +29,12 @@ const Home = ({navigation}) => {
   const [ShowingBookData, setShowingBookData] = useState(false);
 
   //API CALLING
-  // const {state_BookData} = useGetBookDataQuery();
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
 
   const {
     data: Book_data,
     isLoading: bookload,
-    error,
     isSuccess,
   } = useGetBookDataQuery();
   useEffect(() => {
@@ -63,10 +59,20 @@ const Home = ({navigation}) => {
       message: `${bookname}`,
     });
   };
+  const gotoCart = () => {
+    navigation.navigate('cart');
+  };
 
   const profileBtn = () => {
     navigation.navigate('profile');
   };
+  const dispatch = useDispatch()
+  const addTocart = itemId => {
+    console.log('hello', itemId);
+    
+    dispatch(setCartData(itemId))
+  };
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -96,7 +102,7 @@ const Home = ({navigation}) => {
             placeholderTextColor={global.bgColor}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={gotoCart}>
           <FontAwesome
             name="book"
             size={30}
@@ -360,7 +366,9 @@ const Home = ({navigation}) => {
                     {item.b_MRP} rs.
                   </Text>
                 </View>
-                <TouchableOpacity style={styles.addBtn}>
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() => addTocart(item._id)}>
                   <Text
                     style={{
                       fontSize: 15,
