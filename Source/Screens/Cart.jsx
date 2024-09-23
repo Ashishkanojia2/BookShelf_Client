@@ -1,14 +1,15 @@
 import {
-    Dimensions,
-    StatusBar,
-    StyleSheet,
-    Text, TouchableOpacity,
-    View
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import React from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { CustomIonicon } from '../Components/Icons/Icons';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {CustomIonicon} from '../Components/Icons/Icons';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 const {height, width} = Dimensions.get('screen');
 
 const Cart = () => {
@@ -23,7 +24,8 @@ const Cart = () => {
         <TouchableOpacity>
           <CustomIonicon name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{}} style={styles.userProfile}>
+        <Text style={styles.myCartTxt}>My Cart</Text>
+        <TouchableOpacity onPress={() => {}} style={styles.userProfile}>
           {/* {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
             <Image
               source={{uri: userdata.data.avatar.url}}
@@ -108,6 +110,10 @@ const Cart = () => {
 export default Cart;
 
 const styles = StyleSheet.create({
+  myCartTxt: {
+    fontSize: width / 18,
+    
+  },
   userProfile: {
     height: height / 23,
     width: width / 10.5,
@@ -221,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal:"5%"
+    paddingHorizontal: '5%',
   },
   searchfield: {
     flexDirection: 'row',
