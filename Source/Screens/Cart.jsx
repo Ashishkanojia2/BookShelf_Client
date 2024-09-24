@@ -26,30 +26,19 @@ const Cart = ({navigation}) => {
   const {data: bookdata, isLoading, isSuccess} = useGetBookDataQuery();
   const dispatch = useDispatch();
 
-
-  console.log('*******************************');
-  console.log('cartdata', cartData);
-  console.log('bookdata11', bookdata);
+  //   console.log('*******************************');
+  //   console.log('cartdata', cartData);
+  //   console.log('bookdata11', bookdata);
   const [alldata, setalldata] = useState('');
 
   const removeitem = id => {
     console.log('Removing item with ID:', id);
-    
+
     const remaningItem = cartData.filter(itemId => itemId !== id); // Only remove the matching ID
     console.log('Updated cart data:', remaningItem);
-  
+
     dispatch(RemoveCartData(remaningItem)); // Dispatch the updated cart
   };
-  //   useEffect(() => {
-  //     if (bookdata && cartData) {
-  //       const filteredItems = cartData
-  //         .map(itemId => bookdata.allbooks.find(item => item._id === itemId)) // Match IDs
-  //         .filter(item => item !== undefined);
-
-  //       setalldata(filteredItems);
-  //       console.log('filteredItems', filteredItems);
-  //     }
-  //   }, [cartData, bookdata]); // Remove 'removeitem' from the dependencies
 
   useEffect(() => {
     if (bookdata && cartData) {
@@ -62,9 +51,9 @@ const Cart = ({navigation}) => {
         setalldata(filteredItems);
       }
 
-      console.log('filteredItems', filteredItems);
+    //   console.log('filteredItems', filteredItems);
     }
-  }, [cartData, bookdata, alldata ,removeitem]);
+  }, [cartData, bookdata, alldata, removeitem]);
   const renderBookImages = images => {
     if (images && images.length > 0) {
       return (

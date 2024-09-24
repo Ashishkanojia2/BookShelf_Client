@@ -43,8 +43,10 @@ const Home = ({navigation}) => {
     }
   }, [Book_data, isSuccess]);
   const userdata = useSelector(state => state.user);
+  const cartdata = useSelector(state => state.cart.cartData);
 
   console.log('*******************from home screen********************');
+console.log(cartdata.length);
 
   console.log('userdata', userdata);
   console.log('state_BookData direct data recived form api', state_BookData);
@@ -112,7 +114,7 @@ const Home = ({navigation}) => {
         </TouchableOpacity>
 
         <Badge size={20} style={styles.cartBadge}>
-          3
+          {cartdata.length}
         </Badge>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
