@@ -4,8 +4,9 @@ export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
     // http://localhost:4000/api/v1/user/login
-    baseUrl: 'http://192.168.137.1:4000/api/v1/user',
-    // baseUrl: 'http://192.168.132.190:4000/api/v1/user',
+    // baseUrl: 'http://192.168.137.1:4000/api/v1/user',
+    baseUrl: 'http://192.168.186.190:4000/api/v1/user',
+    // 192.168.186.190
   }),
   endpoints: builder => ({
     getUser: builder.query({

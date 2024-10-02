@@ -115,7 +115,14 @@ const SellingBooks = ({navigation}) => {
           );
         })
       ) : (
-        <Text>No books</Text>
+        <Text style={{
+          color: global.sandColor,
+          fontSize: 25,
+          fontFamily: globalfonts.font,
+          marginTop: '20%',
+          textDecorationLine: 'underline',
+          alignSelf: 'center',
+        }}>No books</Text>
       )}
     </View>
   );

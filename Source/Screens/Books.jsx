@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'native-base';
@@ -17,21 +18,49 @@ import { Badge } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCartData } from '../Redux/Reducer/CartReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
-
 const Books = route => {
   const [favBook, setfavBook] = useState(false);
-  // console.log('message:', route.route.params.message);
+  const cartdata = useSelector(state => state.cart.cartData);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  // console.log('********************* books screen ***************************');
+  // console.log(cartdata);
+
   const {
     data: Book_data,
     isLoading: bookload,
     error,
     isSuccess,
   } = useGetBookDataQuery();
-  // const data = useSelector(state => state.book);
-  // console.log('@@@@@@@@@@@Book screen@@@@@@@', Book_data);
+
+  const ChangeeScreen = () => {
+    navigation.navigate('cart');
+  };
+
+  const addTocart = itemId => {
+    {
+      cartdata.includes(itemId)
+        ? Alert.alert(
+            'Book not added in cart  ',
+            'Book already added in cart',
+            [
+              {
+                text: 'ok',
+              },
+            ],
+            {cancelable: false},
+          )
+        : dispatch(setCartData(itemId));
+    }
+  };
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -50,7 +79,10 @@ const Books = route => {
             placeholderTextColor={global.bgColor}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            ChangeeScreen();
+          }}>
           <FontAwesome
             name="book"
             size={30}
@@ -60,7 +92,7 @@ const Books = route => {
         </TouchableOpacity>
 
         <Badge size={20} style={styles.cartBadge}>
-          3
+          {cartdata.length}
         </Badge>
       </View>
 
@@ -74,15 +106,12 @@ const Books = route => {
               return category === route.route.params.message;
             })
             .map(item => (
-              
               <View style={styles.newBookContainer} key={item.id}>
-                {/* console.log(item.id) */}
                 <View style={styles.productPhoto}>
                   <View
                     style={{
                       height: '80%',
                       width: '80%',
-                      // backgroundColor: global.thirdColor,
                     }}>
                     <Image
                       source={{uri: item.images[0].url}}
@@ -142,16 +171,32 @@ const Books = route => {
                       {item.b_MRP}
                     </Text>
                   </View>
-                  <TouchableOpacity style={styles.addBtn}>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: '#000',
-                        fontFamily: globalfonts.font5,
-                      }}>
-                      ADD
-                    </Text>
-                  </TouchableOpacity>
+                  {cartdata.includes(item._id) ? (
+                   
+                    <TouchableOpacity style={styles.removeBtn}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#000',
+                          fontFamily: globalfonts.font5,
+                        }}>
+                        Added
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.addBtn}
+                      onPress={() => addTocart(item._id)}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#000',
+                          fontFamily: globalfonts.font5,
+                        }}>
+                        ADD
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             ))
@@ -173,6 +218,18 @@ const Books = route => {
 };
 
 const styles = StyleSheet.create({
+  removeBtn: {
+    height: height / 25,
+    width: width / 6,
+    position: 'absolute',
+    backgroundColor: global.lightgray,
+    right: 10,
+    bottom: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
+  },
   searchfield: {
     flexDirection: 'row',
     alignItems: 'center',

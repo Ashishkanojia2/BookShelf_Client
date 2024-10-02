@@ -8,17 +8,18 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {ActivityIndicator, Badge} from 'react-native-paper';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import React, { useEffect, useState } from 'react';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { ActivityIndicator, Badge } from 'react-native-paper';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
-import {useDispatch, useSelector} from 'react-redux';
+import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCartData } from '../Redux/Reducer/CartReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -46,15 +47,13 @@ const Home = ({navigation}) => {
   const cartdata = useSelector(state => state.cart.cartData);
 
   console.log('*******************from home screen********************');
-console.log(cartdata.length);
 
-  console.log('userdata', userdata);
-  console.log('state_BookData direct data recived form api', state_BookData);
+  // console.log('userdata', userdata);
+  // console.log('state_BookData direct data recived form api', state_BookData);
 
   const name = userdata?.data?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
 
-  //FUNCTIONS
   const bookContainer = bookname => {
     console.log('clicking');
     navigation.navigate('books', {
@@ -68,11 +67,22 @@ console.log(cartdata.length);
   const profileBtn = () => {
     navigation.navigate('profile');
   };
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const addTocart = itemId => {
-    console.log('hello', itemId);
-    
-    dispatch(setCartData(itemId))
+    {
+      cartdata.includes(itemId)
+        ? Alert.alert(
+            'Book not added in cart  ',
+            'Book already added in cart',
+            [
+              {
+                text: 'ok',
+              },
+            ],
+            {cancelable: false},
+          )
+        : dispatch(setCartData(itemId));
+    }
   };
 
   return (
@@ -310,7 +320,6 @@ console.log(cartdata.length);
                   style={{
                     height: '90%',
                     width: '90%',
-                    // backgroundColor: global.thirdColor,
                   }}>
                   <Image
                     source={{uri: item.images[0].url}}
@@ -368,18 +377,33 @@ console.log(cartdata.length);
                     {item.b_MRP} rs.
                   </Text>
                 </View>
-                <TouchableOpacity
-                  style={styles.addBtn}
-                  onPress={() => addTocart(item._id)}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: '#000',
-                      fontFamily: globalfonts.font5,
-                    }}>
-                    ADD
-                  </Text>
-                </TouchableOpacity>
+                <View style={styles.addBtnCont}>
+                  {cartdata.includes(item._id) ? (
+                    <TouchableOpacity style={styles.removeBtn}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#000',
+                          fontFamily: globalfonts.font5,
+                        }}>
+                        Added
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.addBtn}
+                      onPress={() => addTocart(item._id)}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#000',
+                          fontFamily: globalfonts.font5,
+                        }}>
+                        ADD
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
           ))
@@ -407,6 +431,18 @@ const styles = StyleSheet.create({
     color: '#000',
     marginHorizontal: '2%',
     fontFamily: globalfonts.font5,
+  },
+  removeBtn: {
+    height: height / 25,
+    width: width / 6,
+    position: 'absolute',
+    backgroundColor: global.lightgray,
+    right: 10,
+    bottom: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2,
   },
   addBtn: {
     height: height / 25,
@@ -441,7 +477,6 @@ const styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    // backgroundColor: global.thirdColor,
     height: '100%',
     width: '50%',
     justifyContent: 'center',

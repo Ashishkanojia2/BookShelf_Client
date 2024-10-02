@@ -1,20 +1,20 @@
 import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    Image,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {CustomIonicon} from '../Components/Icons/Icons';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {useDispatch, useSelector} from 'react-redux';
-import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
-import {RemoveCartData, setCartData} from '../Redux/Reducer/CartReducer';
+import React, { useEffect, useState } from 'react';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { CustomIonicon } from '../Components/Icons/Icons';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
+import { RemoveCartData } from '../Redux/Reducer/CartReducer';
 const {height, width} = Dimensions.get('screen');
 
 const Cart = ({navigation}) => {
@@ -79,7 +79,7 @@ const Cart = ({navigation}) => {
           <CustomIonicon name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.myCartTxt}>My Cart</Text>
-        <TouchableOpacity onPress={() => {}} style={styles.userProfile}>
+        <TouchableOpacity onPress={() => {navigation.navigate("profile")}} style={styles.userProfile}>
           {/* {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
             <Image
               source={{uri: userdata.data.avatar.url}}
@@ -161,7 +161,14 @@ const Cart = ({navigation}) => {
               );
             })
           ) : (
-            <Text style={{color: '#000'}}>No books</Text>
+            <Text style={{
+                color: global.sandColor,
+                fontSize: 25,
+                fontFamily: globalfonts.font,
+                marginTop: '20%',
+                textDecorationLine: 'underline',
+                alignSelf: 'center',
+              }}>No books</Text>
           )}
         </ScrollView>
       </View>

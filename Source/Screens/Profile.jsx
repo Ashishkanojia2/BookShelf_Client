@@ -27,10 +27,10 @@ const Profile = ({navigation}) => {
 
   const dispatch = useDispatch();
   const [triggerLogout] = useLazyLogoutUserQuery();
-  // console.log(
-  //   '****************** from profile screen**************************',
-  // );
-  // console.log(userData);
+  console.log(
+    '****************** from profile screen**************************',
+  );
+  console.log(userData);
 
   const logout = async () => {
     await triggerLogout()
