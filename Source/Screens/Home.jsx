@@ -10,17 +10,17 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { ActivityIndicator, Badge } from 'react-native-paper';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import React, {useEffect, useState} from 'react';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {ActivityIndicator, Badge} from 'react-native-paper';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCartData } from '../Redux/Reducer/CartReducer';
+import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
+import {useDispatch, useSelector} from 'react-redux';
+import {setCartData} from '../Redux/Reducer/CartReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
@@ -28,7 +28,6 @@ const Home = ({navigation}) => {
   //USE_STATE
   const [searchText, setsearchText] = useState('');
   const [ShowingBookData, setShowingBookData] = useState(false);
-
   //API CALLING
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
@@ -314,7 +313,12 @@ const Home = ({navigation}) => {
           <ActivityIndicator size={'small'} />
         ) : state_BookData && state_BookData.allbooks.length > 0 ? (
           state_BookData.allbooks.map(item => (
-            <View style={styles.allBookContainer} key={item.id}>
+            <TouchableOpacity
+              style={styles.allBookContainer}
+              key={item._id}
+              onPress={() =>
+                navigation.navigate('productbooks', {key: item._id})
+              }>
               <View style={styles.productPhoto}>
                 <View
                   style={{
@@ -405,7 +409,7 @@ const Home = ({navigation}) => {
                   )}
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text

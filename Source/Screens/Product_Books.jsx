@@ -21,32 +21,66 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
+
 const {height, width} = Dimensions.get('window');
 // const width = Dimensions.get('window').width;
 
-const Product_Books = ({navigation}) => {
-  //USE_STATE
-  const [searchText, setsearchText] = useState('');
-  const [ShowingBookData, setShowingBookData] = useState(false);
+const Product_Books = ({route}) => {
+  const navigation = useNavigation();
 
-  //API CALLING
-  // const {state_BookData} = useGetBookDataQuery();
+  // const state = useSelector(state => state.books);
+  const userdata = useSelector(state => state.user);
+  const [singlebookdata, setsinglebookdata] = useState('');
+  const {data: Book_data, isLoading, error, isSuccess} = useGetBookDataQuery();
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
   const [isExpand, setisExpand] = useState(false);
+  // const [U_data, setU_data] = useState('');
 
-  const {
-    data: Book_data,
-    isLoading: bookload,
-    error,
-    isSuccess,
-  } = useGetBookDataQuery();
+  console.log(
+    '**********************form PRODUCT BOOK SCREEN***************************',
+  );
+  console.log('what we recive from route', route.params);
+  console.log('userdata', userdata);
+  console.log('bood data', Book_data);
+
+  // useEffect(() => {
+  //   setU_data(userdata);
+  //   console.log('U_data', U_data.data);
+  // }, [userdata]);
+
+  useEffect(() => {
+    // Check if data is loaded and available
+    if (!isLoading && Book_data && Book_data.allbooks) {
+      const isMatch = id => {
+        return Book_data.allbooks.find(item => item._id == id);
+      };
+
+      const matchedBook = isMatch(route.params.key);
+      console.log('Matched Book:', matchedBook);
+
+      // Only set the state if a book is matched
+      if (matchedBook) {
+        setsinglebookdata(matchedBook);
+      }
+    }
+  }, [Book_data, isLoading, route.params.key]);
+
+  //USE_STATE
+  const [searchText, setsearchText] = useState('');
+  // const [ShowingBookData, setShowingBookData] = useState(false);
+
+  //API CALLING
+  // const {state_BookData} = useGetBookDataQuery();
+
   useEffect(() => {
     if (Book_data && isSuccess) {
       setstate_BookData(Book_data);
     }
   }, [Book_data, isSuccess]);
-  const userdata = useSelector(state => state.user);
+
+  // const userdata = useSelector(state => state.user);
 
   const name = userdata?.data?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
@@ -94,18 +128,13 @@ const Product_Books = ({navigation}) => {
         <View style={{marginBottom: '15%'}}>
           <View style={styles.whitebox}>
             <Text style={[styles.prdName, {color: '#000'}]}>
-              The War History : Indus and Muguls 58bc
+              {singlebookdata.b_name}
             </Text>
             {/* <ImageBackground
             source={require('../Assets/images/watingBg.png')}
             style={styles.topimg}></ImageBackground> */}
             <Text style={[styles.prdDesc]} numberOfLines={isExpand ? null : 4}>
-              Here Product name show book descriptionHere Product name show book
-              descriptionHere Product name show book descriptionHere Product
-              name show book descriptionHere Product name show book
-              descriptionHere Product name show book descriptionHere Product
-              name show book descriptionHere Product name show book
-              descriptionHere Product name show book description
+              {singlebookdata.b_desc}
             </Text>
             {isExpand ? (
               <TouchableOpacity onPress={() => setisExpand(!isExpand)}>
@@ -134,15 +163,17 @@ const Product_Books = ({navigation}) => {
                 styles.prdDiscount,
                 {color: '#b2b2b2', textDecorationLine: ' line-through'},
               ]}>
-              9000
+              {singlebookdata.b_MRP}
             </Text>
-            <Text style={[styles.prdDiscount, {color: '#000'}]}>1200rs.</Text>
+            <Text style={[styles.prdDiscount, {color: '#000'}]}>
+              {singlebookdata.b_sellingprice}
+            </Text>
           </View>
           <View style={[styles.whitebox]}>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.addressTxt}>Delivery to :</Text>
               <Text style={[styles.addressTxt, {color: '#000'}]}>
-                Ashish Kanojia,
+                {userdata.data.name},
               </Text>
               <TouchableOpacity style={styles.changebtn}>
                 <Text style={{color: '#000'}}>Change</Text>
@@ -151,8 +182,7 @@ const Product_Books = ({navigation}) => {
             <Text
               style={[styles.addressTxt, {color: '#b6b6b6', marginEnd: '20%'}]}
               numberOfLines={1}>
-              ward 9 nal bikaner rajasthanward 9 nal bikaner rajasthanward 9 nal
-              bikaner rajasthanward 9 nal bikaner rajasthan
+              {userdata.data.address}
             </Text>
           </View>
           <View style={styles.whitebox}>
@@ -166,34 +196,43 @@ const Product_Books = ({navigation}) => {
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Book Name :</Text>
               <Text style={[styles.b_detail_child]} numberOfLines={2}>
-                The War History : Indus and Muguls 58bcThe War History : Indus
-                and Muguls 58bcThe War History :
+                {singlebookdata.b_name}
               </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Author :</Text>
-              <Text style={[styles.b_detail_child]}>Dr.VeerBhagat Singh</Text>
+              <Text style={[styles.b_detail_child]}>
+                {singlebookdata.b_author}
+              </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Edition :</Text>
-              <Text style={[styles.b_detail_child]}>12 th</Text>
+              <Text style={[styles.b_detail_child]}>
+                {singlebookdata.b_edition} th
+              </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Categories :</Text>
-              <Text style={[styles.b_detail_child]}>History</Text>
+              <Text style={[styles.b_detail_child]}>
+                {singlebookdata.b_categorie}
+              </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>MRP :</Text>
-              <Text style={[styles.b_detail_child]}>12000 Rs.</Text>
+              <Text style={[styles.b_detail_child]}>
+                {singlebookdata.b_MRP} Rs.
+              </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Best Price :</Text>
-              <Text style={[styles.b_detail_child]}>1000</Text>
+              <Text style={[styles.b_detail_child]}>
+                {singlebookdata.b_sellingprice} Rs.
+              </Text>
             </View>
-            <View style={styles.b_detail}>
+            {/* <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Best Price :</Text>
               <Text style={[styles.b_detail_child]}>1000</Text>
-            </View>
+            </View> */}
           </View>
           <View style={styles.whitebox}>
             <Text
