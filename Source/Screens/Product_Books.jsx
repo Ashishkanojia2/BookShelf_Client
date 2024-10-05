@@ -126,6 +126,7 @@ export default Product_Books = ({route}) => {
      
           <Carousel
             loop
+            
             width={width} // Set width according to your design
             height={height/2} // Set height according to your design
             // autoPlay={true} // Optional: for auto-playing the carousel
