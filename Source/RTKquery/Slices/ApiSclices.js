@@ -5,7 +5,8 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     // http://localhost:4000/api/v1/user/login
     // baseUrl: 'http://192.168.137.1:4000/api/v1/user',
-    baseUrl: 'http://192.168.186.190:4000/api/v1/user',
+    // baseUrl: 'http://192.168.186.190:4000/api/v1/user',
+    baseUrl: 'http://192.168.137.1:4000/api/v1/user',
     // 192.168.186.190
   }),
   endpoints: builder => ({
@@ -31,14 +32,18 @@ export const userApi = createApi({
         body: registerUser,
       }),
     }),
+    bookOwner: builder.mutation({
+      query: OwnerId => ({
+        url: '/bookOwner',
+        method: 'POST',
+        body: OwnerId, // Assuming the server expects an object with an `id` field
+      }),
+    }),
     updateUser: builder.mutation({
       query: data => ({
         url: './updateProfile',
         method: 'PUT',
         body: data,
-        // headers: {
-        //   'Content-Type': 'multipart/form-data', // Optional, usually auto-handled by the browser
-        // },
       }),
     }),
   }),
@@ -50,5 +55,5 @@ export const {
   useRegisterUserMutation,
   useLazyLogoutUserQuery,
   useUpdateUserMutation,
-  // useLogoutUserQuery,
+  useBookOwnerMutation,
 } = userApi;

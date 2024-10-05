@@ -52,8 +52,8 @@ const Profile_user = ({navigation, route}) => {
   const clearMessage = () => {};
 
   const userData = useSelector(state => state.user.data);
-  // console.log('@@@@@@@@@@@@@@@profile_user@@@@@@@@@@@@@@@@@@@2');
-  // console.log(userData);
+  console.log('@@@@@@@@@@@@@@@profile_user@@@@@@@@@@@@@@@@@@@2');
+  console.log(route);
   // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2');
 
   const [initialData, setInitialData] = useState({
@@ -149,6 +149,14 @@ const Profile_user = ({navigation, route}) => {
     console.log('user profile update krne ke baad RESPONSE', response);
   };
 
+  const goScreen = () => {
+    if (route.params == 'Product_Books') {
+      navigation.navigate('home');
+    } else if (navigation.navigate('profile')) {
+      navigation.navigate('profile');
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.ParentContainer}>
@@ -158,7 +166,7 @@ const Profile_user = ({navigation, route}) => {
         <TouchableOpacity
           style={{position: 'absolute', left: 20, top: 20}}
           onPress={() => {
-            navigation.navigate('profile');
+            goScreen();
           }}>
           <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>

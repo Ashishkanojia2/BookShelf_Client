@@ -6,12 +6,10 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  Image,
   ScrollView,
-  ImageBackground,
+  Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-// import {ScrollView} from 'native-base';
+import React, {useCallback, useEffect, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {Badge} from 'react-native-paper';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
@@ -22,71 +20,72 @@ import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import {useBookOwnerMutation} from '../RTKquery/Slices/ApiSclices';
+import {ProductDiscount} from '../Components/GlobalFiles/GlobalFiles';
+import Carousel from 'react-native-reanimated-carousel';
 
 const {height, width} = Dimensions.get('window');
-// const width = Dimensions.get('window').width;
 
-const Product_Books = ({route}) => {
+export default Product_Books = ({route}) => {
   const navigation = useNavigation();
 
-  // const state = useSelector(state => state.books);
   const userdata = useSelector(state => state.user);
   const [singlebookdata, setsinglebookdata] = useState('');
   const {data: Book_data, isLoading, error, isSuccess} = useGetBookDataQuery();
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
   const [isExpand, setisExpand] = useState(false);
-  // const [U_data, setU_data] = useState('');
+  const [ownerDetails, setownerDetails] = useState(null);
+
+  const [product_images, setproduct_images] = useState([]);
+
+  const [searchText, setsearchText] = useState('');
+  const [ownerData] = useBookOwnerMutation();
 
   console.log(
     '**********************form PRODUCT BOOK SCREEN***************************',
   );
-  console.log('what we recive from route', route.params);
+  console.log('singlebookdata ', singlebookdata);
+  console.log('product_images', product_images);
   console.log('userdata', userdata);
-  console.log('bood data', Book_data);
+  // console.log('state_BookData', state_BookData);
 
-  // useEffect(() => {
-  //   setU_data(userdata);
-  //   console.log('U_data', U_data.data);
-  // }, [userdata]);
+  const fetchOwnerDetails = useCallback(
+    async bookOwnerId => {
+      try {
+        const result = await ownerData({bookOwnerId}).unwrap();
+        setownerDetails(result);
+        // console.log('Owner Details Fetched:', result);
+      } catch (err) {
+        console.error('Error fetching owner details:', err);
+      }
+    },
+    [ownerData],
+  );
 
   useEffect(() => {
-    // Check if data is loaded and available
     if (!isLoading && Book_data && Book_data.allbooks) {
-      const isMatch = id => {
-        return Book_data.allbooks.find(item => item._id == id);
-      };
+      const isMatch = id => Book_data.allbooks.find(item => item._id === id);
 
       const matchedBook = isMatch(route.params.key);
-      console.log('Matched Book:', matchedBook);
-
-      // Only set the state if a book is matched
       if (matchedBook) {
         setsinglebookdata(matchedBook);
+        setproduct_images(matchedBook.images.map(item => item.url));
+        fetchOwnerDetails(matchedBook.b_seller_id);
       }
     }
-  }, [Book_data, isLoading, route.params.key]);
-
-  //USE_STATE
-  const [searchText, setsearchText] = useState('');
-  // const [ShowingBookData, setShowingBookData] = useState(false);
-
-  //API CALLING
-  // const {state_BookData} = useGetBookDataQuery();
+  }, [Book_data, isLoading, route.params, ownerData]);
 
   useEffect(() => {
     if (Book_data && isSuccess) {
       setstate_BookData(Book_data);
     }
   }, [Book_data, isSuccess]);
-
-  // const userdata = useSelector(state => state.user);
-
-  const name = userdata?.data?.name || '';
-  const CapLetter = name.charAt(0).toUpperCase();
   const profileBtn = () => {
     navigation.navigate('home');
   };
+
+  // const imageUrls = singlebookdata.images.map(image => image.url);
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -121,18 +120,28 @@ const Product_Books = ({route}) => {
           3
         </Badge>
       </View>
-
+      {/*********************************************************************************************************** */}
       <ScrollView>
-        <View style={styles.imageCont}></View>
+        <View style={styles.imageCont}>
+     
+          <Carousel
+            loop
+            width={width} // Set width according to your design
+            height={height/2} // Set height according to your design
+            // autoPlay={true} // Optional: for auto-playing the carousel
+            data={product_images} // Your images array
+            renderItem={({item}) => (
+              <Image source={{uri: item}} style={styles.image} />
+            )}
+          />
+        </View>
 
         <View style={{marginBottom: '15%'}}>
           <View style={styles.whitebox}>
             <Text style={[styles.prdName, {color: '#000'}]}>
               {singlebookdata.b_name}
             </Text>
-            {/* <ImageBackground
-            source={require('../Assets/images/watingBg.png')}
-            style={styles.topimg}></ImageBackground> */}
+
             <Text style={[styles.prdDesc]} numberOfLines={isExpand ? null : 4}>
               {singlebookdata.b_desc}
             </Text>
@@ -157,7 +166,7 @@ const Product_Books = ({route}) => {
                 {marginEnd: '0', fontSize: width / 20},
               ]}
             />
-            <Text style={styles.prdDiscount}>26%</Text>
+            <Text style={styles.prdDiscount}>{ProductDiscount}%</Text>
             <Text
               style={[
                 styles.prdDiscount,
@@ -173,9 +182,13 @@ const Product_Books = ({route}) => {
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.addressTxt}>Delivery to :</Text>
               <Text style={[styles.addressTxt, {color: '#000'}]}>
-                {userdata.data.name},
+                {userdata?.data.name || ''},
               </Text>
-              <TouchableOpacity style={styles.changebtn}>
+              <TouchableOpacity
+                style={styles.changebtn}
+                onPress={() =>
+                  navigation.navigate('profileUser', 'Product_Books')
+                }>
                 <Text style={{color: '#000'}}>Change</Text>
               </TouchableOpacity>
             </View>
@@ -189,7 +202,7 @@ const Product_Books = ({route}) => {
             <Text
               style={[
                 styles.prdName,
-                {fontSize: width / 23, color: '#565656', marginBottom: '3%'},
+                {fontSize: width / 23, color: '#000', marginBottom: '3%'},
               ]}>
               Highlights
             </Text>
@@ -229,39 +242,37 @@ const Product_Books = ({route}) => {
                 {singlebookdata.b_sellingprice} Rs.
               </Text>
             </View>
-            {/* <View style={styles.b_detail}>
-              <Text style={[styles.b_detail_child]}>Best Price :</Text>
-              <Text style={[styles.b_detail_child]}>1000</Text>
-            </View> */}
           </View>
           <View style={styles.whitebox}>
             <Text
               style={[
                 styles.prdName,
-                {fontSize: width / 23, color: '#565656', marginBottom: '1%'},
+                {fontSize: width / 23, color: '#000', marginBottom: '1%'},
               ]}>
               Book Owner Details
             </Text>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Owner Name :</Text>
               <Text style={[styles.b_detail_child]} numberOfLines={2}>
-                Veer Kumar Singh
+                {ownerDetails?.data.name || ''}
               </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Mail-Id:</Text>
               <Text style={[styles.b_detail_child]}>
-                veerbhagatsingh@gmail.com
+                {ownerDetails?.data.email || ''}
               </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Phone :</Text>
-              <Text style={[styles.b_detail_child]}>80039XXX</Text>
+              <Text style={[styles.b_detail_child]}>
+                {ownerDetails?.data.phone || ''}
+              </Text>
             </View>
             <View style={styles.b_detail}>
               <Text style={[styles.b_detail_child]}>Address :</Text>
               <Text style={[styles.b_detail_child]}>
-                Don't show full address
+                {ownerDetails?.data.address || ''}
               </Text>
             </View>
           </View>
@@ -269,229 +280,85 @@ const Product_Books = ({route}) => {
             <Text
               style={[
                 styles.prdName,
-                {fontSize: width / 23, color: '#565656', marginBottom: '7%'},
+                {fontSize: width / 23, color: '#000', marginBottom: '7%'},
               ]}>
               Similar Books
             </Text>
             <ScrollView
               horizontal={true}
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 flexDirection: 'row',
                 paddingStart: '1%',
-                paddingEnd: '15%',
+                paddingEnd: '7%',
               }}>
-              <TouchableOpacity style={styles.similarProductCont}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: global.thirdColor,
-                    height: '65%',
-                  }}></View>
-                <Text
-                  style={{color: '#000', marginHorizontal: '3%'}}
-                  numberOfLines={2}>
-                  India History : hospitiality of india in world
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <AntDesign
-                    name="arrowdown"
-                    size={20}
-                    color={global.bgColor}
-                    style={[
-                      styles.prdDiscount,
-                      {marginEnd: '0', fontSize: width / 28},
-                    ]}
-                  />
-                  <Text style={{fontSize: width / 28, color: '#30cf5b'}}>
-                    26%
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000',
-                      marginHorizontal: '3%',
-                      textDecorationLine: 'line-through',
-                    }}>
-                    1200
-                  </Text>
-                  <Text style={{color: '#000', marginHorizontal: '3%'}}>
-                    rs.300
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    height: height / 28,
-                    width: width / 5,
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    backgroundColor: global.sandColor,
-                    borderColor: global.lightgray,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: '2%',
-                  }}>
-                  <Text style={{color: global.bgColor}}>Add to Cart</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.similarProductCont}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: global.thirdColor,
-                    height: '65%',
-                  }}></View>
-                <Text
-                  style={{color: '#000', marginHorizontal: '3%'}}
-                  numberOfLines={2}>
-                  India History : hospitiality of india in world
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <AntDesign
-                    name="arrowdown"
-                    size={20}
-                    color={global.bgColor}
-                    style={[
-                      styles.prdDiscount,
-                      {marginEnd: '0', fontSize: width / 28},
-                    ]}
-                  />
-                  <Text style={{fontSize: width / 28, color: '#30cf5b'}}>
-                    26%
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000',
-                      marginHorizontal: '3%',
-                      textDecorationLine: 'line-through',
-                    }}>
-                    1200
-                  </Text>
-                  <Text style={{color: '#000', marginHorizontal: '3%'}}>
-                    rs.300
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    height: height / 28,
-                    width: width / 5,
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    backgroundColor: global.sandColor,
-                    borderColor: global.lightgray,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: '2%',
-                  }}>
-                  <Text style={{color: global.bgColor}}>Add to Cart</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.similarProductCont}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: global.thirdColor,
-                    height: '65%',
-                  }}></View>
-                <Text
-                  style={{color: '#000', marginHorizontal: '3%'}}
-                  numberOfLines={2}>
-                  India History : hospitiality of india in world
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <AntDesign
-                    name="arrowdown"
-                    size={20}
-                    color={global.bgColor}
-                    style={[
-                      styles.prdDiscount,
-                      {marginEnd: '0', fontSize: width / 28},
-                    ]}
-                  />
-                  <Text style={{fontSize: width / 28, color: '#30cf5b'}}>
-                    26%
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000',
-                      marginHorizontal: '3%',
-                      textDecorationLine: 'line-through',
-                    }}>
-                    1200
-                  </Text>
-                  <Text style={{color: '#000', marginHorizontal: '3%'}}>
-                    rs.300
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    height: height / 28,
-                    width: width / 5,
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    backgroundColor: global.sandColor,
-                    borderColor: global.lightgray,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: '2%',
-                  }}>
-                  <Text style={{color: global.bgColor}}>Add to Cart</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.similarProductCont}>
-                <View
-                  style={{
-                    width: '100%',
-                    backgroundColor: global.thirdColor,
-                    height: '65%',
-                  }}></View>
-                <Text
-                  style={{color: '#000', marginHorizontal: '3%'}}
-                  numberOfLines={2}>
-                  India History : hospitiality of india in world
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <AntDesign
-                    name="arrowdown"
-                    size={20}
-                    color={global.bgColor}
-                    style={[
-                      styles.prdDiscount,
-                      {marginEnd: '0', fontSize: width / 28},
-                    ]}
-                  />
-                  <Text style={{fontSize: width / 28, color: '#30cf5b'}}>
-                    26%
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000',
-                      marginHorizontal: '3%',
-                      textDecorationLine: 'line-through',
-                    }}>
-                    1200
-                  </Text>
-                  <Text style={{color: '#000', marginHorizontal: '3%'}}>
-                    rs.300
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    height: height / 28,
-                    width: width / 5,
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    backgroundColor: global.sandColor,
-                    borderColor: global.lightgray,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: '2%',
-                  }}>
-                  <Text style={{color: global.bgColor}}>Add to Cart</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
+              {state_BookData?.allbooks &&
+              state_BookData.allbooks.length > 0 ? (
+                // state_BookData.allbooks
+
+                [...state_BookData.allbooks]
+                  .sort(() => 0.5 - Math.random())
+                  .slice(0, 3)
+
+                  .map(item => (
+                    <TouchableOpacity
+                      key={item._id}
+                      style={styles.similarProductCont}
+                      onPress={() =>
+                        navigation.navigate('productbooks', {key: item._id})
+                      }>
+                      <View
+                        style={{
+                          width: '100%',
+                          height: '65%',
+                        }}>
+                        <Image
+                          source={{uri: item.images[0].url}}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'center',
+                            borderRadius: 12,
+                          }}
+                        />
+                      </View>
+                      <Text
+                        style={{color: '#000', marginHorizontal: '3%'}}
+                        numberOfLines={2}>
+                        {item.b_name}
+                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <AntDesign
+                          name="arrowdown"
+                          size={20}
+                          color={global.bgColor}
+                          style={[
+                            styles.prdDiscount,
+                            {marginEnd: '0', fontSize: width / 28},
+                          ]}
+                        />
+                        <Text style={{fontSize: width / 28, color: '#30cf5b'}}>
+                          {ProductDiscount}% off
+                        </Text>
+                      </View>
+                      <View style={{flexDirection: 'row'}}>
+                        <Text
+                          style={{
+                            color: '#000',
+                            marginHorizontal: '3%',
+                            textDecorationLine: 'line-through',
+                          }}>
+                          {item.b_MRP}
+                        </Text>
+                        <Text style={{color: '#000', marginHorizontal: '3%'}}>
+                          {item.b_sellingprice} Rs.
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))
+              ) : (
+                <Text>Waiting...</Text>
+              )}
             </ScrollView>
           </View>
         </View>
@@ -514,21 +381,27 @@ const Product_Books = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: '70%', // or any specific width
+    height: '100%', // or any specific height
+  // alignItems:"center",
+  // // justifyContent:"center",
+  alignSelf:"center"
+    // resizeMode: 'cover', // or 'contain', depending on your need
+  },
+
   similarProductCont: {
-    // backgroundColor: 'blue',
     height: height / 3.5,
-    width: width / 2.5,
+    width: width / 3,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: global.thirdColor,
-    // marginHorizontal:"1%"
     marginHorizontal: '1%',
     overflow: 'hidden',
   },
   bottomCartBtn: {
     position: 'absolute',
     bottom: 0,
-    // backgroundColor: 'green',
     height: height / 15,
     width,
     flexDirection: 'row',
@@ -542,7 +415,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottomCartBtn_txt: {
-    // justifyContent: 'center',
     fontSize: width / 20,
   },
   changebtn: {
@@ -559,7 +431,6 @@ const styles = StyleSheet.create({
     maxHeight: height / 3,
     width,
     backgroundColor: '#fff',
-    // elevation: 10,
     alignSelf: 'center',
     paddingHorizontal: '2%',
     paddingBottom: '1%',
@@ -576,15 +447,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: '1%',
-    // paddingHorizontal: '1%',
   },
   readMore: {
     color: '#b4b5b5',
     fontSize: width / 30,
     textDecorationLine: 'underline',
   },
-  // topimg: {height: 10, width: 10},
-  // textCont: {padding: '2%'},
+
   prdName: {
     fontFamily: globalfonts.font6,
     color: 'gray',
@@ -592,12 +461,10 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
   prdDesc: {
-    // fontFamily: globalfonts.font6,
     color: '#000',
     fontSize: width / 27,
     marginTop: '1%',
     fontFamily: globalfonts.font7,
-    // fontWeight:"600"
   },
   prdDiscount: {
     fontFamily: globalfonts.font6,
@@ -612,12 +479,13 @@ const styles = StyleSheet.create({
     fontSize: width / 25,
     color: '#6b6b6b',
     marginTop: '1%',
-    // alignSelf: 'center',
     marginEnd: '1%',
   },
   imageCont: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     height: height / 2,
+    width:width,
+    alignItems:"center"
   },
   ParentContainer: {
     flex: 1,
@@ -721,5 +589,3 @@ const styles = StyleSheet.create({
     color: global.bgColor,
   },
 });
-
-export default Product_Books;
