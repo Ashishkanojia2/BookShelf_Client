@@ -144,7 +144,7 @@ const Login = ({navigation}) => {
             <TouchableOpacity
               onPress={signupBtn}
               styles={{
-                backgroundColor: 'pink',
+                // backgroundColor: 'pink',
               }}>
               <Text
                 style={[
@@ -159,9 +159,9 @@ const Login = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={signupBtn}
+            onPress={() => navigation.navigate('verifyAccount')}
             styles={{
-              backgroundColor: 'pink',
+              // backgroundColor: 'pink',
             }}>
             <Text
               style={[
@@ -169,6 +169,7 @@ const Login = ({navigation}) => {
                 {
                   color: global.sandColor,
                   textDecorationLine: 'underline',
+                  marginTop:"2%"
                 },
               ]}>
               Forgot Password

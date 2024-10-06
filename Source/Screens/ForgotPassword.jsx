@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     color: global.thirdColor,
     fontSize: width / 5,
     fontFamily: globalfonts.font,
+    marginLeft:"2%"
   },
 
   mainCont: {flex: 1, backgroundColor: global.bgColor},
