@@ -60,7 +60,7 @@ const Login = ({navigation}) => {
     } catch (error) {
       setbuttonLoading(false);
       setMessage(error.data.message);
-      console.log("error form login screen",error);
+      console.log('error form login screen', error);
 
       // setMessage(error.data.message);
     }
@@ -158,6 +158,22 @@ const Login = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={signupBtn}
+            styles={{
+              backgroundColor: 'pink',
+            }}>
+            <Text
+              style={[
+                styles.btmText,
+                {
+                  color: global.sandColor,
+                  textDecorationLine: 'underline',
+                },
+              ]}>
+              Forgot Password
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

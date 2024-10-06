@@ -22,22 +22,23 @@ const Cart = ({navigation}) => {
     navigation.navigate('home');
   };
   const cartData = useSelector(state => state.cart.cartData);
-  // export const {useRegisterBookMutation, useGetBookDataQuery} = bookApi;
+  const userdata = useSelector(state => state.user);
+
   const {data: bookdata, isLoading, isSuccess} = useGetBookDataQuery();
   const dispatch = useDispatch();
 
-  //   console.log('*******************************');
-  //   console.log('cartdata', cartData);
+    console.log('*******************************');
+    console.log('userdata', userdata);
   //   console.log('bookdata11', bookdata);
   const [alldata, setalldata] = useState('');
 
   const removeitem = id => {
     console.log('Removing item with ID:', id);
 
-    const remaningItem = cartData.filter(itemId => itemId !== id); // Only remove the matching ID
+    const remaningItem = cartData.filter(itemId => itemId !== id); 
     console.log('Updated cart data:', remaningItem);
 
-    dispatch(RemoveCartData(remaningItem)); // Dispatch the updated cart
+    dispatch(RemoveCartData(remaningItem)); 
   };
 
   useEffect(() => {
@@ -46,12 +47,10 @@ const Cart = ({navigation}) => {
         .map(itemId => bookdata.allbooks.find(item => item._id === itemId))
         .filter(item => item !== undefined);
 
-      // Check if filteredItems is different from current alldata before setting state
       if (JSON.stringify(alldata) !== JSON.stringify(filteredItems)) {
         setalldata(filteredItems);
       }
 
-    //   console.log('filteredItems', filteredItems);
     }
   }, [cartData, bookdata, alldata, removeitem]);
   const renderBookImages = images => {
@@ -67,6 +66,9 @@ const Cart = ({navigation}) => {
     }
   };
 
+  const name = userdata?.data?.name || '';
+  const CapLetter = name.charAt(0).toUpperCase();
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -80,13 +82,14 @@ const Cart = ({navigation}) => {
         </TouchableOpacity>
         <Text style={styles.myCartTxt}>My Cart</Text>
         <TouchableOpacity onPress={() => {navigation.navigate("profile")}} style={styles.userProfile}>
-          {/* {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
+        {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
             <Image
               source={{uri: userdata.data.avatar.url}}
               style={{height: '100%', width: '100%'}}
             />
-          ) : null // <Text style={styles.profilePhotoText}>{CapLetter}</Text>
-          } */}
+          ) : (
+            <Text style={styles.profilePhotoText}>{CapLetter}</Text>
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.mainCont}>
@@ -207,7 +210,6 @@ const styles = StyleSheet.create({
   bottomCartBtn: {
     position: 'absolute',
     bottom: 0,
-    // backgroundColor: 'green',
     height: height / 15,
     width,
     flexDirection: 'row',
@@ -221,7 +223,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottomCartBtn_txt: {
-    // justifyContent: 'center',
     fontSize: width / 20,
   },
   addBtn: {
@@ -269,7 +270,6 @@ const styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    // backgroundColor: global.bgColor,
     height: '95%',
     width: '100%',
     justifyContent: 'center',

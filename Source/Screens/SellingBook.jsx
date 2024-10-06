@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   StyleSheet,
@@ -17,7 +18,7 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const SellingBooks = ({navigation}) => {
-  const {data: bookdata} = useGetBookDataQuery();
+  const {data: bookdata, isLoading} = useGetBookDataQuery();
 
   const userData = useSelector(state => state.user);
   const [gettingBookData, setgettingBookData] = useState([]);
@@ -56,7 +57,9 @@ const SellingBooks = ({navigation}) => {
       <View style={styles.headingCont}>
         <Text style={styles.headingTxt}>Selling Books</Text>
       </View>
-      {gettingBookData ? (
+      {isLoading ? (
+        <ActivityIndicator size={'large'} color={'black'} />
+      ) : gettingBookData ? (
         gettingBookData.map(item => {
           return (
             <View style={styles.allBookContainer}>
@@ -115,15 +118,20 @@ const SellingBooks = ({navigation}) => {
           );
         })
       ) : (
-        <Text style={{
-          color: global.sandColor,
-          fontSize: 25,
-          fontFamily: globalfonts.font,
-          marginTop: '20%',
-          textDecorationLine: 'underline',
-          alignSelf: 'center',
-        }}>No books</Text>
+        <Text
+          style={{
+            color: global.sandColor,
+            fontSize: 25,
+            fontFamily: globalfonts.font,
+            marginTop: '20%',
+            textDecorationLine: 'underline',
+            alignSelf: 'center',
+          }}>
+          No books
+        </Text>
       )}
+
+      {/* {} */}
     </View>
   );
 };
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf:"center"
+    alignSelf: 'center',
   },
   allBookContainer: {
     height: height / 5.5,

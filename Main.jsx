@@ -24,6 +24,8 @@ import TryComp from './Source/Screens/TryComp';
 import Camera from './Source/Screens/Camera';
 import Cart from './Source/Screens/Cart';
 import Product_Books from './Source/Screens/Product_Books';
+import ForgotPassword from './Source/Screens/ForgotPassword';
+import VerifyAccount from './Source/Screens/VerifyAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +66,8 @@ const Main = () => {
           <Stack.Screen name="cart" component={Cart} />
           <Stack.Screen name="productbooks" component={Product_Books} />
           <Stack.Screen name="profileorder" component={Profile_order} />
+          <Stack.Screen name="forgotPassword" component={ForgotPassword} />
+          <Stack.Screen name="verifyAccount" component={VerifyAccount} />
           
         </Stack.Navigator>
       </NavigationContainer>

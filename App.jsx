@@ -1,15 +1,21 @@
 import React from 'react';
-import {Provider} from 'react-redux';
+// import {Provider} from 'react-redux';
 import Main from './Main';
 import {store} from './Source/Redux/Store/Store';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
+import { Provider as ReduxProvider } from 'react-redux'; 
+import ForgotPassword from './Source/Screens/ForgotPassword';
+import VerifyAccount from './Source/Screens/VerifyAccount';
+
 export default App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <Provider store={store}>
+      <ReduxProvider store={store}>
         <Main />
-      </Provider>
+        {/* <ForgotPassword/> */}
+        {/* <VerifyAccount/> */}
+      </ReduxProvider>
     </GestureHandlerRootView>
   );
 };

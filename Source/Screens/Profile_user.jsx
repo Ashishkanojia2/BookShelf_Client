@@ -227,6 +227,7 @@ const Profile_user = ({navigation, route}) => {
             value={gender}
             onChangeText={value => setgender(value)}
             label={'gender'}
+            color
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
