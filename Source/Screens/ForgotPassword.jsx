@@ -3,85 +3,202 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {Button, TextInput} from 'react-native-paper';
+import {
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+} from '../RTKquery/Slices/ApiSclices';
+import { useNavigation } from '@react-navigation/native';
 
 const {height, width} = Dimensions.get('screen');
 
-const ForgotPassword = () => {
-  const [state, setstate] = useState('');
+const ForgotPassword = ({navigation}) => {
   const [newPassword, setnewPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [verifyEmail, setverifyEmail] = useState(false);
+  const [Emailid, setEmailid] = useState('');
+  const [otp, setotp] = useState('');
+  const [isloadingIndicator, setisloadingIndicator] = useState(false);
+
+  const [emailVerifition, {isSuccess, isError}] = useForgotPasswordMutation();
+  const [
+    resetPassword,
+    {isSuccess: PasswordChangeSucess, isError: PasswordChangeError},
+  ] = useResetPasswordMutation();
+
+//   const navigation = useNavigation()
 
   const isValid = useMemo(() => {
     return newPassword.length > 0 && confirmPassword.length > 0;
   }, [newPassword, confirmPassword]);
 
-  const CheckValid = useCallback(() => {
-    isValid ? console.warn('ok procceed..') : console.warn('field is empty');
-  }, [isValid]);
-
-  useEffect(() => {
-    // Trigger side-effect based on form validation
-    if (!isValid) {
-      console.warn('field is empty');
-    } else {
-      console.warn('Form is valid');
+  const CheckValid = useCallback(async () => {
+    // console.log(
+    //  "otp : ", otp,
+    //   'new password : ',
+    //   newPassword,
+    //   'confirm password  : ',
+    //   confirmPassword,
+    // );
+    try {
+      const result = await resetPassword({otp, newpassword: newPassword});
+      console.log('reset password result ', result);
+      //   {
+      //     result.data.success ? navigation.navigate('home') : null;
+      //   }
+    } catch (error) {
+      console.log('eror while reset password');
     }
   }, [isValid]);
+
+  const isValidEmail = useMemo(() => {
+    return Emailid.length > 10;
+  }, [Emailid]);
+
+  const checkEmail = async () => {
+    console.log('hme email id kya dalai hai ', Emailid);
+    setisloadingIndicator(true);
+    try {
+      const result = await emailVerifition({email: Emailid}).unwrap();
+      console.log('here is a result', result);
+      setisloadingIndicator(false)
+    } catch (error) {
+      console.log('Error while send the code', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log('Email verification success!');
+      setverifyEmail(true);
+    } else if (isError) {
+      console.log('Email verification failed.');
+      setverifyEmail(false);
+    }
+  }, [isSuccess, isError]);
+
+  useEffect(() => {
+    if (PasswordChangeSucess) {
+      console.log('Email verification success!');
+      navigation.navigate('home');
+    } else if (PasswordChangeError) {
+      console.log('Email verification failed.');
+      setverifyEmail(false);
+    }
+  }, [PasswordChangeSucess, PasswordChangeError, navigation]);
 
   return (
     <View style={styles.mainCont}>
       <Text style={styles.headerTxt}>Forgot Password</Text>
 
-      <View style={styles.parentCont}>
-        <TextInput
-          //   ref={genderRef}
-          value={newPassword}
-          onChangeText={value => setnewPassword(value)}
-          label={'New Password'}
-          color
-          style={styles.inputfield}
-          outlineColor={global.thirdColor}
-          cursorColor={global.sandColor}
-          activeOutlineColor={global.sandColor}
-          mode="outlined"
-          textColor={global.sandColor}
-          //   onFocus={clearMessage}
-        />
-        <TextInput
-          //   ref={genderRef}
-          value={confirmPassword}
-          onChangeText={value => setconfirmPassword(value)}
-          label={'Confirm New Password'}
-          color
-          style={styles.inputfield}
-          outlineColor={global.thirdColor}
-          cursorColor={global.sandColor}
-          activeOutlineColor={global.sandColor}
-          mode="outlined"
-          textColor={global.sandColor}
-          //   onFocus={clearMessage}
-        />
+      {!verifyEmail ? (
+        <View style={styles.parentCont}>
+          <Text
+            style={{
+              color: global.thirdColor,
+              fontSize: 20,
+              fontFamily: globalfonts.font,
+            }}>
+            Enter your valid Email-Id
+          </Text>
+          <TextInput
+            value={Emailid}
+            onChangeText={value => setEmailid(value)}
+            label={'Email-Id'}
+            // color
+            style={styles.inputfield}
+            outlineColor={global.thirdColor}
+            cursorColor={global.sandColor}
+            activeOutlineColor={global.sandColor}
+            mode="outlined"
+            textColor={global.sandColor}
+            keyboardType="email-address"
+          />
 
-        <Button
-          mode="contained"
-          rippleColor="#c9c9c9"
-          buttonColor={
-             !isValid ? global.disablebtn_Gray : global.thirdColor
-            // global.sandColor
-          }
-          onPress={() => CheckValid()}
-        //   disabled={true}
-          //   loading={buttonLoading}
+          <Button
+            mode="contained"
+            rippleColor="#c9c9c9"
+            buttonColor={
+              !isValidEmail ? global.disablebtn_Gray : global.thirdColor
+              // global.sandColor
+            }
+            onPress={() => checkEmail()}
+            disabled={isValidEmail ? false : true}
+              loading={isloadingIndicator}
 
-          style={{
-            marginTop: '20%',
-            height: height / 20,
-            width: width - 80,
-            justifyContent: 'center',
-          }}>
-          Yes I Confirm
-        </Button>
-      </View>
+            style={{
+              marginTop: '20%',
+              height: height / 20,
+              width: width - 80,
+              justifyContent: 'center',
+            }}>
+            Verify Email
+          </Button>
+        </View>
+      ) : (
+        <View style={styles.parentCont}>
+          <TextInput
+            //   ref={genderRef}
+            value={otp}
+            onChangeText={value => setotp(value)}
+            label={'Enter OTP'}
+            // color
+            style={styles.inputfield}
+            outlineColor={global.thirdColor}
+            cursorColor={global.sandColor}
+            activeOutlineColor={global.sandColor}
+            mode="outlined"
+            textColor={global.sandColor}
+            //   onFocus={clearMessage}
+          />
+          <TextInput
+            //   ref={genderRef}
+            value={newPassword}
+            onChangeText={value => setnewPassword(value)}
+            label={'New Password'}
+            // color
+            style={styles.inputfield}
+            outlineColor={global.thirdColor}
+            cursorColor={global.sandColor}
+            activeOutlineColor={global.sandColor}
+            mode="outlined"
+            textColor={global.sandColor}
+            //   onFocus={clearMessage}
+          />
+          <TextInput
+            //   ref={genderRef}
+            value={confirmPassword}
+            onChangeText={value => setconfirmPassword(value)}
+            label={'Confirm New Password'}
+            // color
+            style={styles.inputfield}
+            outlineColor={global.thirdColor}
+            cursorColor={global.sandColor}
+            activeOutlineColor={global.sandColor}
+            mode="outlined"
+            textColor={global.sandColor}
+            //   onFocus={clearMessage}
+          />
+          <Button
+            mode="contained"
+            rippleColor="#c9c9c9"
+            buttonColor={
+              !isValid ? global.disablebtn_Gray : global.thirdColor
+              // global.sandColor
+            }
+            onPress={() => CheckValid()}
+            //   disabled={true}
+            //   loading={buttonLoading}
+
+            style={{
+              marginTop: '20%',
+              height: height / 20,
+              width: width - 80,
+              justifyContent: 'center',
+            }}>
+            Yes I Confirm
+          </Button>
+        </View>
+      )}
     </View>
   );
 };
@@ -100,7 +217,7 @@ const styles = StyleSheet.create({
     color: global.thirdColor,
     fontSize: width / 5,
     fontFamily: globalfonts.font,
-    marginLeft:"2%"
+    marginLeft: '2%',
   },
 
   mainCont: {flex: 1, backgroundColor: global.bgColor},

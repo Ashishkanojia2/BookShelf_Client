@@ -32,16 +32,30 @@ export const userApi = createApi({
         body: registerUser,
       }),
     }),
+    // bookOwner: builder.mutation({
+    //   query: OwnerId => ({
+    //     url: '/bookOwner',
+    //     method: 'POST',
+    //     body: OwnerId, // Assuming the server expects an object with an `id` field
+    //   }),
+    // }),
     bookOwner: builder.mutation({
       query: OwnerId => ({
         url: '/bookOwner',
         method: 'POST',
-        body: OwnerId, // Assuming the server expects an object with an `id` field
+        body: OwnerId,
       }),
     }),
-    updateUser: builder.mutation({
+    forgotPassword: builder.mutation({
       query: data => ({
-        url: './updateProfile',
+        url: './forgotPassword',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation({
+      query: data => ({
+        url: './resetPassword',
         method: 'PUT',
         body: data,
       }),
@@ -54,6 +68,7 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useLazyLogoutUserQuery,
-  useUpdateUserMutation,
   useBookOwnerMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation
 } = userApi;

@@ -24,8 +24,8 @@ import TryComp from './Source/Screens/TryComp';
 import Camera from './Source/Screens/Camera';
 import Cart from './Source/Screens/Cart';
 import Product_Books from './Source/Screens/Product_Books';
-import ForgotPassword from './Source/Screens/ForgotPassword';
 import VerifyAccount from './Source/Screens/VerifyAccount';
+import ForgotPassword from './Source/Screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 

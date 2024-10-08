@@ -12,8 +12,8 @@ export default App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <ReduxProvider store={store}>
-        <Main />
-        {/* <ForgotPassword/> */}
+        {/* <Main /> */}
+        <ForgotPassword/>
         {/* <VerifyAccount/> */}
       </ReduxProvider>
     </GestureHandlerRootView>
