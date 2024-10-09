@@ -78,8 +78,8 @@ const Login = ({navigation}) => {
           'Your Account is Registered in Our BooksOfAccount',
           [
             {
-              text: 'Go to Login page',
-              onPress: () => navigation.navigate('Register'),
+              text: 'verify Your Account',
+              onPress: () => navigation.navigate('verifyAccount'),
             },
           ],
           {cancelable: false},
@@ -204,6 +204,7 @@ const Login = ({navigation}) => {
             rippleColor="#c9c9c9"
             buttonColor={global.thirdColor}
             onPress={() => registerUserBtn()}
+            // onPress={() => navigation.navigate("verifyAccount")}
             loading={buttonLoading}
             style={{
               marginTop: '20%',

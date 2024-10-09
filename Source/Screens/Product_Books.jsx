@@ -33,7 +33,6 @@ export default Product_Books = ({route}) => {
   const [singlebookdata, setsinglebookdata] = useState('');
   const {data: Book_data, isLoading, error, isSuccess} = useGetBookDataQuery();
   const [state_BookData, setstate_BookData] = useState('');
-  const [favBook, setfavBook] = useState(false);
   const [isExpand, setisExpand] = useState(false);
   const [ownerDetails, setownerDetails] = useState(null);
 
@@ -42,13 +41,9 @@ export default Product_Books = ({route}) => {
   const [searchText, setsearchText] = useState('');
   const [ownerData] = useBookOwnerMutation();
 
-  console.log(
-    '**********************form PRODUCT BOOK SCREEN***************************',
-  );
-  console.log('singlebookdata ', singlebookdata);
-  console.log('product_images', product_images);
-  console.log('userdata', userdata);
-  // console.log('state_BookData', state_BookData);
+  // console.log(
+  //   '**********************form PRODUCT BOOK SCREEN***************************',
+  // );
 
   const fetchOwnerDetails = useCallback(
     async bookOwnerId => {
@@ -71,6 +66,8 @@ export default Product_Books = ({route}) => {
       if (matchedBook) {
         setsinglebookdata(matchedBook);
         setproduct_images(matchedBook.images.map(item => item.url));
+        console.log('product images', product_images);
+
         fetchOwnerDetails(matchedBook.b_seller_id);
       }
     }
@@ -85,7 +82,6 @@ export default Product_Books = ({route}) => {
     navigation.navigate('home');
   };
 
-  // const imageUrls = singlebookdata.images.map(image => image.url);
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -120,21 +116,25 @@ export default Product_Books = ({route}) => {
           3
         </Badge>
       </View>
-      {/*********************************************************************************************************** */}
       <ScrollView>
         <View style={styles.imageCont}>
-     
-          <Carousel
-            loop
-            
-            width={width} // Set width according to your design
-            height={height/2} // Set height according to your design
-            // autoPlay={true} // Optional: for auto-playing the carousel
-            data={product_images} // Your images array
-            renderItem={({item}) => (
-              <Image source={{uri: item}} style={styles.image} />
-            )}
-          />
+          {product_images && product_images.length > 0 ? (
+            <Carousel
+              loop
+              width={width}
+              height={height / 2}
+              data={product_images}
+              renderItem={({item}) =>
+                item !== undefined && item !== null ? (
+                  <Image source={{uri: item}} style={styles.image} />
+                ) : (
+                  <Text style={{color: '#000'}}>Image not Available</Text>
+                )
+              }
+            />
+          ) : (
+            <Text style={{color: '#000'}}>No Images Available</Text>
+          )}
         </View>
 
         <View style={{marginBottom: '15%'}}>
@@ -313,15 +313,29 @@ export default Product_Books = ({route}) => {
                           width: '100%',
                           height: '65%',
                         }}>
-                        <Image
-                          source={{uri: item.images[0].url}}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            resizeMode: 'center',
-                            borderRadius: 12,
-                          }}
-                        />
+                        {item &&
+                        item.images &&
+                        item.images.length > 0 &&
+                        item.images[0].url ? (
+                          <Image
+                            source={{uri: item.images[0].url}}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              resizeMode: 'center',
+                              borderRadius: 12,
+                            }}
+                          />
+                        ) : (
+                          <Text
+                            style={{
+                              color: '#000',
+                              alignSelf: 'center',
+                              marginTop: '50%',
+                            }}>
+                            No Image Avaliable
+                          </Text>
+                        )}
                       </View>
                       <Text
                         style={{color: '#000', marginHorizontal: '3%'}}
@@ -385,9 +399,9 @@ const styles = StyleSheet.create({
   image: {
     width: '70%', // or any specific width
     height: '100%', // or any specific height
-  // alignItems:"center",
-  // // justifyContent:"center",
-  alignSelf:"center"
+    // alignItems:"center",
+    // // justifyContent:"center",
+    alignSelf: 'center',
     // resizeMode: 'cover', // or 'contain', depending on your need
   },
 
@@ -399,6 +413,7 @@ const styles = StyleSheet.create({
     borderColor: global.thirdColor,
     marginHorizontal: '1%',
     overflow: 'hidden',
+    // alignItems:"center"
   },
   bottomCartBtn: {
     position: 'absolute',
@@ -485,8 +500,9 @@ const styles = StyleSheet.create({
   imageCont: {
     backgroundColor: '#fff',
     height: height / 2,
-    width:width,
-    alignItems:"center"
+    width: width,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   ParentContainer: {
     flex: 1,

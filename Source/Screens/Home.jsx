@@ -49,6 +49,7 @@ const Home = ({navigation}) => {
 
   // console.log('userdata', userdata);
   // console.log('state_BookData direct data recived form api', state_BookData);
+  // console.log('$$$$$$$$$$$$b', state_BookData.allbooks);
 
   const name = userdata?.data?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
@@ -324,16 +325,26 @@ const Home = ({navigation}) => {
                   style={{
                     height: '90%',
                     width: '90%',
+                    justifyContent: 'center',
                   }}>
-                  <Image
-                    source={{uri: item.images[0].url}}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      resizeMode: 'center',
-                      borderRadius: 12,
-                    }}
-                  />
+                  {item &&
+                  item.images &&
+                  item.images.length > 0 &&
+                  item.images[0].url ? (
+                    <Image
+                      source={{uri: item.images[0].url}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        resizeMode: 'center',
+                        borderRadius: 12,
+                      }}
+                    />
+                  ) : (
+                    <Text style={{color: '#000', alignSelf: 'center'}}>
+                      No image available
+                    </Text>
+                  )}
                 </View>
               </View>
               <TouchableOpacity
@@ -430,6 +441,17 @@ const Home = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  addBtnCont: {
+    position: 'absolute',
+    bottom: 10,
+    right:10
+  },
+  profilePhotoText: {
+    alignSelf: 'center',
+    fontSize: width / 30,
+    // justifyContent: 'center',
+    // alignContent:"center"
+  },
   booksName: {
     fontSize: 20,
     color: '#000',
@@ -439,10 +461,10 @@ const styles = StyleSheet.create({
   removeBtn: {
     height: height / 25,
     width: width / 6,
-    position: 'absolute',
+    // position: 'absolute',
     backgroundColor: global.lightgray,
-    right: 10,
-    bottom: 10,
+    // right: 10,
+    // bottom: 10,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -451,10 +473,10 @@ const styles = StyleSheet.create({
   addBtn: {
     height: height / 25,
     width: width / 7,
-    position: 'absolute',
+    // position: 'absolute',
     backgroundColor: global.sandColor,
-    right: 10,
-    bottom: 10,
+    // right: 10,
+    // bottom: 1,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -605,6 +627,7 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     borderWidth: 1,
     overflow: 'hidden',
+    justifyContent: 'center',
   },
   cartBadge: {
     color: '#fff',

@@ -4,9 +4,10 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {Button} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useVerifyUserMutation} from '../RTKquery/Slices/ApiSclices';
 const {width, height} = Dimensions.get('screen');
 
-const VerifyAccount = () => {
+const VerifyAccount = ({navigation}) => {
   const iTxt1 = useRef();
   const iTxt2 = useRef();
   const iTxt3 = useRef();
@@ -21,7 +22,9 @@ const VerifyAccount = () => {
   const [field_5, setfield_5] = useState('');
   const [field_6, setfield_6] = useState('');
   const [loadingIndicator, setloadingIndicator] = useState(false);
-  console.log(field_1, field_2, field_3, field_4, field_5, field_6);
+  const combinedValue = `${field_1}${field_2}${field_3}${field_4}${field_5}${field_6}`;
+
+  const [verifyUser, {isSuccess, isError}] = useVerifyUserMutation();
 
   const isValid = useMemo(() => {
     return (
@@ -34,15 +37,31 @@ const VerifyAccount = () => {
     );
   }, [field_1, field_2, field_3, field_4, field_5, field_6]);
 
-  const CheckValid = useCallback(() => {
-    isValid == true
-      ? setloadingIndicator(!loadingIndicator)
-      : setloadingIndicator(false);
-  }, [isValid]);
+  const CheckValid = useCallback(async () => {
+    if (isValid) {
+      setloadingIndicator(true);
 
+      try {
+        const result = await verifyUser({otp: combinedValue}).unwrap();
+        console.log('Verification result:', result);
+      } catch (error) {
+        console.error('Error while verifying user:', error);
+      } finally {
+        setloadingIndicator(false);
+      }
+    } else {
+      setloadingIndicator(false);
+    }
+  }, [isValid, combinedValue, verifyUser]);
   useEffect(() => {
-    isValid ? console.log('Good To Go!') : console.warn('Field is Empty');
-  }, [isValid]);
+    if (isSuccess) {
+      console.log('Email verification success!');
+      navigation.navigate('home');
+    } else if (isError) {
+      console.log('Email verification failed.');
+      setloadingIndicator(false);
+    }
+  }, [isSuccess, isError]);
 
   return (
     <View style={styles.mainCont}>
@@ -197,12 +216,8 @@ const VerifyAccount = () => {
         <Button
           mode="contained"
           rippleColor={global.thirdColor}
-          buttonColor={
-            !isValid ? global.disablebtn_Gray : global.thirdColor
-            // global.sandColor
-          }
+          buttonColor={!isValid ? global.disablebtn_Gray : global.thirdColor}
           onPress={() => CheckValid()}
-          //   disabled={true}
           loading={isValid && loadingIndicator ? true : false}
           style={{
             marginTop: '20%',
@@ -232,15 +247,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: '2%',
     fontWeight: '700',
-    // alignItems:"center",
-    // alignSelf:"center",
-    // justifyContent:"center"
   },
   headerTxt: {
     color: global.thirdColor,
     fontSize: width / 5,
     fontFamily: globalfonts.font,
-    marginLeft:"2%"
+    marginLeft: '2%',
   },
 
   mainCont: {flex: 1, backgroundColor: global.bgColor},

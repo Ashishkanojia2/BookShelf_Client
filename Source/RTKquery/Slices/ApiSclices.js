@@ -3,11 +3,8 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    // http://localhost:4000/api/v1/user/login
     // baseUrl: 'http://192.168.137.1:4000/api/v1/user',
-    // baseUrl: 'http://192.168.186.190:4000/api/v1/user',
-    baseUrl: 'http://192.168.137.1:4000/api/v1/user',
-    // 192.168.186.190
+    baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1/user',
   }),
   endpoints: builder => ({
     getUser: builder.query({
@@ -32,13 +29,13 @@ export const userApi = createApi({
         body: registerUser,
       }),
     }),
-    // bookOwner: builder.mutation({
-    //   query: OwnerId => ({
-    //     url: '/bookOwner',
-    //     method: 'POST',
-    //     body: OwnerId, // Assuming the server expects an object with an `id` field
-    //   }),
-    // }),
+    updateUser: builder.mutation({
+      query: data => ({
+        url: './updateProfile',
+        method: 'PUT',
+        body: data,
+      }),
+    }),
     bookOwner: builder.mutation({
       query: OwnerId => ({
         url: '/bookOwner',
@@ -49,6 +46,13 @@ export const userApi = createApi({
     forgotPassword: builder.mutation({
       query: data => ({
         url: './forgotPassword',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    verifyUser: builder.mutation({
+      query: data => ({
+        url: './verify',
         method: 'POST',
         body: data,
       }),
@@ -70,5 +74,7 @@ export const {
   useLazyLogoutUserQuery,
   useBookOwnerMutation,
   useForgotPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useVerifyUserMutation,
+  useUpdateUserMutation,
 } = userApi;

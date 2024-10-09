@@ -62,7 +62,7 @@ const Cart = ({navigation}) => {
         />
       );
     } else {
-      return <Text>No image available</Text>;
+      return <Text style={{color:global.SecondaryColor}}>No image available</Text>;
     }
   };
 
@@ -206,6 +206,8 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     borderWidth: 1,
     overflow: 'hidden',
+    justifyContent:"center",
+    alignItems:"center"
   },
   bottomCartBtn: {
     position: 'absolute',

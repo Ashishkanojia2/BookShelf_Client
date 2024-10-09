@@ -52,10 +52,7 @@ const Profile_user = ({navigation, route}) => {
   const clearMessage = () => {};
 
   const userData = useSelector(state => state.user.data);
-  console.log('@@@@@@@@@@@@@@@profile_user@@@@@@@@@@@@@@@@@@@2');
-  console.log(route);
-  // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2');
-
+  console.log('*************************profile_user*************************');
   const [initialData, setInitialData] = useState({
     address: '',
     name: '',
@@ -73,7 +70,6 @@ const Profile_user = ({navigation, route}) => {
       setgender(userData.gender || '');
       setphone(userData.phone ? userData.phone.toString() : '');
       setuserProfilePic(userData.avatar?.url || '');
-      // console.log('########', userData.avatar);
     }
     setInitialData({
       address: userData.address || '',
@@ -130,7 +126,7 @@ const Profile_user = ({navigation, route}) => {
       name: userProfilePic.split('/').pop(),
     });
 
-    const response = await UpdateUserData(myform);
+    const response = await UpdateUserData(myform).unwrap();
     if (response?.data?.success) {
       setbuttonLoading(false);
       dispatch(getUserData(response.data));
@@ -173,8 +169,24 @@ const Profile_user = ({navigation, route}) => {
 
         <View style={styles.headingCont}></View>
 
+        {/* <View style={styles.profilepicCont}>
+          {userProfilePic !== undefined && userProfilePic !== null ? && userProfilePic !== '' (
+            <Image
+              source={{uri: userProfilePic }}
+              style={{height: '100%', width: '100%'}}
+            />
+          ) : (
+            <MaterialIcons
+              name="add-a-photo"
+              size={35}
+              color={global.bgColor}
+            />
+          )}
+        </View> */}
         <View style={styles.profilepicCont}>
-          {userProfilePic !== undefined && userProfilePic !== null ? (
+          {userProfilePic !== undefined &&
+          userProfilePic !== null &&
+          userProfilePic !== '' ? (
             <Image
               source={{uri: userProfilePic}}
               style={{height: '100%', width: '100%'}}

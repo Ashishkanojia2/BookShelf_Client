@@ -9,18 +9,18 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import React, {useState} from 'react';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Badge } from 'react-native-paper';
+import {Badge} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCartData } from '../Redux/Reducer/CartReducer';
+import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {setCartData} from '../Redux/Reducer/CartReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const font = 'Calistoga-Regular';
@@ -36,7 +36,7 @@ const Books = route => {
   const {
     data: Book_data,
     isLoading: bookload,
-    error,
+    isError: error,
     isSuccess,
   } = useGetBookDataQuery();
 
@@ -60,6 +60,12 @@ const Books = route => {
         : dispatch(setCartData(itemId));
     }
   };
+  console.log(route.route.params.message);
+
+  const filteredBooks = Book_data?.allbooks?.filter(item => {
+    const category = item.b_categorie?.trim().toLowerCase() || '';
+    return category === route.route.params.message?.toLowerCase();
+  });
 
   return (
     <View style={styles.ParentContainer}>
@@ -97,22 +103,23 @@ const Books = route => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {Book_data && Book_data.allbooks && Book_data.allbooks.length > 0 ? (
-          Book_data.allbooks
-            .filter(item => {
-              const category = item.b_categorie
-                ? item.b_categorie.trim().toLowerCase()
-                : '';
-              return category === route.route.params.message;
-            })
-            .map(item => (
-              <View style={styles.newBookContainer} key={item.id}>
-                <View style={styles.productPhoto}>
-                  <View
-                    style={{
-                      height: '80%',
-                      width: '80%',
-                    }}>
+        {bookload ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>Error loading books</Text>
+        ) : filteredBooks.length > 0 ? (
+          filteredBooks.map(item => (
+            <View style={styles.newBookContainer} key={item._id}>
+              <View style={styles.productPhoto}>
+                <View
+                  style={{
+                    height: '80%',
+                    width: '80%',
+                  }}>
+                  {item &&
+                  item.images &&
+                  item.images.length > 0 &&
+                  item.images[0].url ? (
                     <Image
                       source={{uri: item.images[0].url}}
                       style={{
@@ -122,84 +129,88 @@ const Books = route => {
                         borderRadius: 12,
                       }}
                     />
-                  </View>
-                </View>
-                <TouchableOpacity
-                  onPress={() => setfavBook(!favBook)}
-                  style={{position: 'absolute', right: 10, top: 7, zIndex: 1}}>
-                  {favBook ? (
-                    <AntDesign name="heart" size={25} color="red" />
                   ) : (
-                    <FontAwesome name="heart-o" size={25} color="#000" />
-                  )}
-                </TouchableOpacity>
-                <View style={styles.productInfo}>
-                  <Text
-                    style={[styles.booksName]}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {item.b_name}
-                  </Text>
-                  <Text
-                    style={[styles.bookstxt]}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {item.b_desc}
-                  </Text>
-                  <View style={styles.editionCont}>
-                    <Text style={styles.booksHead}>Edition :</Text>
-                    <Text style={styles.bookstxt}>{item.b_edition}</Text>
-                  </View>
-                  <View style={styles.infoCont}>
-                    <Text style={styles.booksHead}>Author :</Text>
-                    <Text style={styles.bookstxt}>{item.b_author}</Text>
-                  </View>
-                  <View style={styles.infoCont}>
-                    <Text style={styles.booksHead}>S.Price :</Text>
-                    <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
-                  </View>
-                  <View style={styles.infoCont}>
-                    <Text style={styles.booksHead}>MRP :</Text>
-                    <Text
-                      style={[
-                        styles.bookstxt,
-                        {
-                          textDecorationLine: 'line-through',
-                          color: '#c9c9c9',
-                        },
-                      ]}>
-                      {item.b_MRP}
+                    <Text style={{color: '#000', alignSelf: 'center'}}>
+                      No image available
                     </Text>
-                  </View>
-                  {cartdata.includes(item._id) ? (
-                   
-                    <TouchableOpacity style={styles.removeBtn}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#000',
-                          fontFamily: globalfonts.font5,
-                        }}>
-                        Added
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.addBtn}
-                      onPress={() => addTocart(item._id)}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#000',
-                          fontFamily: globalfonts.font5,
-                        }}>
-                        ADD
-                      </Text>
-                    </TouchableOpacity>
                   )}
                 </View>
               </View>
-            ))
+              <TouchableOpacity
+                onPress={() => setfavBook(!favBook)}
+                style={{position: 'absolute', right: 10, top: 7, zIndex: 1}}>
+                {favBook ? (
+                  <AntDesign name="heart" size={25} color="red" />
+                ) : (
+                  <FontAwesome name="heart-o" size={25} color="#000" />
+                )}
+              </TouchableOpacity>
+              <View style={styles.productInfo}>
+                <Text
+                  style={[styles.booksName]}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item.b_name}
+                </Text>
+                <Text
+                  style={[styles.bookstxt]}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item.b_desc}
+                </Text>
+                <View style={styles.editionCont}>
+                  <Text style={styles.booksHead}>Edition :</Text>
+                  <Text style={styles.bookstxt}>{item.b_edition}</Text>
+                </View>
+                <View style={styles.infoCont}>
+                  <Text style={styles.booksHead}>Author :</Text>
+                  <Text style={styles.bookstxt}>{item.b_author}</Text>
+                </View>
+                <View style={styles.infoCont}>
+                  <Text style={styles.booksHead}>S.Price :</Text>
+                  <Text style={styles.bookstxt}>{item.b_sellingprice}</Text>
+                </View>
+                <View style={styles.infoCont}>
+                  <Text style={styles.booksHead}>MRP :</Text>
+                  <Text
+                    style={[
+                      styles.bookstxt,
+                      {
+                        textDecorationLine: 'line-through',
+                        color: '#c9c9c9',
+                      },
+                    ]}>
+                    {item.b_MRP}
+                  </Text>
+                </View>
+                {cartdata.includes(item._id) ? (
+                  <TouchableOpacity style={styles.removeBtn}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#000',
+                        fontFamily: globalfonts.font5,
+                      }}>
+                      Added
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => addTocart(item._id)}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: '#000',
+                        fontFamily: globalfonts.font5,
+                      }}>
+                      ADD
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          ))
         ) : (
           <Text
             style={{
