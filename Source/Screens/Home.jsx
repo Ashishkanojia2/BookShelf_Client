@@ -21,45 +21,58 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCartData} from '../Redux/Reducer/CartReducer';
+import {currentuserSelectore} from '../Redux/Reducer/AuthReducer';
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const Home = ({navigation}) => {
-  //USE_STATE
+  const dispatch = useDispatch();
+
+  // State
   const [searchText, setsearchText] = useState('');
   const [ShowingBookData, setShowingBookData] = useState(false);
-  //API CALLING
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state
+
+  // Redux state
+  const userdata = useSelector(currentuserSelectore);
+  // const userdata = useSelector(state => state.user);
+  const cartdata = useSelector(state => state.cart.cartData);
 
   const {
     data: Book_data,
     isLoading: bookload,
     isSuccess,
   } = useGetBookDataQuery();
+
+  useEffect(() => {
+    if (userdata) {
+      setLoading(false);
+    }
+  }, [userdata]);
+
   useEffect(() => {
     if (Book_data && isSuccess) {
       setstate_BookData(Book_data);
     }
   }, [Book_data, isSuccess]);
-  const userdata = useSelector(state => state.user);
-  const cartdata = useSelector(state => state.cart.cartData);
 
-  console.log('*******************from home screen********************');
+  if (loading || !userdata) {
+    return <Text style={{color: 'red'}}>Loading data...</Text>;
+  }
 
-  // console.log('userdata', userdata);
-  // console.log('state_BookData direct data recived form api', state_BookData);
-  // console.log('$$$$$$$$$$$$b', state_BookData.allbooks);
+  // console.log('*******************from home screen********************');
 
-  const name = userdata?.data?.name || '';
+  const name = userdata?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
 
   const bookContainer = bookname => {
-    console.log('clicking');
     navigation.navigate('books', {
       message: `${bookname}`,
     });
   };
+
   const gotoCart = () => {
     navigation.navigate('cart');
   };
@@ -67,21 +80,14 @@ const Home = ({navigation}) => {
   const profileBtn = () => {
     navigation.navigate('profile');
   };
-  const dispatch = useDispatch();
+
   const addTocart = itemId => {
-    {
-      cartdata.includes(itemId)
-        ? Alert.alert(
-            'Book not added in cart  ',
-            'Book already added in cart',
-            [
-              {
-                text: 'ok',
-              },
-            ],
-            {cancelable: false},
-          )
-        : dispatch(setCartData(itemId));
+    if (cartdata.includes(itemId)) {
+      Alert.alert('Book not added in cart', 'Book already added in cart', [
+        {text: 'OK'},
+      ]);
+    } else {
+      dispatch(setCartData(itemId));
     }
   };
 
@@ -444,7 +450,7 @@ const styles = StyleSheet.create({
   addBtnCont: {
     position: 'absolute',
     bottom: 10,
-    right:10
+    right: 10,
   },
   profilePhotoText: {
     alignSelf: 'center',

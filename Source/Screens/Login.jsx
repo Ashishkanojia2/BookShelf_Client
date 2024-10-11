@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {Button, TextInput} from 'react-native-paper';
-import {ScrollView} from 'native-base';
-import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
-import {useDispatch} from 'react-redux';
-import {loginUserData} from '../Redux/Reducer/AuthReducer';
+import React, { useRef, useState } from 'react';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { Button, TextInput } from 'react-native-paper';
+import { ScrollView } from 'native-base';
+import { useLoginUserMutation } from '../RTKquery/Slices/ApiSclices';
+import { useDispatch } from 'react-redux';
+import { loginUserData } from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -44,12 +44,12 @@ const Login = ({navigation}) => {
       const user = {email: emailId, password: Password};
       const result = await loginUser(user).unwrap();
 
-      dispatch(loginUserData(result.user));
       emailRef.current?.blur();
       passwordRef.current?.blur();
       Keyboard.dismiss();
 
       if (result.success) {
+        dispatch(loginUserData(result.user));
         navigation.navigate('home');
         setbuttonLoading(false);
         setPassword('');
@@ -60,9 +60,6 @@ const Login = ({navigation}) => {
     } catch (error) {
       setbuttonLoading(false);
       setMessage(error.data.message);
-      console.log('error form login screen', error);
-
-      // setMessage(error.data.message);
     }
   };
   const clearMessage = () => {
@@ -143,9 +140,11 @@ const Login = ({navigation}) => {
             <Text style={styles.btmText}>Don't have an Account </Text>
             <TouchableOpacity
               onPress={signupBtn}
-              styles={{
-                // backgroundColor: 'pink',
-              }}>
+              styles={
+                {
+                  // backgroundColor: 'pink',
+                }
+              }>
               <Text
                 style={[
                   styles.btmText,
@@ -160,16 +159,18 @@ const Login = ({navigation}) => {
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('verifyAccount')}
-            styles={{
-              // backgroundColor: 'pink',
-            }}>
+            styles={
+              {
+                // backgroundColor: 'pink',
+              }
+            }>
             <Text
               style={[
                 styles.btmText,
                 {
                   color: global.sandColor,
                   textDecorationLine: 'underline',
-                  marginTop:"2%"
+                  marginTop: '2%',
                 },
               ]}>
               Forgot Password

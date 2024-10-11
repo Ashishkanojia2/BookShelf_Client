@@ -11,6 +11,7 @@ import React from 'react';
 import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
@@ -20,16 +21,15 @@ const {height, width} = Dimensions.get('window');
 const font = 'Calistoga-Regular';
 
 const Profile = ({navigation}) => {
-  const userData = useSelector(state => state.user);
-  const name = userData?.data?.name || '';
-  const CapLetter = name.charAt(0).toUpperCase();
+  // Ensure we correctly get user state and handle loading and error
+  const {
+    isLoading,
+    isError,
+    data: userData,
+  } = useSelector(state => state.user || {});
 
   const dispatch = useDispatch();
   const [triggerLogout] = useLazyLogoutUserQuery();
-  console.log(
-    '****************** from profile screen**************************',
-  );
-  // console.log(userData);
 
   const logout = async () => {
     await triggerLogout()
@@ -51,9 +51,22 @@ const Profile = ({navigation}) => {
     const day = String(date.getUTCDate()).padStart(2, '0');
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const year = date.getUTCFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
-    return formattedDate;
+    return `${day}-${month}-${year}`;
   };
+
+  // Handle loading state
+  if (isLoading) {
+    return <Text style={{color: '#000'}}>Loading...</Text>;
+  }
+
+  // Handle error state
+  if (isError || !userData) {
+    return <Text style={{color: 'red'}}>Failed to load data.</Text>;
+  }
+
+  const name = userData.name || '';
+  const CapLetter = name.charAt(0).toUpperCase();
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -64,19 +77,18 @@ const Profile = ({navigation}) => {
       <View style={styles.Profileheader}>
         <View style={styles.profileHerderChild1}>
           <TouchableOpacity style={styles.profilepicCont}>
-            {userData && userData.data.avatar && userData.data.avatar.url ? (
+            {userData?.avatar?.url ? (
               <Image
-                source={{uri: userData.data.avatar.url}}
+                source={{uri: userData.avatar.url}}
                 style={{height: '100%', width: '100%'}}
               />
             ) : (
               <Text style={styles.profilePhotoText}>{CapLetter}</Text>
             )}
           </TouchableOpacity>
-          <Text style={styles.profileTxt}>{userData.data.name}</Text>
-
+          <Text style={styles.profileTxt}>{userData.name}</Text>
           <Text style={styles.profileDateTxt}>
-            Acc. Created at {FormateDate(userData.data.createAt)}
+            Acc. Created at {FormateDate(userData.createAt)}
           </Text>
         </View>
         <View style={styles.profileHerderChild2}></View>
@@ -195,6 +207,22 @@ const Profile = ({navigation}) => {
               />
             </View>
             <Text style={styles.profileOptionText}>Send FeedBack</Text>
+          </View>
+          <MaterialCommunityIcons
+            name="greater-than"
+            size={20}
+            color={global.bgColor}
+            style={{right: 10}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.profileOption}
+          onPress={() => navigation.navigate('forgotPassword')}>
+          <View style={styles.profileOptionView}>
+            <View style={styles.profileIconCont}>
+              <MaterialIcons name="change-circle" size={20} color={'#fff'} />
+            </View>
+            <Text style={styles.profileOptionText}>Change Password</Text>
           </View>
           <MaterialCommunityIcons
             name="greater-than"

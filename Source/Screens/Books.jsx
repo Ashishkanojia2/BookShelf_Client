@@ -31,7 +31,6 @@ const Books = route => {
   const navigation = useNavigation();
 
   // console.log('********************* books screen ***************************');
-  // console.log(cartdata);
 
   const {
     data: Book_data,
@@ -60,7 +59,6 @@ const Books = route => {
         : dispatch(setCartData(itemId));
     }
   };
-  console.log(route.route.params.message);
 
   const filteredBooks = Book_data?.allbooks?.filter(item => {
     const category = item.b_categorie?.trim().toLowerCase() || '';
@@ -79,7 +77,6 @@ const Books = route => {
           <Fontisto name="search" size={20} color="#000" />
 
           <TextInput
-            // value={searchText}
             onChangeText={text => setsearchText(text)}
             placeholder="Search Books"
             placeholderTextColor={global.bgColor}

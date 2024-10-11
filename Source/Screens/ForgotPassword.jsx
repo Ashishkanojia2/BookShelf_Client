@@ -7,7 +7,6 @@ import {
   useForgotPasswordMutation,
   useResetPasswordMutation,
 } from '../RTKquery/Slices/ApiSclices';
-import { useNavigation } from '@react-navigation/native';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -25,26 +24,17 @@ const ForgotPassword = ({navigation}) => {
     {isSuccess: PasswordChangeSucess, isError: PasswordChangeError},
   ] = useResetPasswordMutation();
 
-//   const navigation = useNavigation()
+  //   const navigation = useNavigation()
 
   const isValid = useMemo(() => {
     return newPassword.length > 0 && confirmPassword.length > 0;
   }, [newPassword, confirmPassword]);
 
   const CheckValid = useCallback(async () => {
-    // console.log(
-    //  "otp : ", otp,
-    //   'new password : ',
-    //   newPassword,
-    //   'confirm password  : ',
-    //   confirmPassword,
-    // );
     try {
+      setisloadingIndicator(true);
       const result = await resetPassword({otp, newpassword: newPassword});
-      console.log('reset password result ', result);
-      //   {
-      //     result.data.success ? navigation.navigate('home') : null;
-      //   }
+      setisloadingIndicator(false);
     } catch (error) {
       console.log('eror while reset password');
     }
@@ -55,12 +45,10 @@ const ForgotPassword = ({navigation}) => {
   }, [Emailid]);
 
   const checkEmail = async () => {
-    console.log('hme email id kya dalai hai ', Emailid);
     setisloadingIndicator(true);
     try {
       const result = await emailVerifition({email: Emailid}).unwrap();
-      console.log('here is a result', result);
-      setisloadingIndicator(false)
+      setisloadingIndicator(false);
     } catch (error) {
       console.log('Error while send the code', error);
     }
@@ -68,20 +56,16 @@ const ForgotPassword = ({navigation}) => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log('Email verification success!');
       setverifyEmail(true);
     } else if (isError) {
-      console.log('Email verification failed.');
       setverifyEmail(false);
     }
   }, [isSuccess, isError]);
 
   useEffect(() => {
     if (PasswordChangeSucess) {
-      console.log('Email verification success!');
-      navigation.navigate('home');
+      navigation.navigate('login');
     } else if (PasswordChangeError) {
-      console.log('Email verification failed.');
       setverifyEmail(false);
     }
   }, [PasswordChangeSucess, PasswordChangeError, navigation]);
@@ -104,7 +88,6 @@ const ForgotPassword = ({navigation}) => {
             value={Emailid}
             onChangeText={value => setEmailid(value)}
             label={'Email-Id'}
-            // color
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
@@ -119,12 +102,10 @@ const ForgotPassword = ({navigation}) => {
             rippleColor="#c9c9c9"
             buttonColor={
               !isValidEmail ? global.disablebtn_Gray : global.thirdColor
-              // global.sandColor
             }
             onPress={() => checkEmail()}
             disabled={isValidEmail ? false : true}
-              loading={isloadingIndicator}
-
+            loading={isloadingIndicator}
             style={{
               marginTop: '20%',
               height: height / 20,
@@ -137,58 +118,44 @@ const ForgotPassword = ({navigation}) => {
       ) : (
         <View style={styles.parentCont}>
           <TextInput
-            //   ref={genderRef}
             value={otp}
             onChangeText={value => setotp(value)}
             label={'Enter OTP'}
-            // color
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
             activeOutlineColor={global.sandColor}
             mode="outlined"
             textColor={global.sandColor}
-            //   onFocus={clearMessage}
           />
           <TextInput
-            //   ref={genderRef}
             value={newPassword}
             onChangeText={value => setnewPassword(value)}
             label={'New Password'}
-            // color
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
             activeOutlineColor={global.sandColor}
             mode="outlined"
             textColor={global.sandColor}
-            //   onFocus={clearMessage}
           />
           <TextInput
-            //   ref={genderRef}
             value={confirmPassword}
             onChangeText={value => setconfirmPassword(value)}
             label={'Confirm New Password'}
-            // color
             style={styles.inputfield}
             outlineColor={global.thirdColor}
             cursorColor={global.sandColor}
             activeOutlineColor={global.sandColor}
             mode="outlined"
             textColor={global.sandColor}
-            //   onFocus={clearMessage}
           />
           <Button
             mode="contained"
             rippleColor="#c9c9c9"
-            buttonColor={
-              !isValid ? global.disablebtn_Gray : global.thirdColor
-              // global.sandColor
-            }
+            buttonColor={!isValid ? global.disablebtn_Gray : global.thirdColor}
             onPress={() => CheckValid()}
-            //   disabled={true}
-            //   loading={buttonLoading}
-
+            loading={isloadingIndicator}
             style={{
               marginTop: '20%',
               height: height / 20,
@@ -208,7 +175,6 @@ export default ForgotPassword;
 const styles = StyleSheet.create({
   parentCont: {alignItems: 'center', marginTop: '20%'},
   inputfield: {
-    // marginBottom: '10%',
     width: width - 50,
     backgroundColor: global.bgColor,
     marginVertical: height / 70,

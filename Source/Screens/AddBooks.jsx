@@ -7,15 +7,15 @@ import {
   View,
   Image,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {Button, Text, TextInput} from 'react-native-paper';
-import {ScrollView} from 'native-base';
+import React, { useEffect, useRef, useState } from 'react';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { Button, Text, TextInput } from 'react-native-paper';
+import { ScrollView } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import { useRegisterBookMutation } from '../RTKquery/Slices/BookApiSclice';
 import mime from 'mime';
 const font = 'Calistoga-Regular';
 
@@ -23,9 +23,6 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const AddBooks = ({navigation, route}) => {
-  // const {photo} = route.params;
-  // console.log(photo);
-
   const [RegisterBook] = useRegisterBookMutation();
 
   const [bookDesc, setbookDesc] = useState('');
@@ -101,8 +98,6 @@ const AddBooks = ({navigation, route}) => {
       myform.append('b_MRP', mrp);
       myform.append('b_sellingprice', sellingPrice);
 
-      console.log('storePhotoPath', storePhotoPath);
-
       storePhotoPath.forEach(imagePath => {
         const mimeType = mime.getType(imagePath);
         if (mimeType) {
@@ -117,7 +112,6 @@ const AddBooks = ({navigation, route}) => {
       });
 
       const isRegister = await RegisterBook(myform);
-      console.log('isRegister', isRegister);
 
       if (isRegister?.data?.success) {
         setbuttonLoading(false);
@@ -170,10 +164,6 @@ const AddBooks = ({navigation, route}) => {
       return Alert.alert('Success', 'Book is Deteled');
     }
   };
-  const checkPhoto = () => {
-    console.log('checking photot ');
-    console.log('checking photot : ', storePhotoPath);
-  };
 
   return (
     <View style={{backgroundColor: global.bgColor, flex: 1}}>
@@ -197,11 +187,6 @@ const AddBooks = ({navigation, route}) => {
       <ScrollView>
         <View style={styles.ParentContainer}>
           <View style={styles.noteCont}>
-            <TouchableOpacity onPress={() => checkPhoto()}>
-              <Text style={{color: 'pink', fontSize: 20}}>
-                click for check photo
-              </Text>
-            </TouchableOpacity>
             <Text style={styles.noteText}>NOTE :</Text>
             <Text style={styles.noteDetailsText}>
               * Click Top-right button to add your books photo.

@@ -1,12 +1,12 @@
 import {
-    Dimensions,
-    Image,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { global } from '../Components/GlobalComponent/GlobalStyle';
@@ -27,18 +27,13 @@ const Cart = ({navigation}) => {
   const {data: bookdata, isLoading, isSuccess} = useGetBookDataQuery();
   const dispatch = useDispatch();
 
-    console.log('*******************************');
-    console.log('userdata', userdata);
-  //   console.log('bookdata11', bookdata);
+  // console.log('*******************************');
   const [alldata, setalldata] = useState('');
 
   const removeitem = id => {
-    console.log('Removing item with ID:', id);
+    const remaningItem = cartData.filter(itemId => itemId !== id);
 
-    const remaningItem = cartData.filter(itemId => itemId !== id); 
-    console.log('Updated cart data:', remaningItem);
-
-    dispatch(RemoveCartData(remaningItem)); 
+    dispatch(RemoveCartData(remaningItem));
   };
 
   useEffect(() => {
@@ -50,7 +45,6 @@ const Cart = ({navigation}) => {
       if (JSON.stringify(alldata) !== JSON.stringify(filteredItems)) {
         setalldata(filteredItems);
       }
-
     }
   }, [cartData, bookdata, alldata, removeitem]);
   const renderBookImages = images => {
@@ -62,7 +56,9 @@ const Cart = ({navigation}) => {
         />
       );
     } else {
-      return <Text style={{color:global.SecondaryColor}}>No image available</Text>;
+      return (
+        <Text style={{color: global.SecondaryColor}}>No image available</Text>
+      );
     }
   };
 
@@ -81,8 +77,12 @@ const Cart = ({navigation}) => {
           <CustomIonicon name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.myCartTxt}>My Cart</Text>
-        <TouchableOpacity onPress={() => {navigation.navigate("profile")}} style={styles.userProfile}>
-        {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('profile');
+          }}
+          style={styles.userProfile}>
+          {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
             <Image
               source={{uri: userdata.data.avatar.url}}
               style={{height: '100%', width: '100%'}}
@@ -164,14 +164,17 @@ const Cart = ({navigation}) => {
               );
             })
           ) : (
-            <Text style={{
+            <Text
+              style={{
                 color: global.sandColor,
                 fontSize: 25,
                 fontFamily: globalfonts.font,
                 marginTop: '20%',
                 textDecorationLine: 'underline',
                 alignSelf: 'center',
-              }}>No books</Text>
+              }}>
+              No books
+            </Text>
           )}
         </ScrollView>
       </View>
@@ -206,8 +209,8 @@ const styles = StyleSheet.create({
     borderColor: global.sandColor,
     borderWidth: 1,
     overflow: 'hidden',
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomCartBtn: {
     position: 'absolute',

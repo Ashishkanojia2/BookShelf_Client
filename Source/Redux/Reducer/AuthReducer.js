@@ -11,18 +11,15 @@ export const userData = createSlice({
   initialState,
   reducers: {
     getUserData: (state, action) => {
-      // const {data, isSuccess} = action.payload;
-      state.data = action.payload.data;
-      // state.isAuth = isSuccess;
+      state.data = action.payload;
     },
     loginUserData: (state, action) => {
-      state.data = action.payload.data;
-      // state.isAuth = true;
+      state.data = action.payload;
       state.msg = 'user login';
+      // console.log('@@@', action.payload);
     },
     logoutUser: (state, action) => {
       state.data = action.payload;
-      // state.isAuth = false;
       state.msg = 'user Logout';
     },
     clearUserData: (state, action) => {
@@ -43,3 +40,7 @@ export const {
   updateUserData,
 } = userData.actions;
 export default userData.reducer;
+
+export const currentuserSelectore = state => {
+  return state.user.data;
+};
