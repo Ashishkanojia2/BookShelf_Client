@@ -34,6 +34,8 @@ const ForgotPassword = ({navigation}) => {
     try {
       setisloadingIndicator(true);
       const result = await resetPassword({otp, newpassword: newPassword});
+      console.log("reset password result ", result );
+
       setisloadingIndicator(false);
     } catch (error) {
       console.log('eror while reset password');
@@ -48,6 +50,8 @@ const ForgotPassword = ({navigation}) => {
     setisloadingIndicator(true);
     try {
       const result = await emailVerifition({email: Emailid}).unwrap();
+      console.log("forgot password result ", result );
+      
       setisloadingIndicator(false);
     } catch (error) {
       console.log('Error while send the code', error);
@@ -66,6 +70,7 @@ const ForgotPassword = ({navigation}) => {
     if (PasswordChangeSucess) {
       navigation.navigate('login');
     } else if (PasswordChangeError) {
+      
       setverifyEmail(false);
     }
   }, [PasswordChangeSucess, PasswordChangeError, navigation]);

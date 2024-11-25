@@ -8,14 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { Button, TextInput } from 'react-native-paper';
-import { ScrollView } from 'native-base';
-import {
-  useRegisterUserMutation
-} from '../RTKquery/Slices/ApiSclices';
-import { useDispatch } from 'react-redux';
+import React, {useRef, useState} from 'react';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {Button, TextInput} from 'react-native-paper';
+import {ScrollView} from 'native-base';
+import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
+import {useDispatch} from 'react-redux';
+import { loginUserData } from '../Redux/Reducer/AuthReducer';
 // import {} from "../../assets/fonts"
 const font = 'Calistoga-Regular';
 
@@ -73,6 +72,7 @@ const Login = ({navigation}) => {
       console.log('result', result);
 
       if (result?.success) {
+        dispatch(loginUserData(result.user));
         Alert.alert(
           'Successful',
           'Your Account is Registered in Our BooksOfAccount',

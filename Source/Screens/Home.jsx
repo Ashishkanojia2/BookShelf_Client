@@ -58,11 +58,13 @@ const Home = ({navigation}) => {
     }
   }, [Book_data, isSuccess]);
 
-  if (loading || !userdata) {
-    return <Text style={{color: 'red'}}>Loading data...</Text>;
-  }
+  // if (loading || !userdata) {
+  //   return <Text style={{color: 'red'}}>Loading data...</Text>;
+  // }
 
-  // console.log('*******************from home screen********************');
+  console.log('*******************from home screen********************');
+  console.log("userdata",userdata);
+  
 
   const name = userdata?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();

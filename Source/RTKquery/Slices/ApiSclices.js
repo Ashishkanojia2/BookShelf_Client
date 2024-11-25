@@ -3,8 +3,10 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'http://192.168.137.1:4000/api/v1/user',
-    baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1/user',
+    
+    baseUrl: 'http://192.168.137.1:4000/api/v1/user',// Getting this url form ipcongif in command prompt
+    // baseUrl: 'https://bookshelf-server-4.onrender.com/api/v1/user',
+    
   }),
   endpoints: builder => ({
     getUser: builder.query({

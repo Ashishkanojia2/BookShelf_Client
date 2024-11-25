@@ -1,23 +1,52 @@
 import React from 'react';
 // import {Provider} from 'react-redux';
 import Main from './Main';
-import {store} from './Source/Redux/Store/Store';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { store } from './Source/Redux/Store/Store';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { Provider as ReduxProvider } from 'react-redux'; 
-import ForgotPassword from './Source/Screens/ForgotPassword';
-import VerifyAccount from './Source/Screens/VerifyAccount';
-import Register from './Source/Screens/Register';
+import { Provider as ReduxProvider } from 'react-redux';
 
 export default App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <ReduxProvider store={store}>
         <Main />
-        {/* <ForgotPassword/> */}
-        {/* <VerifyAccount/> */}
-        {/* <Register/> */}
       </ReduxProvider>
     </GestureHandlerRootView>
   );
 };
+
+// import React, {useEffect} from 'react';
+// import Main from './Main';
+// import {store, persistor} from './Source/Redux/Store/Store';
+// import {GestureHandlerRootView} from 'react-native-gesture-handler';
+// import {Provider as ReduxProvider} from 'react-redux';
+// import {PersistGate} from 'redux-persist/integration/react';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// if (__DEV__) {
+//   require("./ReactotronConfig");
+// }
+
+// // const clearStorage = async () => {
+// //   await AsyncStorage.clear();
+// // };
+
+// const App = () => {
+//   // useEffect(() => {
+//   //   // Clear AsyncStorage on app startup
+//   //   clearStorage();
+//   // }, []);
+
+//   return (
+//     <GestureHandlerRootView style={{flex: 1}}>
+//       <ReduxProvider store={store}>
+//         <PersistGate loading={null} persistor={persistor}>
+//           <Main />
+//         </PersistGate>
+//       </ReduxProvider>
+//     </GestureHandlerRootView>
+//   );
+// };
+
+// export default App;

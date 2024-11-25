@@ -108,41 +108,89 @@ const Profile_user = ({navigation, route}) => {
     }
   }, [name, address, occupation, gender, phone, initialData, userProfilePic]);
 
+  // const UpdateUserBtn = async () => {
+  //   setbuttonLoading(true);
+  //   const myform = new FormData();
+  //   myform.append('name', name);
+  //   myform.append('gender', gender);
+  //   myform.append('phone', phone);
+  //   myform.append('address', address);
+  //   myform.append('occupation', occupation);
+  //   console.log('***************************************');
+
+  //   console.log('userProfilePic', userProfilePic);
+
+  //   myform.append('avatar', {
+  //     uri: userProfilePic,
+  //     type: mime.getType(userProfilePic),
+  //     name: userProfilePic.split('/').pop(),
+  //   });
+
+  //   const response = await UpdateUserData(myform).unwrap();
+  //   if (response?.success) {
+  //     setbuttonLoading(false);
+  //     dispatch(getUserData(response.data));
+  //     Alert.alert(
+  //       'Success',
+  //       'Profile Successfully Updated',
+  //       [
+  //         {
+  //           text: 'Go to profile page',
+  //           onPress: () => navigation.navigate('profile'),
+  //         },
+  //       ],
+  //       {cancelable: false},
+  //     );
+  //   }
+  //   console.log('user profile update krne ke baad RESPONSE', response);
+  //   // console.log('user profile update krne ke baad RESPONSE', response.data.success);
+  // };
+
   const UpdateUserBtn = async () => {
-    setbuttonLoading(true);
-    const myform = new FormData();
-    myform.append('name', name);
-    myform.append('gender', gender);
-    myform.append('phone', phone);
-    myform.append('address', address);
-    myform.append('occupation', occupation);
-    console.log('***************************************');
+    try {
+      setbuttonLoading(true);
 
-    console.log('userProfilePic', userProfilePic);
+      const myform = new FormData();
+      myform.append('name', name);
+      myform.append('gender', gender);
+      myform.append('phone', phone);
+      myform.append('address', address);
+      myform.append('occupation', occupation);
 
-    myform.append('avatar', {
-      uri: userProfilePic,
-      type: mime.getType(userProfilePic),
-      name: userProfilePic.split('/').pop(),
-    });
+      console.log('***************************************');
+      console.log('userProfilePic', userProfilePic);
 
-    const response = await UpdateUserData(myform).unwrap();
-    if (response?.data?.success) {
+      // Append 'avatar' only if 'userProfilePic' exists
+      if (userProfilePic) {
+        myform.append('avatar', {
+          uri: userProfilePic,
+          type: mime.getType(userProfilePic),
+          name: userProfilePic.split('/').pop(),
+        });
+      }
+
+      const response = await UpdateUserData(myform).unwrap();
+      if (response?.success) {
+        setbuttonLoading(false);
+        dispatch(getUserData(response.data));
+        Alert.alert(
+          'Success',
+          'Profile Successfully Updated',
+          [
+            {
+              text: 'Go to profile page',
+              onPress: () => navigation.navigate('profile'),
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+      console.log('user profile update krne ke baad RESPONSE', response);
+    } catch (error) {
       setbuttonLoading(false);
-      dispatch(getUserData(response.data));
-      Alert.alert(
-        'Success',
-        'Profile Successfully Updated',
-        [
-          {
-            text: 'Go to profile page',
-            onPress: () => navigation.navigate('profile'),
-          },
-        ],
-        {cancelable: false},
-      );
+      console.error(error);
+      Alert.alert('Error', 'Failed to update profile. Please try again.');
     }
-    console.log('user profile update krne ke baad RESPONSE', response);
   };
 
   const goScreen = () => {

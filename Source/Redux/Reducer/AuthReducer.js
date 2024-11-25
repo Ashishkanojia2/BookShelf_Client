@@ -2,9 +2,9 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   data: [],
-  // isAuth: false,
   msg: '',
 };
+console.log('initialState', initialState);
 
 export const userData = createSlice({
   name: 'user',
@@ -16,14 +16,15 @@ export const userData = createSlice({
     loginUserData: (state, action) => {
       state.data = action.payload;
       state.msg = 'user login';
-      // console.log('@@@', action.payload);
+      console.log('@@@', action.payload);
     },
     logoutUser: (state, action) => {
-      state.data = action.payload;
+      state.data = [];
+      // state.data = action.payload;
       state.msg = 'user Logout';
     },
     clearUserData: (state, action) => {
-      state.data = '';
+      state.data = [];
       state.msg = 'data Clear';
     },
     updateUserData: (state, action) => {
@@ -31,7 +32,7 @@ export const userData = createSlice({
     },
   },
 });
-
+//EXPORT ACTION
 export const {
   getUserData,
   logoutUser,
@@ -39,8 +40,11 @@ export const {
   clearUserData,
   updateUserData,
 } = userData.actions;
+
+//EXPORT THE REDUCER
 export default userData.reducer;
 
+//SELECTOR
 export const currentuserSelectore = state => {
   return state.user.data;
 };
