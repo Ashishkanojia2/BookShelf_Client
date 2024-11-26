@@ -4,7 +4,7 @@ const initialState = {
   data: [],
   msg: '',
 };
-console.log('initialState', initialState);
+// console.log('initialState', initialState);
 
 export const userData = createSlice({
   name: 'user',

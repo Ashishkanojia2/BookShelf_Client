@@ -59,7 +59,9 @@ const Login = ({navigation}) => {
       }
     } catch (error) {
       setbuttonLoading(false);
-      setMessage(error.data.message);
+      console.log("from login.jsx line 62 : " , error);
+      
+      // setMessage(error.data.message);
     }
   };
   const clearMessage = () => {

@@ -15,10 +15,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {clearUserData} from '../Redux/Reducer/AuthReducer';
+import {clearUserData, currentuserSelectore} from '../Redux/Reducer/AuthReducer';
 import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 const {height, width} = Dimensions.get('window');
 const font = 'Calistoga-Regular';
+
+import {persistor} from '../Redux/Store/Store';
 
 const Profile = ({navigation}) => {
   // Ensure we correctly get user state and handle loading and error
@@ -26,7 +28,15 @@ const Profile = ({navigation}) => {
     isLoading,
     isError,
     data: userData,
-  } = useSelector(state => state.user || {});
+  } = useSelector(currentuserSelectore);
+
+  // const userdata = useSelector(currentuserSelectore);
+
+  // const {
+  //   isLoading,
+  //   isError,
+  //   data: userData,
+  // } = useSelector(state => state.user || {});
 
   const dispatch = useDispatch();
   const [triggerLogout] = useLazyLogoutUserQuery();
@@ -34,7 +44,8 @@ const Profile = ({navigation}) => {
   const logout = async () => {
     await triggerLogout()
       .unwrap()
-      .then(() => {
+      .then(async () => {
+        await persistor.purge(); // THIS LINE IS USED TO CLEAN DATA ON PRESIST
         dispatch(clearUserData());
         navigation.navigate('login');
       })

@@ -20,7 +20,7 @@ import {
 } from '../RTKquery/Slices/ApiSclices';
 import {useDispatch, useSelector} from 'react-redux';
 import mime from 'mime';
-import {getUserData} from '../Redux/Reducer/AuthReducer';
+import {currentuserSelectore, getUserData} from '../Redux/Reducer/AuthReducer';
 
 const font = 'Calistoga-Regular';
 
@@ -51,8 +51,12 @@ const Profile_user = ({navigation, route}) => {
 
   const clearMessage = () => {};
 
-  const userData = useSelector(state => state.user.data);
+  // const userData = useSelector(state => state.user.data);
+  const userData = useSelector(currentuserSelectore);
+  
   console.log('*************************profile_user*************************');
+  console.log("userData.data", userData.data);
+  
   const [initialData, setInitialData] = useState({
     address: '',
     name: '',
@@ -62,24 +66,24 @@ const Profile_user = ({navigation, route}) => {
     avatar: '',
   });
   useEffect(() => {
-    if (userData) {
-      setaddress(userData.address || '');
-      setemailId(userData.email || '');
-      setname(userData.name || '');
-      setOccupation(userData.occupation || '');
-      setgender(userData.gender || '');
-      setphone(userData.phone ? userData.phone.toString() : '');
-      setuserProfilePic(userData.avatar?.url || '');
+    if (userData.data) {
+      setaddress(userData.data.address || '');
+      setemailId(userData.data.email || '');
+      setname(userData.data.name || '');
+      setOccupation(userData.data.occupation || '');
+      setgender(userData.data.gender || '');
+      setphone(userData.data.phone ? userData.data.phone.toString() : '');
+      setuserProfilePic(userData.data.avatar?.url || '');
     }
     setInitialData({
-      address: userData.address || '',
-      name: userData.name || '',
-      occupation: userData.occupation || '',
-      gender: userData.gender || '',
-      phone: userData.phone ? userData.phone.toString() : '',
-      avatar: userData.avatar ? userData.avatar.url : '',
+      address: userData.data.address || '',
+      name: userData.data.name || '',
+      occupation: userData.data.occupation || '',
+      gender: userData.data.gender || '',
+      phone: userData.data.phone ? userData.data.phone.toString() : '',
+      avatar: userData.data.avatar ? userData.data.avatar.url : '',
     });
-  }, [userData]);
+  }, [userData.data]);
 
   const setProfilFun = () => {
     navigation.navigate('camera', {FromScreen: 'profileUser'});
@@ -108,43 +112,6 @@ const Profile_user = ({navigation, route}) => {
     }
   }, [name, address, occupation, gender, phone, initialData, userProfilePic]);
 
-  // const UpdateUserBtn = async () => {
-  //   setbuttonLoading(true);
-  //   const myform = new FormData();
-  //   myform.append('name', name);
-  //   myform.append('gender', gender);
-  //   myform.append('phone', phone);
-  //   myform.append('address', address);
-  //   myform.append('occupation', occupation);
-  //   console.log('***************************************');
-
-  //   console.log('userProfilePic', userProfilePic);
-
-  //   myform.append('avatar', {
-  //     uri: userProfilePic,
-  //     type: mime.getType(userProfilePic),
-  //     name: userProfilePic.split('/').pop(),
-  //   });
-
-  //   const response = await UpdateUserData(myform).unwrap();
-  //   if (response?.success) {
-  //     setbuttonLoading(false);
-  //     dispatch(getUserData(response.data));
-  //     Alert.alert(
-  //       'Success',
-  //       'Profile Successfully Updated',
-  //       [
-  //         {
-  //           text: 'Go to profile page',
-  //           onPress: () => navigation.navigate('profile'),
-  //         },
-  //       ],
-  //       {cancelable: false},
-  //     );
-  //   }
-  //   console.log('user profile update krne ke baad RESPONSE', response);
-  //   // console.log('user profile update krne ke baad RESPONSE', response.data.success);
-  // };
 
   const UpdateUserBtn = async () => {
     try {
@@ -157,8 +124,8 @@ const Profile_user = ({navigation, route}) => {
       myform.append('address', address);
       myform.append('occupation', occupation);
 
-      console.log('***************************************');
-      console.log('userProfilePic', userProfilePic);
+      // console.log('***************************************');
+      // console.log('userProfilePic', userProfilePic);
 
       // Append 'avatar' only if 'userProfilePic' exists
       if (userProfilePic) {
@@ -172,7 +139,7 @@ const Profile_user = ({navigation, route}) => {
       const response = await UpdateUserData(myform).unwrap();
       if (response?.success) {
         setbuttonLoading(false);
-        dispatch(getUserData(response.data));
+        dispatch(getUserData(response));
         Alert.alert(
           'Success',
           'Profile Successfully Updated',
