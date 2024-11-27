@@ -12,21 +12,48 @@ import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
-import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
+import {
+  useDeleteBookMutation,
+  useGetBookDataQuery,
+} from '../RTKquery/Slices/BookApiSclice';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const SellingBooks = ({navigation}) => {
-  const {data: bookdata, isLoading} = useGetBookDataQuery();
-
+  const {data: bookdata, isLoading, refetch} = useGetBookDataQuery(); // getting all the book
   const userData = useSelector(state => state.user);
+
+  const [Delete_Book] = useDeleteBookMutation();
+
+  const DeleteBook = async id => {
+    try {
+      console.log('print', id);
+      const isBookDeleted = await Delete_Book(id).unwrap();
+      if (isBookDeleted.success) {
+        await refetch();
+      }
+      console.log('isBookDeleted ', isBookDeleted);
+    } catch (error) {
+      console.log(
+        'This Error is comes form SellingBook.jsx while delete the user books',
+        error,
+      );
+    }
+  };
+
+  console.log(
+    '*******************from selling books screen ********************',
+  );
+  // console.log('bookdata', bookdata);
+  console.log('userData', userData);
+
   const [gettingBookData, setgettingBookData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const filteredBooks = bookdata?.allbooks.filter(
-        item => item.b_seller_id === userData.data._id,
+        item => item.b_seller_id === userData.data.data._id,
       );
 
       setgettingBookData(filteredBooks);
@@ -46,6 +73,7 @@ const SellingBooks = ({navigation}) => {
       return <Text>No image available</Text>;
     }
   };
+
   return (
     <View style={styles.ParentContainer}>
       <TouchableOpacity
@@ -103,7 +131,9 @@ const SellingBooks = ({navigation}) => {
                     {item.b_MRP} rs.
                   </Text>
                 </View>
-                <TouchableOpacity style={styles.addBtn}>
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() => DeleteBook(item._id)}>
                   <Text
                     style={{
                       fontSize: 15,
@@ -127,11 +157,9 @@ const SellingBooks = ({navigation}) => {
             textDecorationLine: 'underline',
             alignSelf: 'center',
           }}>
-          No books
+          No books Available
         </Text>
       )}
-
-      {/* {} */}
     </View>
   );
 };
