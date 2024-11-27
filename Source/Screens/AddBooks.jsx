@@ -7,15 +7,15 @@ import {
   View,
   Image,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { Button, Text, TextInput } from 'react-native-paper';
-import { ScrollView } from 'native-base';
+import React, {useEffect, useRef, useState} from 'react';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {Button, Text, TextInput} from 'react-native-paper';
+import {ScrollView} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
-import { useRegisterBookMutation } from '../RTKquery/Slices/BookApiSclice';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import {useRegisterBookMutation} from '../RTKquery/Slices/BookApiSclice';
 import mime from 'mime';
 const font = 'Calistoga-Regular';
 
@@ -23,7 +23,7 @@ const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 
 const AddBooks = ({navigation, route}) => {
-  const [RegisterBook] = useRegisterBookMutation();
+  const [RegisterBook] = useRegisterBookMutation();  // RtkQuery calling api
 
   const [bookDesc, setbookDesc] = useState('');
   const [author, setauthor] = useState('');
@@ -66,14 +66,6 @@ const AddBooks = ({navigation, route}) => {
 
   const registerBookBtn = async () => {
     try {
-      bookRef.current?.blur();
-      DescRef.current?.blur();
-      authorRef.current?.blur();
-      editionRef.current?.blur();
-      categoriesRef.current?.blur();
-      sellingRef.current?.blur();
-      mrpRef.current?.blur();
-
       if (
         bookName === '' ||
         bookDesc === '' ||
@@ -87,6 +79,14 @@ const AddBooks = ({navigation, route}) => {
       } else if (storePhotoPath.length < 1) {
         return setMessage('Image Should be Atleast 1');
       }
+
+      bookRef.current?.blur();
+      DescRef.current?.blur();
+      authorRef.current?.blur();
+      editionRef.current?.blur();
+      categoriesRef.current?.blur();
+      sellingRef.current?.blur();
+      mrpRef.current?.blur();
 
       setbuttonLoading(true);
       const myform = new FormData();

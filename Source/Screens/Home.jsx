@@ -22,8 +22,8 @@ import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCartData} from '../Redux/Reducer/CartReducer';
 import {currentuserSelectore} from '../Redux/Reducer/AuthReducer';
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
+import styles from './HomeScreen/HomeStyle';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
@@ -34,17 +34,50 @@ const Home = ({navigation}) => {
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
+  // const [refreshing, setrefreshing] = useState(false);
+
+  const [refreshing, setRefreshing] = useState(false); // Refreshing state
+  const {
+    data: Book_data,
+    isLoading: bookload,
+    isSuccess,
+    refetch,
+  } = useGetBookDataQuery();
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+      setstate_BookData(Book_data);
+      setRefreshing(false);
+      console.log('Data refreshed successfully');
+    } catch (error) {
+      Alert.alert(
+        'Refresh Failed',
+        "We couldn't update the data. Please check your internet connection and try again.",
+        [
+          {text: 'Retry', onPress: () => onRefresh()}, // Retry button
+          {text: 'Cancel', style: 'cancel'}, // Cancel button
+        ],
+      );
+      console.log(
+        'This error came from home.jsx file while refreshing the data ',
+        error,
+      );
+    } finally {
+      setRefreshing(false); // Hide the spinner
+    }
+  };
 
   // Redux state
   const userdata = useSelector(currentuserSelectore);
   // const userdata = useSelector(state => state.user);
   const cartdata = useSelector(state => state.cart.cartData);
 
-  const {
-    data: Book_data,
-    isLoading: bookload,
-    isSuccess,
-  } = useGetBookDataQuery();
+  // const {
+  //   data: Book_data,
+  //   isLoading: bookload,
+  //   isSuccess,
+  // } = useGetBookDataQuery();
 
   useEffect(() => {
     if (userdata) {
@@ -63,8 +96,7 @@ const Home = ({navigation}) => {
   // }
 
   console.log('*******************from home screen********************');
-  console.log("userdata",userdata);
-  
+  // console.log('userdata', userdata);
 
   const name = userdata?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
@@ -135,7 +167,11 @@ const Home = ({navigation}) => {
           {cartdata.length}
         </Badge>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.topcontent}>
           <ScrollView horizontal style={{flex: 1, marginBottom: '2%'}}>
             <View style={styles.newBookContainer}></View>
@@ -322,6 +358,9 @@ const Home = ({navigation}) => {
           <ActivityIndicator size={'small'} />
         ) : state_BookData && state_BookData.allbooks.length > 0 ? (
           state_BookData.allbooks.map(item => (
+            //
+            //
+            /** HERE ALLBOOKS DATA SHOWING FROM HERE */
             <TouchableOpacity
               style={styles.allBookContainer}
               key={item._id}
@@ -379,19 +418,19 @@ const Home = ({navigation}) => {
                   {item.b_desc}
                 </Text>
                 <View style={styles.editionCont}>
-                  <Text style={styles.booksHead}>Edition</Text>
+                  <Text style={styles.booksHead}>Edition :</Text>
                   <Text style={styles.bookstxt}>{item.b_edition}th.</Text>
                 </View>
                 <View style={styles.editionCont}>
-                  <Text style={styles.booksHead}>Author</Text>
+                  <Text style={styles.booksHead}>Author :</Text>
                   <Text style={styles.bookstxt}>{item.b_author}</Text>
                 </View>
                 <View style={styles.editionCont}>
-                  <Text style={styles.booksHead}>S.Price</Text>
+                  <Text style={styles.booksHead}>S.Price :</Text>
                   <Text style={styles.bookstxt}>{item.b_sellingprice} rs.</Text>
                 </View>
                 <View style={styles.editionCont}>
-                  <Text style={styles.booksHead}>MRP</Text>
+                  <Text style={styles.booksHead}>MRP :</Text>
                   <Text
                     style={[
                       styles.bookstxt,
@@ -447,224 +486,5 @@ const Home = ({navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  addBtnCont: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-  },
-  profilePhotoText: {
-    alignSelf: 'center',
-    fontSize: width / 30,
-    // justifyContent: 'center',
-    // alignContent:"center"
-  },
-  booksName: {
-    fontSize: 20,
-    color: '#000',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  removeBtn: {
-    height: height / 25,
-    width: width / 6,
-    // position: 'absolute',
-    backgroundColor: global.lightgray,
-    // right: 10,
-    // bottom: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-  },
-  addBtn: {
-    height: height / 25,
-    width: width / 7,
-    // position: 'absolute',
-    backgroundColor: global.sandColor,
-    // right: 10,
-    // bottom: 1,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-  },
-  editionCont: {flexDirection: 'row', marginTop: '1%', flexDirection: 'row'},
-  booksHead: {
-    fontSize: 14,
-    color: '#000',
-    fontWeight: '400',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  bookstxt: {
-    fontSize: 15,
-    color: '#000',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  productInfo: {
-    flex: 4,
-    height: '100%',
-    paddingVertical: '1%',
-  },
-  productPhoto: {
-    flex: 2,
-    height: '100%',
-    width: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  allBookContainer: {
-    height: height / 5.5,
-    width: width - 20,
-    backgroundColor: '#fafafa',
-    borderRadius: 10,
-    marginVertical: '1.5%',
-    flexDirection: 'row',
-    elevation: 1,
-    alignSelf: 'center',
-    overflow: 'hidden',
-  },
-  ParentContainer: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  headerCont: {
-    backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  headerText: {
-    color: 'white',
-    fontSize: 20,
-  },
-  content: {
-    flex: 1,
-    color: '#000',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  topcontent: {
-    color: '#000',
-    flexDirection: 'row',
-  },
-  inputfield: {
-    width: width - 100,
-    backgroundColor: '#fff',
-    height: height / 24,
-    borderRadius: 10,
-    color: global.bgColor,
-    fontSize: 15,
-    paddingHorizontal: 20,
-    elevation: 20,
-  },
-  searchfield: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: width - 100,
-    backgroundColor: '#fff',
-    height: height / 24,
-    borderRadius: 10,
-    color: global.bgColor,
-    fontSize: 15,
-    paddingHorizontal: 5,
-    elevation: 20,
-    right: 3,
-  },
-  bookContainer: {
-    height: height / 3.5,
-    width: width / 2.2,
-    borderRadius: 10,
-    borderWidth: 1,
-    margin: '2%',
-    overflow: 'hidden',
-  },
-  newBookContainer: {
-    height: height / 4,
-    width: width - 20,
-    backgroundColor: global.sandColor,
-    borderRadius: 10,
-    borderColor: global.bgColor,
-    borderWidth: 1,
-    marginHorizontal: '1%',
-    elevation: 10,
-    marginVertical: 20,
-  },
-  topimg: {height: height / 5, width: '100%'},
-  BookInfo: {
-    color: '#000',
-    fontSize: 18,
-    fontWeight: '500',
-    paddingHorizontal: '5%',
-  },
-  BookDetails: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '300',
-    paddingHorizontal: '5%',
-  },
-  BookDiscount: {
-    color: '#000',
-    fontSize: 19,
-    fontWeight: '600',
-    paddingHorizontal: '5%',
-  },
-  newArival: {
-    color: '#fff',
-    fontSize: 30,
-    marginHorizontal: 10,
-    fontFamily: globalfonts.font,
-    backgroundColor: global.thirdColor,
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    elevation: 10,
-  },
-  userProfile: {
-    height: height / 23,
-    width: width / 10.5,
-    backgroundColor: global.bgColor,
-    borderRadius: 50,
-    borderColor: global.sandColor,
-    borderWidth: 1,
-    overflow: 'hidden',
-    justifyContent: 'center',
-  },
-  cartBadge: {
-    color: '#fff',
-    position: 'absolute',
-    right: 5,
-    top: 10,
-    backgroundColor: global.sandColor,
-    color: global.bgColor,
-  },
-  bookChooseCatCont: {flexDirection: 'row'},
-  catBtnCont: {
-    marginVertical: '1.5%',
-    borderColor: global.bgColor,
-    marginLeft: '2%',
-    borderWidth: 1,
-    paddingHorizontal: '2%',
-    paddingVertical: '1%',
-    borderRadius: 20,
-  },
-  allbookcatBtnCont: {
-    marginVertical: '1.5%',
-    borderColor: global.bgColor,
-    marginLeft: '2%',
-    borderWidth: 1,
-    paddingHorizontal: '2%',
-    paddingVertical: '1%',
-    borderRadius: 20,
-  },
-  all: {fontSize: 18, color: global.bgColor, fontFamily: globalfonts.font4},
-});
 
 export default Home;
