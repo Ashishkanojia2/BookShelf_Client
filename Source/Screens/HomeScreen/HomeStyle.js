@@ -1,9 +1,38 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import { globalfonts } from '../../../assets/FrontExport/Frontexport';
-import { global } from '../../Components/GlobalComponent/GlobalStyle';
+import {globalfonts} from '../../../assets/FrontExport/Frontexport';
+import {global} from '../../Components/GlobalComponent/GlobalStyle';
 const {height, width} = Dimensions.get('window');
 
 export default styles = StyleSheet.create({
+  imgContainer:{
+    height: '90%',
+    width: '90%',
+    justifyContent: 'center',
+  },
+  productImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'center',
+    borderRadius: 12,
+  },
+  addedBtn: {
+    fontSize: 15,
+    color: '#000',
+    fontFamily: globalfonts.font5,
+  },
+  addBtn: {
+    fontSize: 15,
+    color: '#000',
+    fontFamily: globalfonts.font5,
+  },
+  noBookAvaliable: {
+    color: global.sandColor,
+    fontSize: 25,
+    fontFamily: globalfonts.font,
+    marginTop: '20%',
+    textDecorationLine: 'underline',
+    alignSelf: 'center',
+  },
   addBtnCont: {
     position: 'absolute',
     bottom: 10,
@@ -16,7 +45,7 @@ export default styles = StyleSheet.create({
     // alignContent:"center"
   },
   booksName: {
-    width:210,
+    width: 210,
     fontSize: 20,
     color: '#000',
     marginHorizontal: '2%',

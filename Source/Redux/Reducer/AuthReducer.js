@@ -11,17 +11,18 @@ export const userData = createSlice({
   initialState,
   reducers: {
     getUserData: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.data;
     },
     loginUserData: (state, action) => {
       state.data = action.payload;
       state.msg = 'user login';
-      console.log('@@@', action.payload);
+      // console.log('@@@', action.payload);
     },
     logoutUser: (state, action) => {
       state.data = [];
       // state.data = action.payload;
       state.msg = 'user Logout';
+      return initialState;
     },
     clearUserData: (state, action) => {
       state.data = [];

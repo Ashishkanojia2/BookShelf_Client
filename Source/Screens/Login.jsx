@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { Button, TextInput } from 'react-native-paper';
-import { ScrollView } from 'native-base';
-import { useLoginUserMutation } from '../RTKquery/Slices/ApiSclices';
-import { useDispatch } from 'react-redux';
-import { loginUserData } from '../Redux/Reducer/AuthReducer';
+import React, {useRef, useState} from 'react';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {Button, TextInput} from 'react-native-paper';
+import {ScrollView} from 'native-base';
+import {useLoginUserMutation} from '../RTKquery/Slices/ApiSclices';
+import {useDispatch} from 'react-redux';
+import {loginUserData} from '../Redux/Reducer/AuthReducer';
 const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
@@ -59,9 +59,11 @@ const Login = ({navigation}) => {
       }
     } catch (error) {
       setbuttonLoading(false);
-      console.log("from login.jsx line 62 : " , error);
-      
+      console.log('from login.jsx line 62 : ', error);
+
       // setMessage(error.data.message);
+    } finally {
+      setbuttonLoading(false); // Ensure the loading state is reset
     }
   };
   const clearMessage = () => {

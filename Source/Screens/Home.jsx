@@ -1,6 +1,4 @@
 import {
-  Dimensions,
-  StyleSheet,
   Text,
   View,
   StatusBar,
@@ -21,7 +19,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCartData} from '../Redux/Reducer/CartReducer';
-import {currentuserSelectore} from '../Redux/Reducer/AuthReducer';
 import styles from './HomeScreen/HomeStyle';
 import {RefreshControl} from 'react-native-gesture-handler';
 
@@ -34,7 +31,13 @@ const Home = ({navigation}) => {
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
-  // const [refreshing, setrefreshing] = useState(false);
+
+  const storeData = useSelector(state => state); // Entire Redux state
+  const userdata = useSelector(state => state.user.data); // Specific user data
+
+  console.log('*******************from home screen********************');
+  console.log('storeData_from_homeScreen', storeData);
+  console.log('userData_FromHomeScreen', userdata);
 
   const [refreshing, setRefreshing] = useState(false); // Refreshing state
   const {
@@ -67,18 +70,7 @@ const Home = ({navigation}) => {
       setRefreshing(false); // Hide the spinner
     }
   };
-
-  // Redux state
-  const userdata = useSelector(currentuserSelectore);
-  // const userdata = useSelector(state => state.user);
   const cartdata = useSelector(state => state.cart.cartData);
-
-  // const {
-  //   data: Book_data,
-  //   isLoading: bookload,
-  //   isSuccess,
-  // } = useGetBookDataQuery();
-
   useEffect(() => {
     if (userdata) {
       setLoading(false);
@@ -91,13 +83,9 @@ const Home = ({navigation}) => {
     }
   }, [Book_data, isSuccess]);
 
-  // if (loading || !userdata) {
-  //   return <Text style={{color: 'red'}}>Loading data...</Text>;
-  // }
-
-  console.log('*******************from home screen********************');
-  // console.log('userdata', userdata);
-
+  if (loading || !userdata) {
+    return <Text style={{color: 'red'}}>Loading data...homesScreen</Text>;
+  }
   const name = userdata?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
 
@@ -107,14 +95,8 @@ const Home = ({navigation}) => {
     });
   };
 
-  const gotoCart = () => {
-    navigation.navigate('cart');
-  };
-
-  const profileBtn = () => {
-    navigation.navigate('profile');
-  };
-
+  const gotoCart = () => navigation.navigate('cart');
+  const profileBtn = () => navigation.navigate('profile');
   const addTocart = itemId => {
     if (cartdata.includes(itemId)) {
       Alert.alert('Book not added in cart', 'Book already added in cart', [
@@ -124,7 +106,6 @@ const Home = ({navigation}) => {
       dispatch(setCartData(itemId));
     }
   };
-
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -147,7 +128,6 @@ const Home = ({navigation}) => {
           <Fontisto name="search" size={20} color="#000" />
 
           <TextInput
-            // value={searchText}
             style={{color: global.bgColor}}
             onChangeText={text => setsearchText(text)}
             placeholder="Search Books"
@@ -368,24 +348,14 @@ const Home = ({navigation}) => {
                 navigation.navigate('productbooks', {key: item._id})
               }>
               <View style={styles.productPhoto}>
-                <View
-                  style={{
-                    height: '90%',
-                    width: '90%',
-                    justifyContent: 'center',
-                  }}>
+                <View style={styles.imgContainer}>
                   {item &&
                   item.images &&
                   item.images.length > 0 &&
                   item.images[0].url ? (
                     <Image
                       source={{uri: item.images[0].url}}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'center',
-                        borderRadius: 12,
-                      }}
+                      style={styles.productImage}
                     />
                   ) : (
                     <Text style={{color: '#000', alignSelf: 'center'}}>
@@ -442,27 +412,13 @@ const Home = ({navigation}) => {
                 <View style={styles.addBtnCont}>
                   {cartdata.includes(item._id) ? (
                     <TouchableOpacity style={styles.removeBtn}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#000',
-                          fontFamily: globalfonts.font5,
-                        }}>
-                        Added
-                      </Text>
+                      <Text style={styles.addedBtn}>Added</Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
                       style={styles.addBtn}
                       onPress={() => addTocart(item._id)}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#000',
-                          fontFamily: globalfonts.font5,
-                        }}>
-                        ADD
-                      </Text>
+                      <Text style={styles.addBtn}>ADD</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -470,17 +426,7 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           ))
         ) : (
-          <Text
-            style={{
-              color: global.sandColor,
-              fontSize: 25,
-              fontFamily: globalfonts.font,
-              marginTop: '20%',
-              textDecorationLine: 'underline',
-              alignSelf: 'center',
-            }}>
-            No books available.
-          </Text>
+          <Text style={styles.noBookAvaliable}>No books available.</Text>
         )}
       </ScrollView>
     </View>

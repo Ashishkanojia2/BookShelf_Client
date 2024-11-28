@@ -53,7 +53,7 @@ const SellingBooks = ({navigation}) => {
   useEffect(() => {
     const fetchData = async () => {
       const filteredBooks = bookdata?.allbooks.filter(
-        item => item.b_seller_id === userData.data.data._id,
+        item => item.b_seller_id === userData.data._id,
       );
 
       setgettingBookData(filteredBooks);
@@ -88,9 +88,9 @@ const SellingBooks = ({navigation}) => {
       {isLoading ? (
         <ActivityIndicator size={'large'} color={'black'} />
       ) : gettingBookData ? (
-        gettingBookData.map(item => {
+        gettingBookData.map((item, index) => {
           return (
-            <View style={styles.allBookContainer}>
+            <View style={styles.allBookContainer} key={item._id || index}>
               <View style={styles.productPhoto}>
                 <View style={styles.productPhoto}>
                   {renderBookImages(item.images)}

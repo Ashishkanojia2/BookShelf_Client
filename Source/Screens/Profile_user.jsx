@@ -51,8 +51,8 @@ const Profile_user = ({navigation, route}) => {
 
   const clearMessage = () => {};
 
-  // const userData = useSelector(state => state.user.data);
-  const userData = useSelector(currentuserSelectore);
+  const userData = useSelector(state => state.user);
+  // const userData = useSelector(currentuserSelectore);
   
   console.log('*************************profile_user*************************');
   console.log("userData.data", userData.data);

@@ -15,20 +15,21 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {clearUserData, currentuserSelectore} from '../Redux/Reducer/AuthReducer';
+import {
+  clearUserData,
+  currentuserSelectore,
+} from '../Redux/Reducer/AuthReducer';
 import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 const {height, width} = Dimensions.get('window');
 const font = 'Calistoga-Regular';
 
-import {persistor} from '../Redux/Store/Store';
+import {persistor, store} from '../Redux/Store/Store';
 
 const Profile = ({navigation}) => {
   // Ensure we correctly get user state and handle loading and error
-  const {
-    isLoading,
-    isError,
-    data: userData,
-  } = useSelector(currentuserSelectore);
+  const {isLoading, isError, data: userData} = useSelector(state => state.user);
+  /////////////////////////////////////// From profile screen//////////////////
+  // console.log('userData', userData);
 
   // const userdata = useSelector(currentuserSelectore);
 
@@ -48,6 +49,8 @@ const Profile = ({navigation}) => {
         await persistor.purge(); // THIS LINE IS USED TO CLEAN DATA ON PRESIST
         dispatch(clearUserData());
         navigation.navigate('login');
+        const storeData = store.getState(); // Use `store.getState()` instead of `useSelector`
+        console.log('Store after logout:', storeData);
       })
       .catch(err => {
         console.error('Logout failed:', err);
@@ -70,10 +73,15 @@ const Profile = ({navigation}) => {
     return <Text style={{color: '#000'}}>Loading...</Text>;
   }
 
-  // Handle error state
-  if (isError || !userData) {
-    return <Text style={{color: 'red'}}>Failed to load data.</Text>;
+  if (isError) {
+    return (
+      <Text style={{color: 'red'}}>Something is Error while loading data.</Text>
+    );
   }
+  // Handle error state
+  if (!userData) {
+    return <Text style={{color: 'red'}}>Failed to load data.</Text>;
+  } // Handle error state
 
   const name = userData.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
