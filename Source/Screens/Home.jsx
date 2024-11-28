@@ -36,8 +36,8 @@ const Home = ({navigation}) => {
   const userdata = useSelector(state => state.user.data); // Specific user data
 
   console.log('*******************from home screen********************');
-  console.log('storeData_from_homeScreen', storeData);
-  console.log('userData_FromHomeScreen', userdata);
+  // console.log('storeData_from_homeScreen', storeData);
+  // console.log('userData_FromHomeScreen', userdata);
 
   const [refreshing, setRefreshing] = useState(false); // Refreshing state
   const {
@@ -115,9 +115,9 @@ const Home = ({navigation}) => {
       />
       <View style={styles.headerCont}>
         <TouchableOpacity onPress={profileBtn} style={styles.userProfile}>
-          {userdata && userdata?.data?.avatar && userdata.data.avatar.url ? (
+          {userdata && userdata?.avatar && userdata.avatar.url ? (
             <Image
-              source={{uri: userdata.data.avatar.url}}
+              source={{uri: userdata.avatar.url}}
               style={{height: '100%', width: '100%'}}
             />
           ) : (
@@ -418,7 +418,7 @@ const Home = ({navigation}) => {
                     <TouchableOpacity
                       style={styles.addBtn}
                       onPress={() => addTocart(item._id)}>
-                      <Text style={styles.addBtn}>ADD</Text>
+                      <Text style={styles.addBtnTxt}>ADD</Text>
                     </TouchableOpacity>
                   )}
                 </View>

@@ -20,10 +20,12 @@ export default styles = StyleSheet.create({
     color: '#000',
     fontFamily: globalfonts.font5,
   },
-  addBtn: {
+  addBtnTxt: {
     fontSize: 15,
     color: '#000',
     fontFamily: globalfonts.font5,
+    // textAlign:"center"
+    // alignSelf:"center"
   },
   noBookAvaliable: {
     color: global.sandColor,

@@ -26,18 +26,8 @@ const font = 'Calistoga-Regular';
 import {persistor, store} from '../Redux/Store/Store';
 
 const Profile = ({navigation}) => {
-  // Ensure we correctly get user state and handle loading and error
   const {isLoading, isError, data: userData} = useSelector(state => state.user);
   /////////////////////////////////////// From profile screen//////////////////
-  // console.log('userData', userData);
-
-  // const userdata = useSelector(currentuserSelectore);
-
-  // const {
-  //   isLoading,
-  //   isError,
-  //   data: userData,
-  // } = useSelector(state => state.user || {});
 
   const dispatch = useDispatch();
   const [triggerLogout] = useLazyLogoutUserQuery();
@@ -86,6 +76,27 @@ const Profile = ({navigation}) => {
   const name = userData.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
 
+  // const sortName = userData.name.split(' ');
+  // const a = sortName[0].toUpperCase();
+  // console.log(a);
+
+  // let a = userData.name;
+
+  const sortName = userData.name.split('');
+  const b = sortName[0].toUpperCase();
+  console.log(sortName);
+  console.log(b);
+
+  const fun = () => {
+    let result = b;
+    for (let i = 1; i < sortName.length; i++) {
+      result += sortName[i];
+    }
+    return result;
+  };
+
+  const UserNameWithFirstLetterCaptial = fun();
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -105,7 +116,9 @@ const Profile = ({navigation}) => {
               <Text style={styles.profilePhotoText}>{CapLetter}</Text>
             )}
           </TouchableOpacity>
-          <Text style={styles.profileTxt}>{userData.name}</Text>
+          <Text style={styles.profileTxt}>
+            {UserNameWithFirstLetterCaptial}
+          </Text>
           <Text style={styles.profileDateTxt}>
             Acc. Created at {FormateDate(userData.createAt)}
           </Text>
