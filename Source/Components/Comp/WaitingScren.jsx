@@ -43,7 +43,7 @@ const WaitingScren = () => {
             />
           </TouchableOpacity>
           <Text style={styles.txtCont}>
-            Hello, This message is from the development team.
+            Hello, This message is for you from the development team.
           </Text>
           <Text style={styles.txtCont}>
           We appreciate your patience while the application loads to ensure smooth performance

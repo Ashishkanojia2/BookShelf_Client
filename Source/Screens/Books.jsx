@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  StyleSheet,
   Text,
   View,
   StatusBar,
@@ -8,9 +7,9 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
-import {ScrollView} from 'native-base';
 import {global} from '../Components/GlobalComponent/GlobalStyle';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -21,9 +20,7 @@ import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCartData} from '../Redux/Reducer/CartReducer';
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
-const font = 'Calistoga-Regular';
+import styles from './CssStyles/Book';
 const Books = route => {
   const [favBook, setfavBook] = useState(false);
   const cartdata = useSelector(state => state.cart.cartData);
@@ -62,8 +59,12 @@ const Books = route => {
 
   const filteredBooks = Book_data?.allbooks?.filter(item => {
     const category = item.b_categorie?.trim().toLowerCase() || '';
-    return category === route.route.params.message?.toLowerCase();
+    return category === route.route.params.message?.toLowerCase() ;
   });
+  const GotoProductDetails = id => {
+    // console.log(id);
+    navigation.navigate('productbooks', {key: id, ScreenName: 'home', message:route});
+  };
 
   return (
     <View style={styles.ParentContainer}>
@@ -99,14 +100,19 @@ const Books = route => {
         </Badge>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {bookload ? (
-          <Text>Loading...</Text>
-        ) : error ? (
-          <Text>Error loading books</Text>
-        ) : filteredBooks.length > 0 ? (
-          filteredBooks.map(item => (
-            <View style={styles.newBookContainer} key={item._id}>
+      {bookload ? (
+        <Text>Wait, Data is Loading..</Text>
+      ) : error ? (
+        <Text>Something went wrong..</Text>
+      ) : filteredBooks.length > 0 ? (
+        <FlatList
+          data={filteredBooks}
+          contentContainerStyle={styles.scrollContent}
+          keyExtractor={item => item._id}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.newBookContainer}
+              onPress={() => GotoProductDetails(item._id)}>
               <View style={styles.productPhoto}>
                 <View
                   style={{
@@ -206,189 +212,13 @@ const Books = route => {
                   </TouchableOpacity>
                 )}
               </View>
-            </View>
-          ))
-        ) : (
-          <Text
-            style={{
-              color: global.sandColor,
-              fontSize: 25,
-              fontFamily: globalfonts.font,
-              marginTop: '20%',
-              textDecorationLine: 'underline',
-            }}>
-            No Books
-          </Text>
-        )}
-      </ScrollView>
+            </TouchableOpacity>
+          )}
+        />
+      ) : (
+        <Text style={styles.noBooks}>No Books</Text>
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  removeBtn: {
-    height: height / 25,
-    width: width / 6,
-    position: 'absolute',
-    backgroundColor: global.lightgray,
-    right: 10,
-    bottom: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-  },
-  searchfield: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: width - 100,
-    backgroundColor: '#fff',
-    height: height / 24,
-    borderRadius: 10,
-    color: global.bgColor,
-    fontSize: 15,
-    paddingHorizontal: 5,
-    elevation: 20,
-    right: 3,
-  },
-  ParentContainer: {
-    flex: 1,
-  },
-  scrollContent: {
-    alignItems: 'center',
-    flexGrow: 1,
-  },
-  headerCont: {
-    backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  headerText: {
-    color: 'white',
-    fontSize: 20,
-  },
-  cartBadge: {
-    color: '#fff',
-    position: 'absolute',
-    right: 20,
-    top: 10,
-    backgroundColor: global.sandColor,
-    color: global.bgColor,
-  },
-  content: {
-    flex: 1,
-    color: '#000',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  topcontent: {
-    flex: 1,
-    color: '#000',
-    flexDirection: 'row',
-    marginTop: '2%',
-  },
-  inputfield: {
-    width: width - 100,
-    backgroundColor: 'pink',
-    height: height / 24,
-    borderRadius: 10,
-    color: global.bgColor,
-    fontSize: 16,
-    paddingHorizontal: 20,
-  },
-  bookContainer: {
-    height: height / 3.5,
-    width: width / 2.2,
-    borderRadius: 10,
-    borderWidth: 1,
-    margin: '2%',
-    overflow: 'hidden',
-  },
-  newBookContainer: {
-    height: height / 5.5,
-    width: width - 20,
-    backgroundColor: '#fafafa',
-    borderRadius: 10,
-    marginVertical: '1.5%',
-    flexDirection: 'row',
-    elevation: 1,
-    overflow: 'hidden',
-  },
-  productPhoto: {
-    flex: 2,
-    // backgroundColor: global.sandColor,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  productInfo: {
-    flex: 4,
-
-    height: '100%',
-    paddingVertical: '1%',
-  },
-  bookstxt: {
-    fontSize: 15,
-    color: '#000',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  booksName: {
-    fontSize: 20,
-    color: '#000',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  booksHead: {
-    fontSize: 14,
-    color: '#000',
-    fontWeight: '400',
-    marginHorizontal: '2%',
-    fontFamily: globalfonts.font5,
-  },
-  addBtn: {
-    height: height / 25,
-    width: width / 7,
-    position: 'absolute',
-    backgroundColor: global.sandColor,
-    right: 10,
-    bottom: 10,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-  },
-  topimg: {height: height / 5, width: '100%'},
-  BookInfo: {
-    color: '#000',
-    fontSize: 18,
-    fontWeight: '500',
-    paddingHorizontal: '5%',
-  },
-  BookDetails: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '300',
-    paddingHorizontal: '5%',
-  },
-  BookDiscount: {
-    color: '#000',
-    fontSize: 19,
-    fontWeight: '600',
-    paddingHorizontal: '5%',
-  },
-  newArival: {
-    color: '#000',
-    fontSize: 30,
-    marginHorizontal: 10,
-    fontFamily: font,
-  },
-  editionCont: {flexDirection: 'row', marginTop: '2%'},
-  infoCont: {flexDirection: 'row'},
-});
-
 export default Books;

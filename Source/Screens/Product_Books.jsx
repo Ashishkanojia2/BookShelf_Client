@@ -41,9 +41,8 @@ export default Product_Books = ({route}) => {
   const [searchText, setsearchText] = useState('');
   const [ownerData] = useBookOwnerMutation();
 
-  // console.log(
-  //   '**********************form PRODUCT BOOK SCREEN***************************',
-  // );
+  console.log('****************form PRODUCT BOOK SCREEN***************');
+  console.log('route', route);
 
   const fetchOwnerDetails = useCallback(
     async bookOwnerId => {
@@ -78,8 +77,8 @@ export default Product_Books = ({route}) => {
       setstate_BookData(Book_data);
     }
   }, [Book_data, isSuccess]);
-  const profileBtn = () => {
-    navigation.navigate('home');
+  const GoBackWhereyouCameFrom = () => {
+    // navigation.navigate('home');
   };
 
   return (
@@ -90,7 +89,10 @@ export default Product_Books = ({route}) => {
         translucent={false}
       />
       <View style={styles.headerCont}>
-        <TouchableOpacity onPress={profileBtn}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(route.params.ScreenName || 'home')
+          }>
           <Ionicons name="arrow-back-sharp" size={30} color="#fff" />
         </TouchableOpacity>
         <View style={styles.searchfield}>

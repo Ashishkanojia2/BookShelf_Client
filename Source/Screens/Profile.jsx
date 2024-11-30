@@ -84,8 +84,8 @@ const Profile = ({navigation}) => {
 
   const sortName = userData.name.split('');
   const b = sortName[0].toUpperCase();
-  console.log(sortName);
-  console.log(b);
+  // console.log(sortName);
+  // console.log(b);
 
   const fun = () => {
     let result = b;

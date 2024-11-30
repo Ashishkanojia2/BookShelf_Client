@@ -8,38 +8,36 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
-import {ActivityIndicator, Badge} from 'react-native-paper';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
+import React, { useEffect, useState } from 'react';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
+import { ActivityIndicator, Badge } from 'react-native-paper';
+import { globalfonts } from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
-import {useDispatch, useSelector} from 'react-redux';
-import {setCartData} from '../Redux/Reducer/CartReducer';
+import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCartData } from '../Redux/Reducer/CartReducer';
 import styles from './HomeScreen/HomeStyle';
-import {RefreshControl} from 'react-native-gesture-handler';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
 
-  // State
   const [searchText, setsearchText] = useState('');
   const [ShowingBookData, setShowingBookData] = useState(false);
   const [state_BookData, setstate_BookData] = useState('');
   const [favBook, setfavBook] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
 
-  const storeData = useSelector(state => state); // Entire Redux state
   const userdata = useSelector(state => state.user.data); // Specific user data
 
   console.log('*******************from home screen********************');
   // console.log('storeData_from_homeScreen', storeData);
   // console.log('userData_FromHomeScreen', userdata);
 
-  const [refreshing, setRefreshing] = useState(false); // Refreshing state
+  const [refreshing, setRefreshing] = useState(false);
   const {
     data: Book_data,
     isLoading: bookload,
