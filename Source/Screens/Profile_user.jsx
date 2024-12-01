@@ -14,15 +14,11 @@ import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  useGetUserQuery,
-  useUpdateUserMutation,
-} from '../RTKquery/Slices/ApiSclices';
+import {useUpdateUserMutation} from '../RTKquery/Slices/ApiSclices';
 import {useDispatch, useSelector} from 'react-redux';
 import mime from 'mime';
-import {currentuserSelectore, getUserData} from '../Redux/Reducer/AuthReducer';
-
-const font = 'Calistoga-Regular';
+import {getUserData} from '../Redux/Reducer/AuthReducer';
+import styles from './CssStyles/ProfileUser';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -41,22 +37,19 @@ const Profile_user = ({navigation, route}) => {
   const addressRef = useRef(null);
   const nameRef = useRef(null);
   const [buttonLoading, setbuttonLoading] = useState(false);
-  const [Message, setMessage] = useState('');
   const [userProfilePic, setuserProfilePic] = useState(null);
   const [buttonEnabled, setButtonEnabled] = useState(false);
 
   const [UpdateUserData] = useUpdateUserMutation();
   const dispatch = useDispatch();
-  const {data: getuserdatafromStore} = useGetUserQuery();
 
   const clearMessage = () => {};
 
   const userData = useSelector(state => state.user);
-  // const userData = useSelector(currentuserSelectore);
-  
-  console.log('*************************profile_user*************************');
-  console.log("userData.data", userData.data);
-  
+
+  // console.log('*************************profile_user*************************');
+  // console.log('userData.data', userData.data);
+
   const [initialData, setInitialData] = useState({
     address: '',
     name: '',
@@ -112,7 +105,6 @@ const Profile_user = ({navigation, route}) => {
     }
   }, [name, address, occupation, gender, phone, initialData, userProfilePic]);
 
-
   const UpdateUserBtn = async () => {
     try {
       setbuttonLoading(true);
@@ -123,11 +115,6 @@ const Profile_user = ({navigation, route}) => {
       myform.append('phone', phone);
       myform.append('address', address);
       myform.append('occupation', occupation);
-
-      // console.log('***************************************');
-      // console.log('userProfilePic', userProfilePic);
-
-      // Append 'avatar' only if 'userProfilePic' exists
       if (userProfilePic) {
         myform.append('avatar', {
           uri: userProfilePic,
@@ -184,20 +171,6 @@ const Profile_user = ({navigation, route}) => {
 
         <View style={styles.headingCont}></View>
 
-        {/* <View style={styles.profilepicCont}>
-          {userProfilePic !== undefined && userProfilePic !== null ? && userProfilePic !== '' (
-            <Image
-              source={{uri: userProfilePic }}
-              style={{height: '100%', width: '100%'}}
-            />
-          ) : (
-            <MaterialIcons
-              name="add-a-photo"
-              size={35}
-              color={global.bgColor}
-            />
-          )}
-        </View> */}
         <View style={styles.profilepicCont}>
           {userProfilePic !== undefined &&
           userProfilePic !== null &&
@@ -330,92 +303,3 @@ const Profile_user = ({navigation, route}) => {
 };
 
 export default Profile_user;
-
-const styles = StyleSheet.create({
-  uploadPhtText: {
-    color: global.sandColor,
-    marginTop: '2%',
-    textDecorationLine: 'underline',
-  },
-  profilepicCont: {
-    height: height / 10,
-    width: width / 4.5,
-    borderRadius: 50,
-    backgroundColor: global.thirdColor,
-    borderWidth: 1,
-    borderColor: global.sandColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    overflow: 'hidden',
-  },
-  ParentContainer: {
-    backgroundColor: global.bgColor,
-    height: height - 32,
-  },
-  topCont: {
-    width,
-    height: height / 13,
-    backgroundColor: global.bgColor,
-    borderBottomColor: global.thirdColor,
-    borderWidth: 1,
-    elevation: 20,
-    shadowColor: global.sandColor,
-  },
-  topContText: {
-    fontSize: 20,
-    color: global.sandColor,
-  },
-  topimg: {width, height: height, position: 'absolute'},
-  headingCont: {
-    alignSelf: 'center',
-    marginTop: '20%',
-  },
-  headtxt: {
-    fontSize: 25,
-    fontFamily: font,
-  },
-  Errortxt: {
-    fontSize: 15,
-    // fontFamily: font,
-    color: 'red',
-    alignSelf: 'center',
-  },
-  SkipCont: {
-    alignSelf: 'flex-end',
-    backgroundColor: global.sandColor,
-    height: '4%',
-    width: '15%',
-    borderRadius: 40,
-    justifyContent: 'center',
-    marginEnd: '2%',
-    marginTop: '2%',
-  },
-  Skiptxt: {
-    fontSize: 17,
-    color: global.bgColor,
-    alignSelf: 'center',
-  },
-  headtxt2: {
-    fontSize: 35,
-    fontFamily: font,
-    alignSelf: 'center',
-    marginTop: '3%',
-  },
-  btmText: {
-    fontSize: 13,
-    // fontFamily: font,
-    alignSelf: 'center',
-    // marginTop: '3%',
-  },
-  inputfield: {
-    // marginBottom: '10%',
-    width: width - 50,
-    backgroundColor: global.bgColor,
-    marginVertical: height / 70,
-  },
-  inputboxcont: {
-    alignItems: 'center',
-    // marginTop: "0.5%",
-  },
-});

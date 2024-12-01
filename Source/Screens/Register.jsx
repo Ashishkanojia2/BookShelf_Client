@@ -3,7 +3,6 @@ import {
   Dimensions,
   ImageBackground,
   Keyboard,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -14,9 +13,8 @@ import {Button, TextInput} from 'react-native-paper';
 import {ScrollView} from 'native-base';
 import {useRegisterUserMutation} from '../RTKquery/Slices/ApiSclices';
 import {useDispatch} from 'react-redux';
-import { loginUserData } from '../Redux/Reducer/AuthReducer';
-// import {} from "../../assets/fonts"
-const font = 'Calistoga-Regular';
+import {loginUserData} from '../Redux/Reducer/AuthReducer';
+import styles from './CssStyles/Register';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -24,8 +22,6 @@ const width = Dimensions.get('window').width;
 const Login = ({navigation}) => {
   const [Registeruser] = useRegisterUserMutation();
   const dispatch = useDispatch();
-  // const {data: getuserdatafromStore} = useGetUserQuery();
-  // const {data} = useGetUserQuery();
 
   const [emailId, setemailId] = useState('');
   const [Password, setPassword] = useState('');
@@ -204,7 +200,6 @@ const Login = ({navigation}) => {
             rippleColor="#c9c9c9"
             buttonColor={global.thirdColor}
             onPress={() => registerUserBtn()}
-            // onPress={() => navigation.navigate("verifyAccount")}
             loading={buttonLoading}
             style={{
               marginTop: '20%',
@@ -240,75 +235,3 @@ const Login = ({navigation}) => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({
-  ParentContainer: {
-    backgroundColor: global.bgColor,
-    height: height - 32,
-  },
-  topCont: {
-    width,
-    height: height / 13,
-    backgroundColor: global.bgColor,
-    borderBottomColor: global.thirdColor,
-    borderWidth: 1,
-    elevation: 20,
-    shadowColor: global.sandColor,
-  },
-  topContText: {
-    fontSize: 20,
-    color: global.sandColor,
-  },
-  topimg: {width, height: height, position: 'absolute'},
-  headingCont: {
-    alignSelf: 'center',
-    marginTop: '20%',
-  },
-  headtxt: {
-    fontSize: 25,
-    fontFamily: font,
-  },
-  Errortxt: {
-    fontSize: 15,
-    // fontFamily: font,
-    color: 'red',
-    alignSelf: 'center',
-  },
-  SkipCont: {
-    alignSelf: 'flex-end',
-    backgroundColor: global.sandColor,
-    height: '4%',
-    width: '15%',
-    borderRadius: 40,
-    justifyContent: 'center',
-    marginEnd: '2%',
-    marginTop: '2%',
-  },
-  Skiptxt: {
-    fontSize: 17,
-    color: global.bgColor,
-    alignSelf: 'center',
-  },
-  headtxt2: {
-    fontSize: 35,
-    fontFamily: font,
-    alignSelf: 'center',
-    marginTop: '3%',
-  },
-  btmText: {
-    fontSize: 13,
-    // fontFamily: font,
-    alignSelf: 'center',
-    // marginTop: '3%',
-  },
-  inputfield: {
-    // marginBottom: '10%',
-    width: width - 50,
-    backgroundColor: global.bgColor,
-    marginVertical: height / 70,
-  },
-  inputboxcont: {
-    alignItems: 'center',
-    // marginTop: "0.5%",
-  },
-});

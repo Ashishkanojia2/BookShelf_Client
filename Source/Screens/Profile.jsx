@@ -1,29 +1,25 @@
 import {
-  Dimensions,
-  StyleSheet,
   Text,
   View,
   StatusBar,
   TouchableOpacity,
-  Image,
+  Image
 } from 'react-native';
 import React from 'react';
-import {ScrollView} from 'native-base';
-import {global} from '../Components/GlobalComponent/GlobalStyle';
+import { ScrollView } from 'native-base';
+import { global } from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {globalfonts} from '../../assets/FrontExport/Frontexport';
-import {
-  clearUserData,
-  currentuserSelectore,
-} from '../Redux/Reducer/AuthReducer';
-import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
-const {height, width} = Dimensions.get('window');
-const font = 'Calistoga-Regular';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from "./CssStyles/Profile"
 
-import {persistor, store} from '../Redux/Store/Store';
+import {
+  clearUserData
+} from '../Redux/Reducer/AuthReducer';
+import { useLazyLogoutUserQuery } from '../RTKquery/Slices/ApiSclices';
+
+import { persistor, store } from '../Redux/Store/Store';
 
 const Profile = ({navigation}) => {
   const {isLoading, isError, data: userData} = useSelector(state => state.user);
@@ -58,7 +54,6 @@ const Profile = ({navigation}) => {
     return `${day}-${month}-${year}`;
   };
 
-  // Handle loading state
   if (isLoading) {
     return <Text style={{color: '#000'}}>Loading...</Text>;
   }
@@ -68,24 +63,15 @@ const Profile = ({navigation}) => {
       <Text style={{color: 'red'}}>Something is Error while loading data.</Text>
     );
   }
-  // Handle error state
   if (!userData) {
     return <Text style={{color: 'red'}}>Failed to load data.</Text>;
-  } // Handle error state
+  }
 
   const name = userData.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
 
-  // const sortName = userData.name.split(' ');
-  // const a = sortName[0].toUpperCase();
-  // console.log(a);
-
-  // let a = userData.name;
-
   const sortName = userData.name.split('');
   const b = sortName[0].toUpperCase();
-  // console.log(sortName);
-  // console.log(b);
 
   const fun = () => {
     let result = b;
@@ -281,125 +267,5 @@ const Profile = ({navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  profileIconCont: {
-    height: height / 27,
-    width: width / 12,
-    borderRadius: 20,
-    backgroundColor: global.bgColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileOptionText: {
-    color: global.bgColor,
-    fontSize: 18,
-    fontWeight: '500',
-    marginLeft: '5%',
-  },
-  profileOptionView: {
-    height: '100%',
-    width: width - 100,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: '2%',
-  },
-  profileOption: {
-    height: height / 18,
-    width: width - 20,
-    borderRadius: 10,
-    backgroundColor: global.lightgray,
-    marginVertical: '3%',
-
-    alignSelf: 'center',
-    marginTop: '2%',
-    overflow: 'hidden',
-    elevation: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  profileTxt: {fontSize: width / 18, marginHorizontal: '5%', fontWeight: '600'},
-  profilePhotoText: {
-    fontSize: width / 6,
-    marginHorizontal: '5%',
-    fontFamily: globalfonts.font6,
-  },
-  profileDateTxt: {
-    fontSize: width / 30,
-    marginHorizontal: '5%',
-    fontWeight: '600',
-    position: 'absolute',
-    right: -5,
-    top: 5,
-    color: '#777675',
-  },
-  profilepicCont: {
-    height: height / 10,
-    width: width / 4.5,
-    borderRadius: 50,
-    backgroundColor: global.thirdColor,
-    borderWidth: 1,
-    borderColor: global.sandColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    // resizeMode:"contain"
-  },
-  profileHerderChild1: {
-    flex: 4,
-    backgroundColor: 'yelow',
-    width: '100%',
-    overflow: 'hidden',
-    alignItems: 'center',
-    paddingHorizontal: '3%',
-    flexDirection: 'row',
-  },
-  profileHerderChild2: {
-    flex: 2,
-    backgroundColor: global.sandColor,
-    width: '100%',
-    overflow: 'hidden',
-  },
-  Profileheader: {
-    height: height / 5,
-    width: width - 20,
-    borderRadius: 10,
-    backgroundColor: global.bgColor,
-    alignSelf: 'center',
-    marginTop: '2%',
-    overflow: 'hidden',
-    elevation: 20,
-  },
-  ParentContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(26,54,54,0.1)',
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  headerCont: {
-    backgroundColor: 'rgba(26,54,54,0.5)',
-    height: 70,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  newArival: {
-    color: '#fff',
-    fontSize: 30,
-    marginHorizontal: 10,
-    fontFamily: font,
-    borderRadius: 6,
-    paddingHorizontal: 10,
-  },
-  inputfield: {
-    width: width - 50,
-    backgroundColor: global.bgColor,
-    marginVertical: height / 70,
-  },
-});
 
 export default Profile;

@@ -8,81 +8,86 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
-import { ActivityIndicator, Badge } from 'react-native-paper';
-import { globalfonts } from '../../assets/FrontExport/Frontexport';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
+import {ActivityIndicator, Badge} from 'react-native-paper';
+import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useGetBookDataQuery } from '../RTKquery/Slices/BookApiSclice';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCartData } from '../Redux/Reducer/CartReducer';
+import {useGetBookDataQuery} from '../RTKquery/Slices/BookApiSclice';
+import {useDispatch, useSelector} from 'react-redux';
+import {setCartData} from '../Redux/Reducer/CartReducer';
 import styles from './HomeScreen/HomeStyle';
-import { RefreshControl } from 'react-native-gesture-handler';
+import {RefreshControl} from 'react-native-gesture-handler';
+import {favBook} from '../Redux/Reducer/BookReducer';
+
+console.log('*******************from home screen********************');
 
 const Home = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const [searchText, setsearchText] = useState('');
-  const [ShowingBookData, setShowingBookData] = useState(false);
-  const [state_BookData, setstate_BookData] = useState('');
-  const [favBook, setfavBook] = useState(false);
-  const [loading, setLoading] = useState(true); // Loading state
-
-  const userdata = useSelector(state => state.user.data); // Specific user data
-
-  console.log('*******************from home screen********************');
-  // console.log('storeData_from_homeScreen', storeData);
-  // console.log('userData_FromHomeScreen', userdata);
-
+  // State management
+  const [state_BookData, setState_BookData] = useState(null);
+  const [FavBook, setFavBook] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [ShowingBookData, setShowingBookData] = useState(false);
+  // const [loading, setLoading] = useState(true); // Loading state
+
+  // Redux selectors
+  const userdata = useSelector(state => state.user.data);
+  const cartdata = useSelector(state => state.cart.cartData);
+  const likedBooks = useSelector(state => state.book.bookdata);
+
   const {
     data: Book_data,
     isLoading: bookload,
     isSuccess,
     refetch,
   } = useGetBookDataQuery();
-  const onRefresh = async () => {
+
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
       await refetch();
-      setstate_BookData(Book_data);
-      setRefreshing(false);
       console.log('Data refreshed successfully');
     } catch (error) {
       Alert.alert(
         'Refresh Failed',
         "We couldn't update the data. Please check your internet connection and try again.",
-        [
-          {text: 'Retry', onPress: () => onRefresh()}, // Retry button
-          {text: 'Cancel', style: 'cancel'}, // Cancel button
-        ],
-      );
-      console.log(
-        'This error came from home.jsx file while refreshing the data ',
-        error,
       );
     } finally {
-      setRefreshing(false); // Hide the spinner
+      setRefreshing(false);
     }
-  };
-  const cartdata = useSelector(state => state.cart.cartData);
-  useEffect(() => {
-    if (userdata) {
-      setLoading(false);
-    }
-  }, [userdata]);
+  }, [refetch]);
+  const addTocart = useCallback(
+    itemId => {
+      if (cartdata.includes(itemId)) {
+        Alert.alert('Book not added in cart', 'Book already added in cart');
+      } else {
+        dispatch(setCartData(itemId));
+      }
+    },
+    [cartdata, dispatch],
+  );
+  const hitToLike = useCallback(
+    id => {
+      setFavBook(prevFav => !prevFav);
+      dispatch(favBook(id));
+    },
+    [dispatch],
+  );
+  console.log('Liked Books:', likedBooks);
 
   useEffect(() => {
     if (Book_data && isSuccess) {
-      setstate_BookData(Book_data);
+      setState_BookData(Book_data);
     }
   }, [Book_data, isSuccess]);
 
-  if (loading || !userdata) {
-    return <Text style={{color: 'red'}}>Loading data...homesScreen</Text>;
+  if (bookload) {
+    return <Text>Loading data...homesScreen</Text>;
   }
   const name = userdata?.name || '';
   const CapLetter = name.charAt(0).toUpperCase();
@@ -95,15 +100,7 @@ const Home = ({navigation}) => {
 
   const gotoCart = () => navigation.navigate('cart');
   const profileBtn = () => navigation.navigate('profile');
-  const addTocart = itemId => {
-    if (cartdata.includes(itemId)) {
-      Alert.alert('Book not added in cart', 'Book already added in cart', [
-        {text: 'OK'},
-      ]);
-    } else {
-      dispatch(setCartData(itemId));
-    }
-  };
+
   return (
     <View style={styles.ParentContainer}>
       <StatusBar
@@ -363,12 +360,12 @@ const Home = ({navigation}) => {
                 </View>
               </View>
               <TouchableOpacity
-                onPress={() => setfavBook(!favBook)}
+                onPress={() => hitToLike(item._id)}
                 style={{position: 'absolute', right: 10, top: 7, zIndex: 1}}>
-                {favBook ? (
-                  <AntDesign name="heart" size={25} color="red" />
+                {likedBooks.includes(item._id) ? (
+                  <AntDesign name="heart" size={23} color="red" /> // Show red heart if liked
                 ) : (
-                  <FontAwesome name="heart-o" size={25} color="#000" />
+                  <FontAwesome name="heart-o" size={23} color="#000" /> // Show empty heart if not liked
                 )}
               </TouchableOpacity>
 

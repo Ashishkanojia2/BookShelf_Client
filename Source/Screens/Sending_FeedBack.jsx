@@ -14,7 +14,6 @@ import {ScrollView} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {globalfonts} from '../../assets/FrontExport/Frontexport';
 import {useSendFeedbackMutation} from '../RTKquery/Slices/Feedback';
-const font = 'Calistoga-Regular';
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -158,36 +157,12 @@ const Sending_Feedback = ({navigation, route}) => {
 export default Sending_Feedback;
 
 const styles = StyleSheet.create({
-  // noteText: {color: global.sandColor, fontSize: 15},
-  // noteDetailsText: {color: global.thirdColor, fontSize: 13},
-  // noteCont: {marginHorizontal: '5%'},
   headingTxt: {
     fontSize: width / 13,
     color: global.sandColor,
     fontFamily: globalfonts.font4,
   },
-  // booksimageCont: {
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   // backgroundColor: 'green',
-  // },
-  // profilepicCont: {
-  //   height: height / 4,
-  //   width: width / 2.5,
-  //   borderRadius: 10,
-  //   backgroundColor: global.thirdColor,
-  //   borderWidth: 1,
-  //   borderColor: global.sandColor,
-  //   // alignItems: 'center',
-  //   // justifyContent: 'center',
-  //   alignSelf: 'center',
-  //   margin: '2%',
-  //   elevation: 30,
-  //   overflow: 'hidden',
-  //   // alignSelf:"center"
-  // },
+
   ParentContainer: {
     paddingBottom: '5%',
   },
@@ -200,10 +175,7 @@ const styles = StyleSheet.create({
     elevation: 20,
     shadowColor: global.sandColor,
   },
-  // topContText: {
-  //   fontSize: 20,
-  //   color: global.sandColor,
-  // },
+
   topimg: {width, height: height, position: 'absolute'},
   headingCont: {
     alignSelf: 'center',
@@ -214,37 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: globalfonts.font,
   },
-  // Errortxt: {
-  //   fontSize: 15,
-  //   color: 'red',
-  //   alignSelf: 'center',
-  //   marginTop: '5%',
-  // },
-  // SkipCont: {
-  //   alignSelf: 'flex-end',
-  //   backgroundColor: global.sandColor,
-  //   height: '4%',
-  //   width: '15%',
-  //   borderRadius: 40,
-  //   justifyContent: 'center',
-  //   marginEnd: '2%',
-  //   marginTop: '2%',
-  // },
-  // Skiptxt: {
-  //   fontSize: 17,
-  //   color: global.bgColor,
-  //   alignSelf: 'center',
-  // },
-  // headtxt2: {
-  //   fontSize: 35,
-  //   fontFamily: font,
-  //   alignSelf: 'center',
-  //   marginTop: '3%',
-  // },
-  // btmText: {
-  //   fontSize: 13,
-  //   alignSelf: 'center',
-  // },
+
   inputfield: {
     width: width - 50,
     backgroundColor: global.bgColor,
