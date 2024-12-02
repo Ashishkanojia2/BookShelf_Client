@@ -1,39 +1,37 @@
 import {userApi} from '../../RTKquery/Slices/ApiSclices';
-import {configureStore} from '@reduxjs/toolkit';
 import {bookApi} from '../../RTKquery/Slices/BookApiSclice';
+import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import {setupListeners} from '@reduxjs/toolkit/query';
-
-{
-  /** REDUX PRESISIT */
-}
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 
 import userData from '../Reducer/AuthReducer';
 import BookReducer from '../Reducer/BookReducer';
 import cartReducer from '../Reducer/CartReducer';
-// import persistReducer from 'redux-persist/es/persistReducer';
 
+// Persist configurations for all reducers
 const persistConfig = {
-  key: 'user',
+  key: 'root', // Root key for persistence
   storage: AsyncStorage,
+  whitelist: ['user', 'book', 'cart'], // Specify reducers to persist
 };
 
-// Wrap the "userData" reducer with persistReducer  OR wrap those reducer which you want to presist
-const persistedUserReducer = persistReducer(persistConfig, userData);
+// Combine reducers
+const rootReducer = combineReducers({
+  user: userData, // Will be persisted
+  book: BookReducer, // Will be persisted
+  cart: cartReducer, // Will be persisted
+  [userApi.reducerPath]: userApi.reducer,
+  [bookApi.reducerPath]: bookApi.reducer,
+});
 
+// Create persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Configure store
 export const store = configureStore({
-  reducer: {
-    // user: userData,
-    user: persistedUserReducer, // SO HERE I USE PRESIST REDUCER
-    book: BookReducer,
-    cart: cartReducer,
-    // booksData: bookSliceReducer,
-    [userApi.reducerPath]: userApi.reducer,
-    [bookApi.reducerPath]: bookApi.reducer,
-    // [bookApi.reducerPath]: bookApi.reducer,
-  },
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -41,10 +39,6 @@ export const store = configureStore({
       },
     }).concat(userApi.middleware, bookApi.middleware),
 });
-
-// middleware: getDefaultMiddleware =>
-//     getDefaultMiddleware().concat(userApi.middleware, bookApi.middleware),
-// });
 
 // Create a persistor for the store
 export const persistor = persistStore(store);
