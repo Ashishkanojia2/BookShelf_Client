@@ -3,6 +3,14 @@ import {global} from '../../Components/GlobalComponent/GlobalStyle';
 import {globalfonts} from '../../../assets/FrontExport/Frontexport';
 const {height, width} = Dimensions.get('window');
 export default styles = StyleSheet.create({
+  imgContainer: {
+    height: '95%',
+    width: '90%',
+    justifyContent: 'center',
+    // alignSelf: 'center',
+    
+    borderRadius: 10,
+  },
   booksName: {
     fontSize: 20,
     color: '#000',
@@ -42,7 +50,7 @@ export default styles = StyleSheet.create({
   },
   productPhoto: {
     flex: 2,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
     height: '100%',
     width: '50%',
     justifyContent: 'center',

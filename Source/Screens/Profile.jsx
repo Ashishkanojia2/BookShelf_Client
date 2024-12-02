@@ -1,25 +1,17 @@
-import {
-  Text,
-  View,
-  StatusBar,
-  TouchableOpacity,
-  Image
-} from 'react-native';
+import {Text, View, StatusBar, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
-import { ScrollView } from 'native-base';
-import { global } from '../Components/GlobalComponent/GlobalStyle';
+import {ScrollView} from 'native-base';
+import {global} from '../Components/GlobalComponent/GlobalStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from "./CssStyles/Profile"
+import {useDispatch, useSelector} from 'react-redux';
+import styles from './CssStyles/Profile';
 
-import {
-  clearUserData
-} from '../Redux/Reducer/AuthReducer';
-import { useLazyLogoutUserQuery } from '../RTKquery/Slices/ApiSclices';
+import {clearUserData} from '../Redux/Reducer/AuthReducer';
+import {useLazyLogoutUserQuery} from '../RTKquery/Slices/ApiSclices';
 
-import { persistor, store } from '../Redux/Store/Store';
+import {persistor, store} from '../Redux/Store/Store';
 
 const Profile = ({navigation}) => {
   const {isLoading, isError, data: userData} = useSelector(state => state.user);
@@ -67,7 +59,7 @@ const Profile = ({navigation}) => {
     return <Text style={{color: 'red'}}>Failed to load data.</Text>;
   }
 
-  const name = userData.name || '';
+  const name = userData ? userData.name : 'user';
   const CapLetter = name.charAt(0).toUpperCase();
 
   const sortName = userData.name.split('');
